@@ -1,0 +1,120 @@
+Act.                                    
+trigger                                 
+Active                                  
+auto.                                   
+Update Panel                            
+Update                                  
+Ana.                                    
+analogic                                
+Year                                    
+Asociate to                             
+Authentication                          
+Channel                                 
+Comp.                                   
+Events                                  
+Connected                               
+Connecting                              
+Connect                                 
+Setup                                   
+Confirm Password                        
+Setpoint                                
+Password                                
+de                                      
+Des                                     
+Description                             
+Day                                     
+IP address                              
+Dev.                                    
+Device                                  
+Run                                     
+Inp.                                    
+Analog. Input                           
+Dig. Input                              
+Input                                   
+Error comm.                             
+Macro                                   
+Macros                                  
+Status                                  
+factory                                 
+Date                                    
+Files                                   
+Save                                    
+Hour                                    
+Initial                                 
+Static IP                               
+Public IP                               
+Lat                                     
+Lon                                     
+Latitude                                
+Longitude                               
+Remote RF                               
+Month                                   
+Mode                                    
+Show codes                              
+NO                                      
+Bands                                   
+Name                                    
+Notif.                                  
+IFTTT Notification                      
+NEW                                     
+New remote                              
+pins                                    
+Price kwh                               
+Program                                 
+Programs                                
+Net                                     
+Net serv.                               
+Restarting                              
+Relay                                   
+Remote                                  
+Remote Dev.                             
+Rem. upd.                               
+Reset Factory                           
+Reset Files                             
+Dig. Out.                               
+Output                                  
+Scan                                    
+Security                                
+Weekly                                  
+Signal                                  
+Public IP server                        
+SÍ                                      
+System                                  
+Probe                                   
+Temp. probes                            
+SR                                      
+Temperature                             
+Thermostat                              
+TDP                                     
+Timeout Remotes                         
+Tipe                                    
+Last value                              
+Unit                                    
+User                                    
+Value                                   
+Version                                 
+Updated version                         
+Version check failed, HTTP code:        
+Web Calls                               
+Installed                               
+Current                                 
+WiFi mode                               
+Zone                                    
+Zones                                   
+FTP server                              
+Installation                            
+Hyst.                                   
+1-31:MB, 150-166:uBitx, Resto:I2C       
+No hacer nada                           
+Falta algún fichero necesarios<br>      
+Use FTP o \"Sketch Data Upload                         
+Save/Export                             
+Language                                
+Heat Pump                               
+Memories                                
+Debug server                            
+TCP server                              
+UDP server                              
+WS server                               
+Serial-IP WS server                     
+Web server                              

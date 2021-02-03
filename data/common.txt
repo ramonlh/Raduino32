@@ -1,0 +1,317 @@
+1234567890123456789012345678901234567890
+dBm                                     
+Time                                    
+Chip_id                                 
+Chip_Flash_Size                         
+Chip_speed                              
+sdk_version                             
+vdd33                                   
+adc_read                                
+boot_version                            
+boot_mode                               
+userbin_addr                            
+cpu_freq                                
+flash_get_id                            
+opmode                                  
+opmode_default                          
+connect_status                          
+get_current_ap_id                       
+auto_connect                            
+dhcpc_status                            
+_hostname                               
+station_num                             
+dhcps_status                            
+phy_mode                                
+sleep_type                              
+broadcast_if                            
+user_limit_rate_mask                    
+channel                                 
+free_heap_size                          
+rtc_time                                
+BMP085_not_found                        
+sensor_I2C                              
+MQTT                                    
+path                                    
+STAR                                    
+BAUD *                                  
+CONTROL                                 
+SAFE                                    
+FULL                                    
+POWER                                   
+SPOT                                    
+CLEAN                                   
+MAX                                     
+DRIVE *                                 
+MOTORS *                                
+LEDS *                                  
+SONG *                                  
+PLAY *                                  
+SENSORS *                               
+DOCK                                    
+xmlns="http://www.w3.org/1999/xhtml"    
+api.myjson.com                          
+www.iottweet.com                        
+www.google.es/maps                      
+http://www.iottweet.com                 
+icanhazip.com                           
+api.myjson.com                          
+europe.pool.ntp.org                     
+ifttt.com                               
+maker.ifttt.com                         
+https://dweet.io/get/dweets/for/        
+getdweet                                
+/get/latest/dweet/for/                  
+/dweet/for/                             
+dweet.io                                
+.ino.bin                                
+Parasite                                
+Power                                   
+Min.                                    
+Port                                    
+'file'                                  
+update                                  
+dev                                     
+Chip Flash.                             
+Freq.                                   
+DNS                                     
+Mask                                    
+mode                                    
+Gateway                                 
+http://                                 
+https://                                
+Alias                                   
+12341234                                
+I2C                                     
+INTRO                                   
+ESC                                     
+UP                                      
+DOWN                                    
+LEFT                                    
+RIGTH                                   
+PgUp                                    
+PgDn                                    
+LF                                      
+RT                                      
+RF                                      
+ModBus                                  
+T-32-P                                  
+Local I/O                               
+IoTtweet                                
+MyJson                                  
+api                                     
+Dig. Input                              
+admin                                   
+SPIFFS                                  
+pretty                                  
+watermark                               
+WebCall                                 
+ND                                      
+hidden                                  
+Host:                                   
+IP                                      
+Running                                 
+WiFi                                    
+Timeout Http                            
+SMTP Per.                               
+SMTP Server                             
+SMTP Port                               
+SMTP User                               
+SMTP Pass                               
+SMTP Sender                             
+SMTP Dest.                              
+pinvalR:                                
+Un.                                     
+Si                                      
+No                                      
+Seg. ON                                 
+Seg. OFF                                
+pon                                     
+pof                                     
+Panel                                   
+Dig.                                    
+digital                                 
+Addr                                    
+AP mode SSID                            
+AP mode Password                        
+Default                                 
+DISPOSITIVO REMOTO                      
+disabled                                
+Dweet.io                                
+ERROR                                   
+ESP8266                                 
+STA mode SSID                           
+STA mode Password                       
+system                                  
+submit                                  
+ThingName                               
+rem=                                    
+Remote I/O                              
+Reset                                   
+Reset WiFi                              
+Restart                                 
+rfkey                                   
+rfon                                    
+rfoff                                   
+Reqjson                                 
+I2C device found at address 0x          
+Unknow error at address 0x              
+No I2C devices found                    
+<font size=6 color="yellow">            
+/trigger/                               
+/with/key/                              
+301                                     
+303                                     
+404                                     
+application/json; charset=utf-8         
+application/octet-stream                
+/bins/                                  
+<body>                                  
+</body>                                 
+Cache-Control                           
+checkbox                                
+<center>                                
+</center>                               
+class                                   
+Connection                              
+close                                   
+Content-Type                            
+Content-Disposition                     
+uBitx                                   
+UBITX                                   
+data                                    
+dataType                                
+ESPSESSIONID                            
+<form action"save" method="get">        
+</form>                                 
+handleClient                            
+head                                    
+html                                    
+HTTP/1.1                                
+target="_blank"                         
+onclick="window.close()                 
+DISCONNECT=YES                          
+text/plain                              
+length                                  
+Location                                
+Log                                     
+MyJson Key                              
+name                                    
+no-cache                                
+<option value=                          
+</option>                               
+Page not found                          
+password                                
+<pre>                                   
+</pre>                                  
+POST                                    
+PRG                                     
+PUT                                     
+See other                               
+</select>                               
+<select name=                           
+Server                                  
+Set-Cookie                              
+table                                   
+maxlength="                             
+method="post">                          
+attachment; filename=                   
+</head>                                 
+<form action="                          
+SMALL                                   
+<meta http-equiv="refresh" content="    
+<font size                              
+</font>                                 
+style="color:#000000;"                  
+style="color:#ffffcc;"                  
+style="visibility: hidden"              
+IFTTT                                   
+input                                   
+Key                                     
+Show                                    
+Ver                                     
+Web                                     
+id                                      
+<td colspan="                           
+<a href="sy?act=rp                      
+title                                   
+<toff>                                  
+value                                   
+act=wc                                  
+text/text                               
+AP                                      
+AP+STA                                  
+STA                                     
+Factor                                  
+Offset                                  
+checked                                 
+<a href=                                
+selected                                
+IFTTT Key                               
+SSID                                    
+PASS                                    
+<hr>                                    
+<td></td>                               
+DHT                                     
+ON/OFF                                  
+URL                                     
+Firmware                                
+MAC                                     
+BMP085 OK                               
+mainTextSize                            
+postfix                                 
+prefix                                  
+textcolor                               
+enableIntermediateState                 
+enablePub                               
+enteredIntermediateStateAt              
+intermediateStateTimeout                
+jsOnReceive                             
+jsonPath                                
+lastPayload                             
+qos                                     
+retained                                
+topic                                   
+topicPub                                
+updateLastPayloadOnPub                  
+id                                      
+jsBlinkExpression                       
+jsOnDisplay                             
+jsOnTap                                 
+lastActivity                            
+longId                                  
+name                                    
+type                                    
+ C                                      
+MEDIUM                                  
+true                                    
+false                                   
+ic_radio_button_unchecked               
+ic_radio_button_checked                 
+offColor                                
+onColor                                 
+payloadOff                              
+payloadOn                               
+ic_power_settings_new                   
+ic_power_switch                         
+event.data['last']=='0'?'1':'0',false,0)
+app.publish                             
+if (!event.data) {event.data={};}       
+event.data['last']=event.payload        
+iconOff                                 
+iconOn                                  
+GPIO                                    
+SMALL                                   
+Local Ip                                
+Public Ip                               
+Device                                  
+topic                                   
+Link                                    
+                                       .
+                                       .
+                                       .
+                                       .
+                                       .
+                                       .
+                                       .
+                                       .
+                                       .

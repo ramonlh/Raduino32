@@ -1,0 +1,120 @@
+Act.                                    
+activadora                              
+Activo                                  
+auto.                                   
+Act. Panel                              
+Actualizar                              
+Ana.                                    
+analógica                               
+Año                                     
+Asociar a                               
+Autenticación                           
+Canal                                   
+Comp.                                   
+Condiciones                             
+Conectado                               
+Conectando                              
+Conectar                                
+Configuración                           
+Confirme Contraseña                     
+Consigna                                
+Contraseña                              
+de                                      
+Des                                     
+Descripción                             
+Día                                     
+Dir. IP                                 
+Disp.                                   
+Dispositivo                             
+Ejecutar                                
+Ent.                                    
+Ent. Analog.                            
+Ent. Dig.                               
+Entrada                                 
+Error comm. REFRESH PAGE                
+Escena                                  
+Escenas                                 
+Estado                                  
+fábrica                                 
+Fecha                                   
+Ficheros                                
+Guardar                                 
+Hora                                    
+Inicial                                 
+IP estática                             
+IP pública                              
+Lat                                     
+Lon                                     
+Latitud                                 
+Longitud                                
+Mando RF                                
+Mes                                     
+Modo                                    
+Mostrar códigos                         
+NO                                      
+Bandas                                  
+Nombre                                  
+Notif.                                  
+Notificación IFTTT                      
+NUEVO                                   
+Nuevo remoto                            
+pines                                   
+Precio kwh                              
+Programa                                
+Programas                               
+Red                                     
+Serv. Red                               
+Reiniciando                             
+Relé                                    
+Remoto                                  
+Remote Dev.                             
+Act. Rem.                               
+Reset Fábrica                           
+Reset Ficheros                          
+Sal. Dig.                               
+Salida                                  
+Scan                                    
+Seguridad                               
+Semanal                                 
+Señal                                   
+Servidor IP pública                     
+SÍ                                      
+Sistema                                 
+Sonda                                   
+Sondas Temp.                            
+SR                                      
+Temperatura                             
+Termostato                              
+TDP                                     
+Timeout Remotos                         
+Tipo                                    
+Último Valor                            
+Unid.                                   
+Usuario                                 
+Valor                                   
+Versión                                 
+Versión actualizada                     
+Version check failed, HTTP code:        
+Web Calls                               
+Instalada                               
+Actual                                  
+WiFi mode                               
+Zona                                    
+Zonas                                   
+FTP server                              
+Instalación                             
+Hist.                                   
+1-31:MB, 150-166:uBitx, Resto:I2C       
+No hacer nada                           
+Falta algún fichero necesarios<br>      
+Use FTP o \"Sketch Data Upload          
+Guardar/Exportar                        
+Idioma                                  
+Bomba Calor                             
+Memorias                                
+Debug server                            
+TCP server                              
+UDP server                              
+WS server                               
+Serial-IP WS server                     
+Web server                              
