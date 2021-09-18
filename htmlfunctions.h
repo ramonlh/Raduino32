@@ -888,11 +888,23 @@ void setupBandHTML()
 
 void calcSmeterScale()
 {
-  const float D[16]={1.0,2.0,4.0,8.0,16.0,32.0,63.0,126.0,251.0,502.0,1600.0,5000.0,16000.0,50000.0,160000.0,500000.0};
-  for (int i=1;i<15;i++)
+  const float D0[16]={1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0};
+  const float D1[16]={1.0,2.0,4.0,8.0,16.0,32.0,63.0,126.0,251.0,502.0,1600.0,5000.0,16000.0,50000.0,160000.0,500000.0};
+  if (conf.modecalsmeter==0)
     {
-    float auxf=D[i]/D[15];
-    conf.sMeterLevels[i]=((conf.sMeterLevels[15]-conf.sMeterLevels[0])*auxf) + conf.sMeterLevels[0];
+    for (int i=1;i<15;i++)
+      {
+      float auxf=D0[i]/D0[15];
+      conf.sMeterLevels[i]=((conf.sMeterLevels[15]-conf.sMeterLevels[0])*auxf) + conf.sMeterLevels[0];
+      }
+    }
+  else  if(conf.modecalsmeter==1)
+    {
+    for (int i=1;i<15;i++)
+      {
+      float auxf=D1[i]/D1[15];
+      conf.sMeterLevels[i]=((conf.sMeterLevels[15]-conf.sMeterLevels[0])*auxf) + conf.sMeterLevels[0];
+      }
     }
 }
 
@@ -905,8 +917,12 @@ void setupSmeterHTML()
     for (int i=0; i<server.args(); i++)
       {
       calcindices(i);
-      if (resto==0) conf.sMeterLevels[indice]=server.arg(i).toInt();
-      if (resto==1) server.arg(i).toCharArray(conf.smeterTit[indice], 4);
+      if (param_number==35) { conf.modecalsmeter = server.arg(i).toInt();  }
+      else
+        {
+        if (resto==0) conf.sMeterLevels[indice]=server.arg(i).toInt();
+        else if (resto==1) server.arg(i).toCharArray(conf.smeterTit[indice], 4);
+        }
       }
     calcSmeterScale();
     calSmeterReq=false;
@@ -918,6 +934,17 @@ void setupSmeterHTML()
   writeHeader(false,false);
   writeMenu(3,6);
   writeForm(smehtm);
+
+  printP(tr,td,"Min / Max",td_f);
+  printPiP(td,minsmeter,td_f);
+  printPiP(td,maxsmeter,td_f);
+  printP(tr_f);
+  
+  printP(tr, td, "Modo");
+  printcampoCB(35, conf.modecalsmeter, PSTR("Lineal"), PSTR("Real"), PSTR("Usuario"), true); 
+  printP(td);
+  printP(td_f,tr_f);
+
   printP(tr,td,"Valor",td_f,td);
   printP("ADC value",td_f,td,"Tit.",td_f,tr_f);
   for (byte i=0;i<16;i++)
@@ -926,15 +953,20 @@ void setupSmeterHTML()
     printP(tr,td);
     printI(i);
     printP(td_f); 
-    if ((i==0) || (i==15))
+    if ((conf.modecalsmeter==0) || (i==0) || (i==15))
+      {
       printcampoI(mpi, conf.sMeterLevels[i], 6, true, true);
+      }
     else
-      { printP(td); printI(conf.sMeterLevels[i]); printP(td_f); }
+      {
+      printI(conf.sMeterLevels[i]);
+      }
     printP(td);
     printcampoC(mpi+1, conf.smeterTit[i], 4, true, true, false,false);
     printP(td_f, tr_f);
     }
-  writeFooter(guardar, false);
+    
+    writeFooter(guardar, false);
   serversend200();
 }
 

@@ -65,6 +65,9 @@
 #define VREFp 1
 #define SMETERp 2
 
+#define VTOTp 0
+#define ITOTp 1
+
 //*******************************************************
 //  Commands TCP conection    // NO USAR 10 NI 13 
 #define tcpsplitOn 3
@@ -95,6 +98,10 @@
 #define tcpmaxsmeter 56   // valor máximo smeter
 #define tcpscanst 64
 #define tcpkeylock 65
+#define tcpattlevel 66
+#define tcpifShiftVal 67
+#define tcpvtotvalue 68
+#define tcpitotvalue 69
 
 #define tcpALL 127
 

@@ -158,10 +158,6 @@ byte ICACHE_FLASH_ATTR getbit8(byte tabla[], byte pin)
 void ICACHE_FLASH_ATTR setbit8(byte tabla[], byte pin, byte value)  {
   tabla[pin/8]=((value==0)?tabla[pin/8]&(255^tab[(pin%8)]):tabla[pin/8]|tab[(pin%8)]);}
 
-void ICACHE_FLASH_ATTR tictac(int pin, int n, int delayed)
-  { for (int i=0;i<n;i++) 
-    {digitalWrite(pin,1); delay(delayed); digitalWrite(pin, 0); delay(delayed);} }
-
 void ICACHE_FLASH_ATTR printconceros(int value)  {  if (value<10) s2(0); s2(value); }
 
 void ICACHE_FLASH_ATTR printhora() {
@@ -312,6 +308,7 @@ void ICACHE_FLASH_ATTR printF(float value, byte deci) {
   printI(int(value)); if (deci>0) printP(punto);  
   for (byte i=0;i<deci;i++) if (int(pdec*pow(10,i+1))%10==0) printP(cero); else printI(abs(int(pdec*pow(10,i+1))%10));
   }
+  
 void ICACHE_FLASH_ATTR printIP(long valor, const  char *texto) { printI(valor); printP(texto); }
 
 void ICACHE_FLASH_ATTR printPiP(const char *texto1, int num, const char *texto2)

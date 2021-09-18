@@ -7,7 +7,8 @@
 //    So I put + in the sense that it was improved one by one based on Original Firmware.
 //    This firmware hass been gradually changed based on the original firmware 
 //    created by Farhan, Jack, Jerry and others and KD8CEC.
-  
+
+// Standar version - No tasks
 #define FIRMWARE_VERSION_INFO F("v 1.100")
 #define BITX      // for use  at user_setup.h from TFT_eSPI library
 #define EEPROM_SIZE 2048
@@ -334,18 +335,18 @@ void setFrequency(unsigned long f){
   if (conf.actualBand != 99) 
     conf.freqbyband[conf.actualBand][conf.vfoActive==VFO_A?0:1]=f; 
   if (conf.vfoActive==VFO_A) conf.frequencyA=f; else conf.frequencyB=f;  
-  sendData(tcpclient,tcpfrequency);  // no enviar al hacer readSpectrum()
+  sendData(tcpclient,tcpfrequency);  
   if (scanF==0)
     {
     if (!readingspectrum)
       {
-      sendData(tcpclient,tcpfrequency);  // no enviar al hacer readSpectrum()
+      sendData(tcpclient,tcpfrequency);  
       //saveconf();
       }
     }
   else 
     {
-    sendData(tcpclient,tcpfrequency);  // no enviar al hacer readSpectrum()
+    sendData(tcpclient,tcpfrequency);  
     }
 }
 
@@ -456,7 +457,7 @@ void stopTx(void){
 
 void checkPTT(){  
   //we don't check for ptt when transmitting cw
-  if (conf.cwTimeout > 0) return;
+  //if (conf.cwTimeout > 0) return;
   if (digitalRead(PTT) == 0 && inTx == 0)
     {
     startTx(TX_SSB, 1);  
@@ -556,7 +557,7 @@ void setMEMtoVFO(int pos)
 
 void setFreq(int s)
 {
-  //s2("setFreq:"); s2(s); s2(crlf);
+  s2("setFreq:"); s2(s); s2(" f:"); s2(conf.frequency); s2(crlf);
   conf.frequency += (conf.arTuneStep[conf.tuneStepIndex] * s);  //applied weight (s is speed) //if want need more increase size, change step size
   if (conf.vfoActive==VFO_A) conf.frequencyA=conf.frequency; else conf.frequencyB=conf.frequency;
   setFrequency(conf.frequency);
@@ -617,12 +618,14 @@ void doMem()
     if (memlin<6) memlin++;
     if (mempos<maxMem) { mempos++; cambio=true; }
     }
+  Serial2.println(mempos);
   if ((cambio) || (firstmem))
     { 
     firstmem=false;
+    displayFreq(0,1,1,1);
+    displayYN(1,1,1);
     displayMemList(); 
     setMEMtoVFO(mempos); 
-    displayFreq(0,1,1,1);
     }
 }
 
@@ -879,7 +882,7 @@ void connectSTA()
 {
   s2("  Conectando: ");  s2(conf.ssidSTA);
   s2("/");  s2(conf.passSTA);
-  displayMsg("Connecting to",conf.ssidSTA,conf.passSTA,40,140,210,75);
+  displayMsg("Connecting to",conf.ssidSTA,"********",40,140,210,75);
   byte cont = 0;
   while((!WiFi.isConnected()) && (cont++ < 20))  { delay(500); s2("."); }
   clearMsg(40,140,210,75);
@@ -923,11 +926,6 @@ void initNetServices()
       { initUDPS(); s2("  UDP service started, port "); s2(conf.udpPort); }
     else
       s2("  UDP server disabled");
-    s2(crlf);
-    if (conf.wsenable)
-      { initWS(); s2("  Web Socket server started, port "); s2(conf.wsPort); }
-    else
-      s2("  WS server disabled");
     s2(crlf);
     if (conf.debugenable)
       { initremoteDebug();  s2("  Debug service started, port ");s2(conf.debugPort); }
@@ -1143,7 +1141,9 @@ void initDS18B20() {
 void initADS()
 {
   adsA.begin();
+  //adsA.setGain(GAIN_TWOTHIRDS);  // +/- 6.144V  1 bit = 0.1875mV (default)
   adsB.begin();
+  //adsB.setGain(GAIN_TWOTHIRDS);  // +/- 6.144V  1 bit = 0.1875mV (default)
 }
 
 void initI2C()
@@ -1309,7 +1309,7 @@ void setup()
   initNetServices();
   initTPA2016();      s2("TPA2016 started"); s2(crlf);
   //initDecodeCW();     s2("initDecodeCW");s2(crlf);
-  smetervalue=0;  maxsmeter=0;  minsmeter=9999;
+  smetervalue=0;  maxsmeter=0;  minsmeter=32000;
   s2("END SETUP");s2(crlf);  
   s2("============================");s2(crlf);
   s2("Type 'h' to help"); s2(crlf); 
@@ -1338,32 +1338,28 @@ void ICACHE_FLASH_ATTR leevaloresOW()
 
 void readSmeter() 
 { 
-
+  int16_t smeteradc=0;
   smeteradc=adsA.readADC_SingleEnded(SMETERp);    // es el valor leído del ADC sin convertir
   calSmeterReq=calSmeterReq || (smeteradc<conf.sMeterLevels[0]) || (smeteradc>conf.sMeterLevels[15]);
-  smetervalue=smeteradc>smeterlast?((smeterlast*3+smeteradc*7)+5)/10:   // valor ajustado para evitar variaciones rápidas
-                                   ((smeterlast*7+smeteradc*3)+5)/10;   // de VK2ETA
-  smeterlast=smetervalue;     // guardar último valor leído
+  smeteradc=smeteradc>smeterlast?((smeterlast*7+smeteradc*3))/10:   // valor ajustado para evitar variaciones rápidas
+                                 ((smeterlast*9+smeteradc*1))/10;   // de VK2ETA
+  smeterlast=smeteradc;     // guardar último valor leído
   if (smeteradc<=minsmeter) { minsmeter=smeteradc; }    // buscar mínimo      
   if (smeteradc>=maxsmeter) { maxsmeter=smeteradc; }    // buscar máximo    
-  //s2(minsmeter); s2(" > "); s2(smeteradc);  s2(" < "); s2(maxsmeter);s2("-----");
-  //s2(conf.sMeterLevels[0]); s2(" > "); s2(smeteradc);  s2(" < "); s2(conf.sMeterLevels[15]);
-  //s2(" smetervalue:"); s2(smetervalue); 
+
   // convertir valor a escala 0-90
   byte i=0; boolean encontrado=false;
   while ((i<16) && (!encontrado))           // busca intervalo de 0 a 16
     {
-    if (smetervalue<conf.sMeterLevels[i]) 
+    if (smeteradc<conf.sMeterLevels[i]) 
       encontrado=true;
     else
       i++;
     }
   if (i<15)
-    smetervalue=((i-1)*6) + (smetervalue-conf.sMeterLevels[i])*6/(conf.sMeterLevels[i]-conf.sMeterLevels[i-1]);
+    smetervalue=((i-1)*6) + (smeteradc-conf.sMeterLevels[i])*6 / (conf.sMeterLevels[i]-conf.sMeterLevels[i-1]);
   else
     smetervalue=90; 
-  //s2(" conv:"); s2(smetervalue);  s2(crlf);
-
 
   if (WiFi.isConnected()) {
     //Send a packet
@@ -1402,35 +1398,6 @@ float readSWR(int limit)
   return(auxSWR);
 }
 
-void readSpectrum()
-{
-  int maxvalue=45;
-  setLOCK(1); 
-  displayFlot();
-  readingspectrum=true; maxvalspectrum=0;
-  memset(spval,0,sizeof(spval));
-  unsigned long fini=conf.frequency;
-  conf.frequency=fini-125000;
-  unsigned long tini=millis();
-  for (int i=0;i<250;i++)
-    {
-    conf.frequency += 1000;
-    setFrequency(conf.frequency);
-    readSmeter();
-    spval[i]=(smeteradc-conf.sMeterLevels[0])*maxvalue/(conf.sMeterLevels[15]-conf.sMeterLevels[0]);
-    if (spval[i]<0) spval[i]=0; if (spval[i]>maxvalue) spval[i]=maxvalue;
-    if (spval[i]>maxvalspectrum) maxvalspectrum=i;
-    }
-  conf.frequency=fini;
-  setFrequency(conf.frequency);
-  displayFreq(1,1,1,1);
-  readingspectrum=false;
-  setLOCK(0);
-  displayFlot();
-}
-
-//conf.sMeterLevels[i]
-
 void task01() {
   tini=millis();
   if ((inTx==0) && (tftpage==0) && (conf.framemode<=1))
@@ -1442,14 +1409,25 @@ void task01() {
   mact01=millis();
 }
 
+void readVIpower()
+{
+  int16_t vtotadc=adsB.readADC_SingleEnded(VTOTp);    // es el valor leído del ADC sin convertir
+  int16_t itotadc=adsB.readADC_SingleEnded(ITOTp);    // es el valor leído del ADC sin convertir
+  float factorv=290.0;
+  float factori=1000.0;
+  vtotvalue=vtotadc*0.1875/factorv;
+  itotvalue=-(itotadc*0.1875-2500)*10/factori;
+}
+
 void task1() {
   tini=millis();
+  readVIpower();
   //printhora();
   //s2(" WiFi:"); s2(WiFi.isConnected());s2(crlf);
   countfaulttime++;   // si se hace mayor que TempDesactPrg,desactiva ejecucion programas dependientes de fecha
   if (inTx==1) leevaloresOW();
-  if ((tftpage!=21) && (tftpage!=23))
-    displayStatus(true,false);
+  if ((tftpage!=21) && (tftpage!=22) &&(tftpage!=23))
+    displayStatus();
   if(conf.rstper>0) { if(millis() > 3600000*conf.rstper) { Serial.println("RESTART"); ESP.restart();  } }
   mact1=millis();
 }
@@ -1479,6 +1457,21 @@ void sendData(WiFiClient client, byte c)
   else if (c==tcptunestep) { strcpy(data,itoa(conf.tuneStepIndex,buff,10)); }
   else if (c==tcpminsmeter) { strcpy(data,itoa(minsmeter,buff,10)); }
   else if (c==tcpmaxsmeter) { strcpy(data,itoa(maxsmeter,buff,10)); }
+  else if (c==tcpattlevel) { strcpy(data,itoa(conf.attLevel,buff,10)); }
+  else if (c==tcpifShiftVal) { strcpy(data,itoa(conf.ifShiftValue,buff,10)); }
+  else if (c==tcpvtotvalue) 
+    { 
+      //strcpy(data,itoa(int(vtotvalue),buff,1)); 
+      //float pdec=vtotvalue-int(vtotvalue);
+      //strcat(data,punto);
+      //strcat(data,itoa(int(pdec),buff,1));
+    }
+/**  else if (c==tcpitotvalue) 
+    { strcpy(data,itoa(int(itotvalue),buff,1)); 
+      float pdec=itotvalue-int(itotvalue);
+      strcat(data,punto);
+      strcat(data,itoa(int(pdec),buff,1));
+    }**/
   else if (c==tcpALL) { }
   else { strcpy(data,"999"); }
   if ((conf.connMode==1) || (conf.connMode==2))   // modos IP, enviar por Client
@@ -1507,8 +1500,6 @@ void task10() {
   sendData(tcpclient, tcpmaxsmeter);
   if ((tftpage==0) && (conf.framemode==2))
     {
-    readSpectrum();
-    displaySpectrum();
     }
   displayWiFiSt();
   mact10=millis();
@@ -1567,6 +1558,10 @@ void sendstatus(byte todo, WiFiClient client)
     sendData(client, tcptemp3); 
     sendData(client, tcptunestep); 
     sendData(client, tcpwifi); 
+    sendData(client, tcpattlevel); 
+    sendData(client, tcpifShiftVal); 
+    sendData(client, tcpvtotvalue); 
+    sendData(client, tcpitotvalue); 
     }
 }
 
@@ -1582,13 +1577,15 @@ void handleRecDataIP(char c, String data)
   else if (c==tcpbandup) { setNextHamBandFreq(conf.frequency,1); }  // 41
   else if (c==tcpfreqdn) { setFreq(-1); }                // 42
   else if (c==tcpfrequp) { setFreq(1); }                 // 43
-  else if (c==tcpfrequency) { setFreq(0); }              // 43
+  else if (c==tcpfrequency) { conf.frequency=data.toInt();   setFreq(0); }              // 45
   else if (c==tcptunestep) { setSTEP(data.toInt()); }    // 51
   else if (c==tcpwifi) { setWiFi(); }                    // 52
   else if (c==tcpreset) { ESP.restart(); }               // 53
   else if (c==tcpframe) { setFrame(); }                  // 54
   else if (c==tcpscanst) { setSCAN(data.toInt()); }      // 64
   else if (c==tcpkeylock) { setLOCK(data.toInt()); }     // 65
+  else if (c==tcpattlevel) { setATT(data.toInt(),0); }     // 66
+  else if (c==tcpifShiftVal) { setIFS(data.toInt(),0); }   // 67
   else if (c==tcpALL) 
     { 
     s2("tcpALL received");s2(crlf);
@@ -1621,8 +1618,6 @@ void handletcpS()
         }
       loopaux();
       }
-    tcpclient.stop(); remoteclientexits=false; displayNav();
-    printhora(); s2(" tcpclient disconnected"); s2(crlf);
     }
   else
     {
@@ -1667,7 +1662,7 @@ void loopaux()
     }
   if (tftpage==0)
     {
-    readSmeter();     // este proceso dura unos 9 ms
+    //readSmeter();     // este proceso dura unos 9 ms
     if (inTx==1)  // TX
       { 
       SWR=readSWR(1); 

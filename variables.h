@@ -55,7 +55,8 @@
       uint8_t connMode;     // 0: IP,  1: Serial2
       uint8_t serial2Mode;  // 0: Debug,  1: Manager
       uint8_t timezone;
-      uint8_t LIBRE1[17];
+      uint8_t modecalsmeter=0;
+      uint8_t LIBRE1[16];
       int ifShiftValue;   //
       uint8_t addrADS1115B; // dir ADS 1115 module analog converter
       uint8_t LIBRE2[6];
@@ -63,14 +64,14 @@
       int ATUIter;
       uint8_t posATUC1;
       uint8_t posATUC2;
-      int sMeterLevels[16];
-      uint8_t ftpenable;
+      int sMeterLevels[16]={8000,9500,10250,11000,11750,12500,13250,14000,14750,15500,16250,17000,17750,18500,19250,20000};
+      uint8_t ftpenable=1;
       uint8_t debugenable;
       uint8_t tcpenable;
       uint8_t udpenable;
       uint8_t wsenable;
-      uint8_t seripenable;
-      uint8_t webenable;
+      uint8_t seripenable=1;
+      uint8_t webenable=1;
       uint8_t LIBRE3[6];         // NO USADO, LIBRE
       uint8_t userCallsignLength;    //7 : display callsign at system startup, 6~0 : callsign length (range : 1~18)
       char CallSign[20];
@@ -236,10 +237,11 @@ float vFORc;
 float vREFc; 
 unsigned long lastswr=0;
 unsigned long swrper=10; 
-int16_t smeteradc=0;
 int16_t smetervalue=0;
 int16_t smeterlast=0;
 int16_t cwcodevalue=0;
+float vtotvalue=0.0;    
+float itotvalue=0.0;  
 int posmin1=180;    // ATU
 int posmin2=180;    // ATU
 char freqpartant[9][4]={"","","","","","","","",""};
@@ -276,9 +278,12 @@ long timezoneval[38]={-43200,-39600,-36000,-34200,-32400,-28800,-25200,-21600,-1
 boolean internetON=false;
 
 int maxsmeter=0;
-int minsmeter=9999;
+int minsmeter=29999;
 boolean remoteclientexits=false;
 char udpAddress[16] = "192.168.000.000";
+byte isUSBtemp=0;
+unsigned long frequencytemp=7000000;
+
 
 void initConf()
 {
