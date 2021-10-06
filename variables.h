@@ -171,7 +171,7 @@
       uint8_t splitOn[maxMem];     // SPL
       unsigned long frequency[maxMem];  // frequency
       unsigned long ritTxFrequency[maxMem];  // frequency TX Rit
-      uint8_t isUsbspl[maxMem];         // isUSB TX split mode
+      uint8_t LIBRE[maxMem];         //  
       uint8_t cwModespl[maxMem];        // CW mode TX split
       unsigned long ftxspl[maxMem];  // frequency TX Split
       char descr[maxMem][20];        // descripción
@@ -179,9 +179,20 @@
   memotype memo;
   uint8_t *buffmemo=(uint8_t *) &memo; // acceder a mem como bytes
 
+  // space for save freq actual
+  uint8_t vfoActiveAct;      // VFO 
+  uint8_t isUSBAct;       // mode
+  uint8_t cwModeAct;      // CW mode
+  uint8_t ritOnAct;       // RIT
+  uint8_t splitOnAct;     // SPL
+  unsigned long frequencyAct;  // frequency
+  unsigned long ritTxFrequencyAct;  // frequency TX Rit
+  uint8_t isUsbsplAct;      // isUSB TX split mode
+  uint8_t cwModesplAct;     // CW mode TX split
+  unsigned long ftxsplAct;  // frequency TX Split
+
 //////  tratamiento de bits /////////////////////
 const byte tab[8]={1,2,4,8,16,32,64,128}; // 8
-
 char watermarkref[16]="uBitx1234567890";  // código de verificación uBitx
 
 String msg;                     // String donde se construye la respuesta HTML qu e se envía al cliente
@@ -429,7 +440,7 @@ void initConf()
   conf.lang=0;                      // 0=español, 1=inglés, 2=francés, 3=alemán
   conf.rstper=0;   
   conf.usepassDev=0;                // 1 byte, 0 no usar password,  1 usar password
-  memset(conf.probecode,0,sizeof(conf.probecode));; // código de sonda 
+  memset(conf.probecode,0,sizeof(conf.probecode)); // código de sonda 
   strcpy(conf.userDev,"admin");         // 20 bytes, usuario device
   strcpy(conf.passDev,"admin");         // 20 bytes, password device
   conf.iftttenabled=0;

@@ -174,8 +174,10 @@ void saveconfEEPROM()
 
 int readconfEEPROM()
 {
-  for (int i=0;i<sizeof(conf);i++) { buffconf[i]=EEPROM.read(i); }
-  return(sizeof(buffconf));
+  int mysize=sizeof(conf);
+  for (int i=0;i<mysize;i++) { buffconf[i]=EEPROM.read(i); }
+  Serial2.print("readconfEEPROM:");Serial2.println(mysize);
+  return(mysize);
 }
 
 
@@ -200,8 +202,6 @@ void ICACHE_FLASH_ATTR saveconf()
 
 int ICACHE_FLASH_ATTR readconf()
 {
-  return readconfEEPROM();
-    
   int count=0;
   File auxfile=SPIFFS.open(fileconf,letrar);
   if (auxfile)
@@ -501,12 +501,12 @@ void ICACHE_FLASH_ATTR printtiempo(unsigned long segundos)
   Serial2.printf(" Flash chip Id: %08X (for example: Id=001640E0 Manuf=E0, Device=4016 (swap bytes))\n", ESP.getFlashChipId());
   Serial2.printf(" Sketch thinks Flash RAM is size: "); Serial2.print(flashChipSize); Serial2.println(" MB");
   Serial2.print(" Actual size based on chip Id: "); Serial2.print(realFlashChipSize); Serial2.println(" MB ... given by (2^( "Device" - 1) / 8 / 1024");
-  Serial2.print(" Flash frequency: "); Serial2.print(flashFreq); Serial.println(" MHz");
+  Serial2.print(" Flash frequency: "); Serial2.print(flashFreq); Serial2.println(" MHz");
   Serial2.printf(" Flash write mode: %s\n", (ideMode == FM_QIO ? "QIO" : ideMode == FM_QOUT ? "QOUT" : ideMode == FM_DIO ? "DIO" : ideMode == FM_DOUT ? "DOUT" : "UNKNOWN"));
   Serial2.printf("__________________________\n\n");
   Serial2.println("File system (SPIFFS): ");
-  Serial2.print(" Total KB: "); Serial2.print(fileTotalKB); Serial.println(" KB");
-  Serial2.print(" Used KB: "); Serial2.print(fileUsedKB); Serial.println(" KB");
+  Serial2.print(" Total KB: "); Serial2.print(fileTotalKB); Serial2.println(" KB");
+  Serial2.print(" Used KB: "); Serial2.print(fileUsedKB); Serial2.println(" KB");
   Serial2.printf(" Block size: %lu\n", fs_info.blockSize);
   Serial2.printf(" Page size: %lu\n", fs_info.pageSize);
   Serial2.printf(" Maximum open files: %lu\n", fs_info.maxOpenFiles);
@@ -515,8 +515,8 @@ void ICACHE_FLASH_ATTR printtiempo(unsigned long segundos)
   Dir dir = SPIFFS.openDir("/");
   Serial2.println("SPIFFS directory {/} :");
   while (dir.next()) {
-    Serial2.print(" "); Serial.println(dir.fileName());
-    Serial2.println(" "); Serial.println(dir.fileSize());
+    Serial2.print(" "); Serial2.println(dir.fileName());
+    Serial2.println(" "); Serial2.println(dir.fileSize());
   }
   Serial2.printf("__________________________\n\n");
   Serial2.printf("CPU frequency: %u MHz\n\n", ESP.getCpuFreqMHz());

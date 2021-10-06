@@ -244,14 +244,6 @@ void ICACHE_FLASH_ATTR printcampoCB(int numpar, int valact, PGM_P t0, PGM_P t1, 
   printcampoCB(numpar,valact,sizeof(t)/sizeof(t[0]),t,printtd);
 }
 
-void printaddr1Wire(byte i)
-{
-  if (i==0)
-    printP("No probe");
-  else
-    for (uint8_t j=0;j<8;j++) { printH(conf.probecode[i-1][j]); } 
-  }
-
 void ICACHE_FLASH_ATTR selectProbe(int numpar, int valact, boolean printtd)
 {
   if (printtd) printP(td);
@@ -508,7 +500,7 @@ void ICACHE_FLASH_ATTR filesHTML()
   File f=dir.openNextFile("r");
 //    File dir=SPIFFS.open(barra);
 //    File file=dir.openNextFile();
-//    if (testfiles) { while (file) { Serial.print(file.name()); Serial.print(b); Serial.println(file.size()); file=dir.openNextFile(); }}
+//    if (testfiles) { while (file) { Serial2.print(file.name()); Serial2.print(b); Serial2.println(file.size()); file=dir.openNextFile(); }}
   while (f)   {
     printP(tr, td, href_i, comillas, letrad, letraw);
     printP(interr, letraf, ig);
@@ -798,7 +790,7 @@ void setupMemHTML()
       else if (resto==7) memo.ritTxFrequency[indice]=server.arg(i).toInt();
       else if (resto==8) memo.splitOn[indice]=server.arg(i).toInt();
       else if (resto==9) memo.ftxspl[indice]=server.arg(i).toInt();
-      else if (resto==10) memo.isUsbspl[indice]=server.arg(i).toInt();
+      else if (resto==10) memo.splitOn[indice]=server.arg(i).toInt();
       else if (resto==11) memo.cwModespl[indice]=server.arg(i).toInt();
       }
     savememo();
@@ -842,7 +834,7 @@ void setupMemHTML()
     checkBox(mp*i+8,memo.splitOn[i],false);
     printP(memo.splitOn[i]?th_f:td_f);
     printcampoL(mp*i+9, memo.ftxspl[i], 9, true, true);
-    printcampoCB(mp*i+10, memo.isUsbspl[i],"LSB","USB",true);
+    printcampoCB(mp*i+10, memo.splitOn[i],"LSB","USB",true);
     printcampoCB(mp*i+11, memo.cwModespl[i],"None","CW",true);
     printP(tr_f);  
     }
@@ -1496,6 +1488,9 @@ void ICACHE_FLASH_ATTR scanapHTML()
   writeHeader(false,false);
   printP(menor,table, b);
   printP(c(tclass), ig, tnormal, mayor);
+  printP(tr,td,"nAP",td_f,td);
+  printI(nAP);
+  printP(td_f,tr_f);
   for (int i=0; i<nAP; i++)
     {
     WiFi.SSID(i).toCharArray(auxchar, 20);
@@ -1530,7 +1525,7 @@ void initupdateserver()
       s2("Update: "); s2(upload.filename.c_str());
       clearTFT();
       tft.setTextSize(2);
-      tft.drawString("Updating firmware...",0,20);
+      tft.drawString("Actualizando firmware...",0,20);
       tft.drawString("No apague el equipo",0,40);
       if (!Update.begin()) { //start with max available size
         Update.printError(Serial2);
@@ -1762,13 +1757,13 @@ int checkInternet()
   msg=vacio;
   printP(barra);
   HTTPClient http;
-  Serial.print("hostmyip:"); Serial.println(conf.hostmyip);
+  Serial2.print("hostmyip:"); Serial2.println(conf.hostmyip);
   http.begin("www.google.com", 80, msg);
   http.setConnectTimeout(2000);
-  Serial.print("checkInternet ");Serial.print("host:");Serial.print("www.google.com");
-  Serial.print(":");Serial.print(80); Serial.print(msg);Serial.print("=");
+  Serial2.print("checkInternet ");Serial2.print("host:");Serial2.print("www.google.com");
+  Serial2.print(":");Serial2.print(80); Serial2.print(msg);Serial2.print("=");
   int httpCode=http.GET();
-  Serial.print(" ");Serial.println(httpCode);
+  Serial2.print(" ");Serial2.println(httpCode);
   http.end();
   msg=vacio;
   return httpCode;

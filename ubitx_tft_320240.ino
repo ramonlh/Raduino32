@@ -88,7 +88,7 @@ char btSetRadtext[5][11]={"TX range","SSB auto","Scan range","Scan mode","Resume
 char btMemMantext[5][11]={"xxx","xxx","xxx","xxx","Clear All"};
 char btNettext[5][11]={"Auto Conn.","Scan SSID","Password","WiFi Mode","Static IP"};
 char btNavtext[5][8]={"H","<",">"," ","xxx"};
-char btFlottext[5][6]={"Ent","Scan-","Scan+","Lock",">VFO"};
+char btFlottext[5][6]={"Ent","Scan-","Scan+","Lock",">MEM"};
 char btYNtext[3][6]={"OK","ESC","<--"};
 char btKeytext[50][2]={"0","1","2","3","4","5","6","7","8","9",
                        "A","B","C","D","E","F","G","H","I","J",
@@ -356,7 +356,6 @@ void displayFreq(byte fast, byte fA, byte fB, byte fAux)
       }
     tft.fillCircle(110,62,2,TFT_WHITE);    // punto de miles
     }
-  if (conf.framemode==3) { displayFreqs(); }
 }
 
 void displayNav()   // botones navegación
@@ -613,7 +612,7 @@ void displayMemList()   // tftpage=22
 {
   tft.setTextSize(1); 
   tft.setTextColor(TFT_WHITE,TFT_BLACK);
-  tft.drawString("  n      Name             VFO  L/U   CW   Rit  Spl", 0, 74);
+  tft.drawString("  n      Name             VFO L/U CW Rt Spl", 0, 74);
   tft.setTextSize(2); 
   for (int i=0; i<6; i++)
     {
@@ -629,15 +628,15 @@ void displayMemList()   // tftpage=22
       btMemN[i].drawButton();
       tft.setTextColor(TFT_WHITE,TFT_BLACK);
       }
-    tft.drawString("                       ",45,92+20*i);    
+    tft.drawString("                       ",35,92+20*i);    
     if (memo.act[mempos+i-memlin]==1)
       {
-      tft.drawString(memo.descr[mempos+i-memlin],45,92+20*i);    
+      tft.drawString(memo.descr[mempos+i-memlin],35,92+20*i);    
       tft.drawString(memo.vfoActive[mempos+i-memlin]==VFO_A?"A":"B",160,92+20*i);    
-      tft.drawString(memo.isUSB[mempos+i-memlin]==0?"LSB":"USB",180,92+20*i);    
-      tft.drawString(memo.cwMode[mempos+i-memlin]==0?"  ":"CW",220,92+20*i);    
-      tft.drawString(memo.ritOn[mempos+i-memlin]==0?"   ":"Rit",250,92+20*i);    
-      tft.drawString(memo.splitOn[mempos+i-memlin]==0?"   ":"SPL",290,92+20*i);    
+      tft.drawString(memo.isUSB[mempos+i-memlin]==0?"L":"U",180,92+20*i);    
+      tft.drawString(memo.cwMode[mempos+i-memlin]==0?" ":"C",200,92+20*i);    
+      tft.drawString(memo.ritOn[mempos+i-memlin]==0?" ":"R",220,92+20*i);    
+      tft.drawString(memo.splitOn[mempos+i-memlin]==0?" ":"S",240,92+20*i);    
       }
     }
 }
@@ -893,7 +892,6 @@ void displayFlot()
     {
     btFlot[0].initButtonUL(&tft,255,140,65,30,2,TFT_WHITE,TFT_BLACK,btFlottext[0],2);
     btFlot[0].drawButton();
-    strcpy(btFlottext[4],conf.memMode==0?">MEM":">VFO");
     btFlot[4].initButtonUL(&tft,255,175,65,30,2,TFT_WHITE,TFT_BLACK,btFlottext[4],2);
     btFlot[4].drawButton();
     }
@@ -1040,7 +1038,7 @@ void DisplayVersionInfo(const __FlashStringHelper * fwVersionInfo)
 void  initButtons()
 {
   btMainact[0]=inTx==1?1:0;         // RX / TX
-  btMainact[1]=conf.memMode==0?0:1; // V/M
+  btMainact[1]=0;                   // V/M
   btMainact[2]=0;                   // Band Down
   btMainact[3]=0;                   // Band Up
   btMainact[4]=conf.isUSB==1?1:0;   // LSB / USB
@@ -1201,12 +1199,10 @@ void setWiFi()
    else
      {
      initWiFi();
-     if (conf.autoWiFi==1)
-       {
-       if ((conf.wifimode==1) || (conf.wifimode==3))  
-         connectSTA();
-       }
-     if (conf.wifimode>0) initNetServices();
+     if ((conf.wifimode==1) || (conf.wifimode==3))  
+       connectSTA();
+     if (conf.wifimode>0) 
+       initNetServices();
      }
 }
 
@@ -1271,7 +1267,7 @@ void checkFlotButtons(uint16_t x, uint16_t y)
         }
       else if (i==1) { startScan(1); }     // scan down
       else if (i==2) { startScan(2); }     // scan up
-      else if (i==4)        // VFO to Mem / Mem to VFO
+      else if (i==4)        // VFO to Mem 
         { 
         if (conf.memMode==0)   // VFO mode
           { 
@@ -1365,9 +1361,10 @@ void checkMainButtons(uint16_t x, uint16_t y)
         }   
       else if (i==1)    // V/M
         { 
-        conf.memMode=conf.memMode==0?1:0; 
-        firstmem=conf.memMode==1;
-        tftpage=conf.memMode==0?0:22;
+        //conf.memMode=1 
+        firstmem=1;
+        tftpage=22;
+        saveFREQ();
         clearTFT();
         }
       else if (i==2)    //Prior Band
@@ -1839,10 +1836,49 @@ void setSTEP(byte value)
   conf.tuneStepIndex=value; sendData(tcpclient,tcptunestep); 
   displayFreq(1,1,1,1);  
 }
+/**
+  typedef struct {    // datos memorias
+      uint8_t act[maxMem];         // activa o no
+      uint8_t vfoActive[maxMem];   // VFO 
+      uint8_t isUSB[maxMem];       // mode
+      uint8_t cwMode[maxMem];      // CW mode
+      uint8_t ritOn[maxMem];       // RIT
+      uint8_t splitOn[maxMem];     // SPL
+      unsigned long frequency[maxMem];  // frequency
+      unsigned long ritTxFrequency[maxMem];  // frequency TX Rit
+      uint8_t isUsbspl[maxMem];         // isUSB TX split mode
+      uint8_t cwModespl[maxMem];        // CW mode TX split
+      unsigned long ftxspl[maxMem];  // frequency TX Split
+      char descr[maxMem][20];        // descripción
+} memotype;
+**/
+
+void saveFREQ()     // save freq values
+{
+  vfoActiveAct=conf.vfoActive;      // VFO 
+  isUSBAct=conf.isUSB;       // mode
+  cwModeAct=conf.cwMode;      // CW mode
+  ritOnAct=conf.ritOn;       // RIT
+  splitOnAct=conf.splitOn;     // SPL
+  frequencyAct=conf.frequency;  // frequency
+  ritTxFrequencyAct=conf.ritTxFrequency;  // frequency TX Rit
+  splitOnAct=conf.splitOn;      // isUSB TX split mode
+  cwModeAct=conf.cwMode;     // CW mode TX split
+  ftxsplAct=conf.frequencyB;           // frequency TX Split
+}
 
 void restFREQ()     // restore freq values
 {
-  
+  conf.vfoActive=vfoActiveAct;      // VFO 
+  conf.isUSB=isUSBAct;       // mode
+  conf.cwMode=cwModeAct;      // CW mode
+  conf.ritOn=ritOnAct;       // RIT
+  conf.splitOn=splitOnAct;     // SPL
+  conf.frequency=frequencyAct;  // frequency
+  conf.ritTxFrequency=ritTxFrequencyAct;  // frequency TX Rit
+  conf.splitOn=splitOnAct;      // isUSB TX split mode
+  conf.cwMode=cwModeAct;     // CW mode TX split
+  conf.frequencyB=ftxsplAct;          // frequency TX Split
 }
 
 void handletfttouch()
@@ -1860,43 +1896,34 @@ void handletfttouch()
       checkFreqButtons(x,y);
       checkMainButtons(x,y);
       checkVFOButtons(x,y);
-      checkSmeterButtons(x,y);
+      checkSmeterButtons(x,y); 
+      checkNavButtons(x,y); 
+      checkStaButtons(x,y);
       }
-    else if (tftpage==1) { checkSetButtons(x,y); }    // Setup page
-    else if (tftpage==2) { checkSetRadButtons(x,y); } // radio setting page
-    else if (tftpage==3) { checkCWButtons(x,y); }     // CW setting page
-    else if (tftpage==4) { checkNetButtons(x,y); }    // WiFi page
-    else if (tftpage==5) { checkCalButtons(x,y); }    // Calibration page
-    else if (tftpage==6) { checkKEYERButtons(x,y); }  // KEYER setting page
-    else if (tftpage==7) { checkMemManButtons(x,y); } // memories manager
-    else if (tftpage==8) { checkATUButtons(x,y); }    // ATU page
-    else if (tftpage==9) { checkTPAButtons(x,y); }    // TPA2016 page
-    else if (tftpage==10) { checkSMEButtons(x,y); }    // S_METER page
-    else if (tftpage==11) { checkCONButtons(x,y); }    // CONNS page
-    else if (tftpage==12) { checkTEMPButtons(x,y); }  // TEMP page
-    else if (tftpage==13) { checkPORTSButtons(x,y); }  // TEMP page
-    else if (tftpage==21) { checkSelButtons(x,y);}    // Select AP
+    else if (tftpage==1) { checkSetButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }    // Setup page
+    else if (tftpage==2) { checkSetRadButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); } // radio setting page
+    else if (tftpage==3) { checkCWButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }     // CW setting page
+    else if (tftpage==4) { checkNetButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }    // WiFi page
+    else if (tftpage==5) { checkCalButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }    // Calibration page
+    else if (tftpage==6) { checkKEYERButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }  // KEYER setting page
+    else if (tftpage==7) { checkMemManButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); } // memories manager
+    else if (tftpage==8) { checkATUButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }    // ATU page
+    else if (tftpage==9) { checkTPAButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }    // TPA2016 page
+    else if (tftpage==10) { checkSMEButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }    // S_METER page
+    else if (tftpage==11) { checkCONButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }    // CONNS page
+    else if (tftpage==12) { checkTEMPButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }  // TEMP page
+    else if (tftpage==13) { checkPORTSButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }  // TEMP page
+    else if (tftpage==21) { checkSelButtons(x,y); }    // Select AP
     else if (tftpage==22) 
       { 
-      int auxres=checkYN();
-      if (auxres==0)
+      tftpage=0; 
+      if (checkYN()==1)  // ESC
         {
-        tftpage=0; 
-        conf.memMode=1;
-        }
-      else if (auxres==1)  // ESC
-        {
-        tftpage=0;  
-        conf.memMode=0;
         restFREQ();
         }
       updateDisplay(1); 
       }    // 
-    else if (tftpage==24) { checkMenuButtons(x,y);}    // 
-    if ((tftpage!=21) && (tftpage!=22)) 
-      { 
-      checkNavButtons(x,y); 
-      checkStaButtons(x,y); }
+    else if (tftpage==24) { checkMenuButtons(x,y); checkNavButtons(x,y); checkStaButtons(x,y); }    // 
     delay(20);
     } 
 }
