@@ -9,10 +9,13 @@
 //    created by Farhan, Jack, Jerry and others and KD8CEC.
 
 // Standar version - No tasks
-#define FIRMWARE_VERSION_INFO F("v 1.100")
+#define FIRMWARE_VERSION_INFO F("v 1.101")
 #define BITX      // for use  at user_setup.h from TFT_eSPI library
 #define EEPROM_SIZE 2048
 
+/********************************************
+// you must define this pins at file "User_setup.h" from TFT_eSPI library
+// these lines have no effect and are only informative
 // TFT pins for uBITX
 #define BITX        // for use  at user_setup.h from TFT_eSPI library
 #define TFT_RST  -1 // Reset pin (could connect to RST pin)
@@ -22,6 +25,7 @@
 #define TFT_SCLK 14
 #define TFT_CS   32 // Chip select control pin    
 #define TOUCH_CS  5 // Chip select pin (T_CS) of touch screen
+*********************************************/
 
 /**
  Cat Suppoort uBITX CEC Version 
@@ -93,6 +97,7 @@
 #include "Adafruit_TPA2016.h"
 #include <ArduinoWebsockets.h>
 #include "AsyncUDP.h"
+#include "esp_wifi.h"
 
 WiFiServer tcpserver;
 WiFiUDP udp;
@@ -515,7 +520,7 @@ void saveVFOtoMem()
   while ((i<maxMem) && (memo.act[i]==1)) i++;
   if (i<maxMem)
     {
-    strcpy(memo.descr[i], itoa(conf.frequency,buff,10));
+    strcpy(memo.descr[i], "");
     int auxI=getCharTFT(memo.descr[i],10); 
     if (auxI !=-1) 
       {
@@ -528,7 +533,6 @@ void saveVFOtoMem()
       memo.splitOn[i]=conf.splitOn;
       memo.frequency[i]=conf.frequency;
       memo.ritTxFrequency[i]=conf.ritOn==1?conf.ritTxFrequency:conf.frequency;
-      memo.isUsbspl[i]=conf.isUSBB;
       memo.cwModespl[i]=conf.cwModeB;
       memo.ftxspl[i]=conf.frequencyB;
       savememo();
@@ -546,7 +550,6 @@ void setMEMtoVFO(int pos)
     setSPLIT(memo.splitOn[pos]);
     conf.frequency=memo.frequency[pos];
     conf.ritTxFrequency=memo.ritTxFrequency[pos];
-    conf.isUSBB=memo.isUsbspl[pos]=0;
     conf.cwModeB=memo.cwModespl[pos]=0;
     conf.frequencyB=memo.ftxspl[pos];
     setFrequency(conf.frequency);
@@ -557,7 +560,7 @@ void setMEMtoVFO(int pos)
 
 void setFreq(int s)
 {
-  s2("setFreq:"); s2(s); s2(" f:"); s2(conf.frequency); s2(crlf);
+  //s2("setFreq:"); s2(s); s2(" f:"); s2(conf.frequency); s2(crlf);
   conf.frequency += (conf.arTuneStep[conf.tuneStepIndex] * s);  //applied weight (s is speed) //if want need more increase size, change step size
   if (conf.vfoActive==VFO_A) conf.frequencyA=conf.frequency; else conf.frequencyB=conf.frequency;
   setFrequency(conf.frequency);
@@ -608,12 +611,12 @@ void doMem()
     }
   boolean cambio=false;
   int knob = enc_read();
-  if (knob < 0) 
+  if (knob < -1) 
     {
     if (memlin>0) memlin--;
     if (mempos>0) { mempos--; cambio=true; }
     }
-  else if (knob > 0) 
+  else if (knob > 1) 
     {
     if (memlin<6) memlin++;
     if (mempos<maxMem) { mempos++; cambio=true; }
@@ -623,7 +626,7 @@ void doMem()
     { 
     firstmem=false;
     displayFreq(0,1,1,1);
-    displayYN(1,1,1);
+    displayYN(1,1,0);
     displayMemList(); 
     setMEMtoVFO(mempos); 
     }
@@ -735,7 +738,7 @@ void showSettings()
 
   s2("rstper:"); s2(conf.rstper); s2(crlf);
   s2("usepassDev:"); s2(conf.usepassDev); s2(crlf);
-  s2("probecode:"); s2(conf.usepassDev); s2(crlf);
+  s2("probecode:"); s2(crlf);
   for (byte i=0;i<8;i++)
     { 
     s2(i);s2(":");
@@ -792,7 +795,8 @@ void initSettings(){
   else
     {
     if (!checkfiles()) s2("Falta algún fichero");s2(crlf);
-    readconf();
+    int auxread=readconfEEPROM();
+    s2("Leído readconf:"); s2(auxread); s2(crlf);
     if(readmemo()!=sizeof(memo)) { savememo(); }
     conf.memMode=0;
     conf.EEip[3]=149;
@@ -882,13 +886,13 @@ void connectSTA()
 {
   s2("  Conectando: ");  s2(conf.ssidSTA);
   s2("/");  s2(conf.passSTA);
-  displayMsg("Connecting to",conf.ssidSTA,"********",40,140,210,75);
+  displayMsg("Conectando a",conf.ssidSTA,"********",40,140,210,75);
   byte cont = 0;
   while((!WiFi.isConnected()) && (cont++ < 20))  { delay(500); s2("."); }
   clearMsg(40,140,210,75);
   displayWiFiSt();
   s2(WiFi.isConnected()?" OK":" ERROR"); s2(crlf);
-  //s2("  STA IP: ");  s2.print(WiFi.localIP()); s2(crlf);
+  s2("  STA IP: ");  s2(WiFi.localIP()); s2(crlf);
   s2("  STA MAC: ");  s2(WiFi.macAddress()); s2(crlf);
   s2("  Subnet Mask: ");  s2(WiFi.subnetMask()); s2(crlf);
   s2("  Gateway IP: "); s2(WiFi.gatewayIP()); s2(crlf);
@@ -897,8 +901,8 @@ void connectSTA()
 
 void initNetServices()
 {
-  displayIFS(0,40,185);
-  displayATT(0,40,150);
+  //displayIFS(0,40,185);
+  //displayATT(0,40,150);
   task1();
   if ((conf.wifimode>0))  // 
     {
@@ -950,8 +954,9 @@ void initNetServices()
 
 void initWiFi() {
   if(conf.wifimode==0) { WiFi.mode(WIFI_OFF); }
-  else if(conf.wifimode==1) { WiFi.mode(WIFI_STA); }
-  else if(conf.wifimode==3) { WiFi.mode(WIFI_AP_STA); }
+  else if (conf.wifimode==1) { WiFi.mode(WIFI_STA); }
+  else if (conf.wifimode==2) { WiFi.mode(WIFI_AP); }
+  else if (conf.wifimode==3) { WiFi.mode(WIFI_AP_STA); }
   else { WiFi.mode(WIFI_AP); }
   
   WiFi.setAutoConnect(true);
@@ -966,21 +971,28 @@ void initWiFi() {
     s2("  AP MAC:"); s2(WiFi.softAPmacAddress());s2(crlf);
     s2("  IP:");s2(WiFi.softAPIP());s2(crlf);
     }
-  if ((conf.wifimode==1) || (conf.wifimode==3)) {       // STA o AP+STA
+  if ((conf.wifimode==1) || (conf.wifimode==3))        // STA o AP+STA
     {
     s2("STA mode:");s2(crlf);
     if(conf.staticIP==1) { 
-      WiFi.config(conf.EEip, conf.EEgw, conf.EEmask, conf.EEdns, conf.EEdns2); }
+      WiFi.config(conf.EEip, conf.EEgw, conf.EEmask, conf.EEdns, conf.EEdns2); 
+        }
+//      WiFi.begin(conf.ssidSTA, conf.passSTA);
       WiFi.begin(conf.ssidSTA, conf.passSTA, true);
       s2("  Static IP:");s2(conf.staticIP?"YES ":"NO ");
-      for(byte i=0; i<4; i++) { s2(conf.EEip[i]); s2("."); }
-      s2(crlf);
+      for(byte i=0; i<4; i++) { s2(conf.EEip[i]); s2("."); }  s2(crlf);
+      s2("  Gateway:"); for(byte i=0; i<4; i++) { s2(conf.EEgw[i]); s2("."); } s2(crlf);
+      s2("  EEmask:"); for(byte i=0; i<4; i++) { s2(conf.EEmask[i]); s2("."); } s2(crlf);
+      s2("  EEdns:"); for(byte i=0; i<4; i++) { s2(conf.EEdns[i]); s2("."); } s2(crlf);
+      s2("  EEdns2:"); for(byte i=0; i<4; i++) { s2(conf.EEdns2[i]); s2("."); } s2(crlf);
     }
-  }
   if (conf.autoWiFi==1)
     {
     if ((conf.wifimode==1) || (conf.wifimode==3))
+      {
       connectSTA();
+      updateDisplay(1);
+      }
     }
 }
 
@@ -1035,10 +1047,6 @@ void printhelp()
 
 void printstatus()
 {
-  if(conf.wifimode==0) { WiFi.mode(WIFI_OFF); }
-  else if(conf.wifimode==1) { WiFi.mode(WIFI_STA); }
-  else if(conf.wifimode==2) { WiFi.mode(WIFI_AP); }
-  else if(conf.wifimode==3) { WiFi.mode(WIFI_AP_STA); }
   s2("WiFi Mode: "); s2(conf.wifimode==0?"OFF":conf.wifimode==1?"STA":conf.wifimode==2?"AP":"AP+STA");s2(crlf);
   s2("IP: ");        s2(WiFi.localIP());s2(crlf);
   s2("Port: ");      s2(conf.webPort);s2(crlf);
@@ -1279,15 +1287,14 @@ void initWS() { wsserver.listen(conf.wsPort); }
 
 void setup()
 {
-  EEPROM.begin(2048);
+  initSerial2(115200);  
+  EEPROM.begin(EEPROM_SIZE);
   initConf();
   conf.connMode=0;
-  initSerial2(115200);  
   s2("========== Init =========");s2(crlf);
   Init_Cat(38400, SERIAL_8N1);  s2("  Serial 1 started");s2(crlf);
   s2("  Serial 2 started"); s2(crlf);
   s2("  Vers.:"); s2(FIRMWARE_VERSION_INFO); s2(crlf);
-  //s2(EEPROM.begin(EEPROM_SIZE)?"EEPROM started":"ERROR initializing EEPROM"); s2(crlf);
   delay(10);
   initTFT();          s2("TFT started");s2(crlf);
   DisplayVersionInfo(FIRMWARE_VERSION_INFO);
@@ -1310,13 +1317,21 @@ void setup()
   initTPA2016();      s2("TPA2016 started"); s2(crlf);
   //initDecodeCW();     s2("initDecodeCW");s2(crlf);
   smetervalue=0;  maxsmeter=0;  minsmeter=32000;
+  int8_t power;
+  int auxerr=esp_wifi_get_max_tx_power(&power);
+  Serial2.print("radio power:");Serial2.println(power);
   s2("END SETUP");s2(crlf);  
   s2("============================");s2(crlf);
   s2("Type 'h' to help"); s2(crlf); 
   s2("----------------------------");s2(crlf);
-  //for (byte i=0; i<16;i++) { s2("i:"); s2(i); s2(" v:"); s2(conf.sMeterLevels[i]); s2(crlf); }
   conf.connMode=auxconnMode;
-  //conf.connMode=1;
+  Serial2.print("TFT_MISO:"); Serial2.println(TFT_MISO);
+  Serial2.print("TFT_MOSI:"); Serial2.println(TFT_MOSI);
+  Serial2.print("TFT_SCLK:"); Serial2.println(TFT_SCLK);
+  Serial2.print("TFT_CS:"); Serial2.println(TFT_CS);
+  Serial2.print("TFT_DC:"); Serial2.println(TFT_DC);
+  Serial2.print("TOUCH_CS:"); Serial2.println(TOUCH_CS);
+  Serial2.print("TFT_RST:"); Serial2.println(TFT_RST);
 }
 
 void ICACHE_FLASH_ATTR leevaloresOW()
@@ -1378,21 +1393,20 @@ float readSWR(int limit)
 {
   float auxSWR=1;
   int16_t adc0, adc1;
-  long ldc0=0; long ldc1=0;
+  long ldc0=0; long ldc1=0; 
   for (byte i=0;i<conf.ATUIter;i++)
     {
-    ldc0=ldc0+adsA.readADC_SingleEnded(VFORp); // s2(" ldc0/1:"); s2(ldc0); 
-    ldc1=ldc1+adsA.readADC_SingleEnded(VREFp); // s2("/"); s2(ldc1);
+    ldc0=ldc0+adsA.readADC_SingleEnded(VFORp); // VFORp=0
+    ldc1=ldc1+adsA.readADC_SingleEnded(VREFp); // VREFp=1
     }
   adc0 = ldc0/conf.ATUIter; if (adc0<0) adc0=0;
   adc1 = ldc1/conf.ATUIter; if (adc1<0) adc1=0;
-  s2("adc:"); s2(adc0); s2("-");s2(adc1);
   
   vFORc=((float(adc0)*0.1875/1000)+0.25)*11*0.707;
   vREFc=((float(adc1)*0.1875/1000)+0.25)*11*0.707;
-  wFORc=vFORc*vFORc/50; wREFc=vREFc*vREFc/50;
+  //wFORc=vFORc*vFORc/50; wREFc=vREFc*vREFc/50;
+  wFORc=vFORc*vFORc*0.707/50; wREFc=vREFc*vREFc*0.707/50;
   if ((vFORc-vREFc)>0) SWRreal=(vFORc+vREFc)/(vFORc-vREFc); else SWRreal=1.0;
-  s2(" SWRreal:"); s2(SWRreal);s2(crlf);
   auxSWR=(SWRreal*conf.ATUFactor)+conf.ATUOffset;
   if (auxSWR<limit) auxSWR=1;
   return(auxSWR);
@@ -1413,10 +1427,12 @@ void readVIpower()
 {
   int16_t vtotadc=adsB.readADC_SingleEnded(VTOTp);    // es el valor leído del ADC sin convertir
   int16_t itotadc=adsB.readADC_SingleEnded(ITOTp);    // es el valor leído del ADC sin convertir
-  float factorv=290.0;
-  float factori=1000.0;
-  vtotvalue=vtotadc*0.1875/factorv;
-  itotvalue=-(itotadc*0.1875-2500)*10/factori;
+  float factorv=290.0;    // factor teórico
+  float factori=1000.0;   // factor teórico
+  float factorvr=1.0;     // factor corrección
+  float factorir=0.75;   // factor corrección
+  vtotvalue=factorvr*vtotadc*0.1875/factorv;
+  itotvalue=-(factorir)*(itotadc*0.1875-2500)*10/factori;
 }
 
 void task1() {
@@ -1428,7 +1444,7 @@ void task1() {
   if (inTx==1) leevaloresOW();
   if ((tftpage!=21) && (tftpage!=22) &&(tftpage!=23))
     displayStatus();
-  if(conf.rstper>0) { if(millis() > 3600000*conf.rstper) { Serial.println("RESTART"); ESP.restart();  } }
+  if(conf.rstper>0) { if(millis() > 3600000*conf.rstper) { Serial2.println("RESTART"); ESP.restart();  } }
   mact1=millis();
 }
 
@@ -1498,9 +1514,6 @@ void task10() {
   //sendData(tcpclient, tcptemp3); 
   sendData(tcpclient, tcpminsmeter);
   sendData(tcpclient, tcpmaxsmeter);
-  if ((tftpage==0) && (conf.framemode==2))
-    {
-    }
   displayWiFiSt();
   mact10=millis();
 }
