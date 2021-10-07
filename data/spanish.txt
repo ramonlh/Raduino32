@@ -116,5 +116,13 @@ Debug server
 TCP server                              
 UDP server                              
 WS server                               
-Serial-IP WS server                     
+Serial IP server                        
 Web server                              
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        

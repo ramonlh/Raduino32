@@ -102,12 +102,12 @@ WiFi mode
 Zone                                    
 Zones                                   
 FTP server                              
-Installation                            
+Installation                             
 Hyst.                                   
 1-31:MB, 150-166:uBitx, Resto:I2C       
 No hacer nada                           
 Falta algún fichero necesarios<br>      
-Use FTP o \"Sketch Data Upload                         
+Use FTP o \"Sketch Data Upload                                        
 Save/Export                             
 Language                                
 Heat Pump                               
@@ -116,5 +116,8 @@ Debug server
 TCP server                              
 UDP server                              
 WS server                               
-Serial-IP WS server                     
+Serial IP server                        
 Web server                              
+                                        
+                                        
+                                        
