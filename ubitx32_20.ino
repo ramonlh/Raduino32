@@ -71,7 +71,7 @@
 #include "variables.h"                // include 
 #include "commontexts.h"              
 #include "ajaxcode.h"                  // include
-#include <WiFi.h>
+//#include <WiFi.h>
 #include <WebServer.h>
 #include <Update.h>
 #include <ESP8266FtpServer.h>
@@ -1325,13 +1325,6 @@ void setup()
   s2("Type 'h' to help"); s2(crlf); 
   s2("----------------------------");s2(crlf);
   conf.connMode=auxconnMode;
-  Serial2.print("TFT_MISO:"); Serial2.println(TFT_MISO);
-  Serial2.print("TFT_MOSI:"); Serial2.println(TFT_MOSI);
-  Serial2.print("TFT_SCLK:"); Serial2.println(TFT_SCLK);
-  Serial2.print("TFT_CS:"); Serial2.println(TFT_CS);
-  Serial2.print("TFT_DC:"); Serial2.println(TFT_DC);
-  Serial2.print("TOUCH_CS:"); Serial2.println(TOUCH_CS);
-  Serial2.print("TFT_RST:"); Serial2.println(TFT_RST);
 }
 
 void ICACHE_FLASH_ATTR leevaloresOW()

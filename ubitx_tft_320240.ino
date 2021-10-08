@@ -90,11 +90,16 @@ char btNettext[5][11]={"Auto Conn.","Scan SSID","Password","WiFi Mode","Static I
 char btNavtext[5][8]={"H","<",">"," ","xxx"};
 char btFlottext[5][6]={"Ent","Scan-","Scan+","Lock",">MEM"};
 char btYNtext[3][6]={"OK","ESC","<--"};
-char btKeytext[50][2]={"0","1","2","3","4","5","6","7","8","9",
+char btKeytextL[50][2]={"0","1","2","3","4","5","6","7","8","9",
+                       "a","b","v","d","e","f","g","h","i","j",
+                       "k","l","m","n","ñ","o","p","q","r","s",
+                       "t","u","v","w","x","y","z","","","",
+                       "-","=","_",".",",",";","/","(",")","U"};
+char btKeytextU[50][2]={"0","1","2","3","4","5","6","7","8","9",
                        "A","B","C","D","E","F","G","H","I","J",
                        "K","L","M","N","Ñ","O","P","Q","R","S",
-                       "T","U","V","W","X","Y","Z","x","x","x",
-                       "-","=","_",".",",",";","/","(",")","x"};
+                       "T","U","V","W","X","Y","Z","","","",
+                       "-","=","_",".",",",";","/","(",")","L"};
 char keytypetext[3][11]={"Straigth","Iambic A","Iambic B"};
 char btMenuNavtext[20][6]={"HOME","USER","RADIO","CW","Wifi",
                            "CALIB","KEYER","MEM","ATU","TPA",
@@ -544,18 +549,24 @@ void displayKEYERSet()    // botones KEYER setting
     tft.drawNumber(conf.cwAdcSTTo,250,150);
 }
 
-void displayKey(byte mode) // 0: all keys, 1:numeric, 2:alfa only  
+void displayKey(byte mode) // 0: all keys UP, 1: all keys LW, 2:alfa only UP, 3:alfa only LW, 4:numeric only 
 { 
-  if (mode<=1)
+  if ((mode<=1) || (mode==4))
     for (byte i=0;i<10;i++)
       {
-      btKey[i].initButtonUL(&tft,31*(i%10),35+(31*int(i/10)),30,30,2,TFT_WHITE,TFT_BLACK,btKeytext[i],2);
+      btKey[i].initButtonUL(&tft,31*(i%10),35+(31*int(i/10)),30,30,2,TFT_WHITE,TFT_BLACK,btKeytextU[i],2);
       btKey[i].drawButton();
       }
-  if(mode !=1)
+  if ((mode==0) || (mode==2))
     for (byte i=10;i<50;i++)
       {
-      btKey[i].initButtonUL(&tft,31*(i%10),35+(31*int(i/10)),30,30,2,TFT_WHITE,TFT_BLACK,btKeytext[i],2);
+      btKey[i].initButtonUL(&tft,31*(i%10),35+(31*int(i/10)),30,30,2,TFT_WHITE,TFT_BLACK,btKeytextU[i],2);
+      btKey[i].drawButton();
+      }
+  if ((mode==1) || (mode==2))
+    for (byte i=10;i<50;i++)
+      {
+      btKey[i].initButtonUL(&tft,31*(i%10),35+(31*int(i/10)),30,30,2,TFT_WHITE,TFT_BLACK,btKeytextL[i],2);
       btKey[i].drawButton();
       }
   displayYN(1,1,1);
@@ -1069,7 +1080,7 @@ long getNumberTFT(long valini, byte len, char *tunits)
   clearTFT();
   tft.setTextSize(4); tft.setTextColor(TFT_WHITE, TFT_BLACK);
   tft.drawString(tunits,200,0);
-  displayKey(1);
+  displayKey(4);
   strcpy(auxtft,itoa(valini,buff,10));
   tft.setTextSize(4); tft.setTextColor(TFT_WHITE, TFT_BLACK);
   tft.drawString(auxtft,0,0);
@@ -1107,8 +1118,9 @@ long getNumberTFT(long valini, byte len, char *tunits)
 
 int getCharTFT(char *valini, byte tam)
 {
+  byte modekeyer=0;
   clearTFT();
-  displayKey(0);
+  displayKey(modekeyer);
   uint16_t x, y;
   strcpy(auxtft,valini);
   tft.setTextSize(4); tft.setTextColor(TFT_WHITE, TFT_BLACK);
@@ -1123,11 +1135,22 @@ int getCharTFT(char *valini, byte tam)
         {
         if (btKey[i].contains(x,y)) 
           {
-          if (strlen(auxtft)<tam)
+          if (i==49)    // cambio Lower/Upper 
             {
-            strcat(auxtft, btKeytext[i]);
-            tft.setTextSize(4); tft.setTextColor(TFT_WHITE, TFT_BLACK);
-            tft.drawString(auxtft,0,0);
+            if (modekeyer==0) modekeyer=1; else modekeyer=0;
+            displayKey(modekeyer);
+            }
+          else
+            {
+            if (strlen(auxtft)<tam)
+              {
+              if (modekeyer==0)
+                strcat(auxtft, btKeytextU[i]);
+              else
+                strcat(auxtft, btKeytextL[i]);
+              tft.setTextSize(4); tft.setTextColor(TFT_WHITE, TFT_BLACK);
+              tft.drawString(auxtft,0,0);
+              }
             }
           delay(100);
           }
