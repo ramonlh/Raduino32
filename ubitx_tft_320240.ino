@@ -66,7 +66,7 @@ byte btPortsact[5]={1,1,1,1,0};
 byte btMemManact[5]={0,0,0,0,1};
 byte btATUact[5]={1,1,1,0,0};
 byte btTPAact[5]={1,1,1,1,0};
-byte btSetact[5]={1,1,1,1,0};
+byte btSetact[5]={1,1,1,1,1};
 byte btSetRadact[5]={1,1,1,1,1};
 byte btNetact[5]={1,1,1,1,1};
 byte btNavact[5]={1,1,1,1,0};
@@ -83,7 +83,7 @@ char btATUtext[5][11]={"Enable","C1","C2","",""};
 char btTPAtext[5][11]={"Enable","AGC Comp.","Max Gain","Gain",""};
 char btCWtext[5][11]={"Key type","WPM","Sidetone","Delay Time","Start Time"};
 char btKEYERtext[8][11]={"from","from","from","from","to","to","to","to"};
-char btSettext[5][11]={"Language","CallSign","Latitude","Longitude",""};
+char btSettext[5][11]={"Language","CallSign","Latitude","Longitude","Time Zone"};
 char btSetRadtext[5][11]={"TX range","SSB auto","Scan range","Scan mode","Resume (s)"};
 char btMemMantext[5][11]={"xxx","xxx","xxx","xxx","Clear All"};
 char btNettext[5][11]={"Auto Conn.","Scan SSID","Password","WiFi Mode","Static IP"};
@@ -586,6 +586,7 @@ void displayUSERSet()
   tft.drawString(conf.CallSign,180,75);
   tft.drawNumber(conf.latitud,180,110);
   tft.drawNumber(conf.longitud,180,145);
+  tft.drawString(timezonetext[conf.timezone],180,180);
 }
 
 void displaySetRad()
@@ -1439,7 +1440,8 @@ void checkSetButtons(uint16_t x, uint16_t y)
   {
    if (btSet[i].contains(x,y)) 
      {
-     if (i==0) { conf.lang=conf.lang==0?1:0; }   // language
+     if (i==0) 
+       { conf.lang=conf.lang==0?1:0; }           // language
      else if (i==1)                              // CallSign
        { 
        int auxI=getCharTFT(conf.CallSign,10); 
@@ -1455,7 +1457,10 @@ void checkSetButtons(uint16_t x, uint16_t y)
        long auxL=getNumberTFT(conf.longitud,10,"");  
        if (auxL!=-1) { conf.longitud=auxL; }
        }                         // Latitude
-     else if (i==4) {  }                         // 
+     else if (i==4) 
+       {  
+       conf.timezone=getValByKnob(19, conf.timezone, 0, 37, 1, "Time Zone", 1);
+       }                         // 
      saveconf(); 
      updateDisplay(1);
      }

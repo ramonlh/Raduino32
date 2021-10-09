@@ -9,8 +9,7 @@
 //    created by Farhan, Jack, Jerry and others and KD8CEC.
 
 // Standar version - No tasks
-#define FIRMWARE_VERSION_INFO F("v 1.101")
-#define BITX      // for use  at user_setup.h from TFT_eSPI library
+#define FIRMWARE_VERSION_INFO F("v 1.102")
 #define EEPROM_SIZE 2048
 
 /********************************************
@@ -67,6 +66,7 @@
  *  The Wire.h library is used to talk to the Si5351 and we also declare an instance of 
  *  Si5351 object to control the clocks.
  */
+ 
 #include "defines.h"              
 #include "variables.h"                // include 
 #include "commontexts.h"              

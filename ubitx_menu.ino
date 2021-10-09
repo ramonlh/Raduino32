@@ -23,7 +23,7 @@ uint32_t getValByKnob(int valueType, int targetValue, int minValue, int maxValue
   tft.drawString(Title,5,20);
   displayYN(1,1,0);
   tft.setTextSize(3);  tft.setTextColor(TFT_WHITE, TFT_BLACK);
-  if ((valueType!=0)&&(valueType!=5))
+  if ((valueType!=0) && (valueType!=5) && (valueType!=19))
     {
     btaux.initButtonUL(&tft,215,5,100,40,2,TFT_BLACK,TFT_WHITE,itoa(targetValue,buff,10),3);
     btaux.drawButton();
@@ -36,7 +36,7 @@ uint32_t getValByKnob(int valueType, int targetValue, int minValue, int maxValue
     else if (conf.framemode==2) displaySpectrum();
     else if (conf.framemode==3) displayFreqs();
     }
-  if ((valueType==3) || (valueType==4))       // ajustar C1/C2
+  else if ((valueType==3) || (valueType==4))       // ajustar C1/C2
     {
     displaygauge(3,targetValue,160,190,140,1,minValue,maxValue,180,12);
     displayneedle(targetValue,160,190,140,minValue,maxValue,180);
@@ -54,7 +54,7 @@ uint32_t getValByKnob(int valueType, int targetValue, int minValue, int maxValue
     else if (conf.framemode==2) displaySpectrum();
     else if (conf.framemode==3) displayFreqs();
     }
-  else if (valueType>=11)        // analog KEYER setting
+  else if ((valueType>=11) && (valueType<=18))        // analog KEYER setting
     {
     tft.setTextSize(2); tft.setTextColor(TFT_YELLOW, TFT_BLACK);
     if ((valueType==11)||(valueType==15)) tft.drawString("Press DOT to check value",0,70); 
@@ -64,6 +64,11 @@ uint32_t getValByKnob(int valueType, int targetValue, int minValue, int maxValue
     tft.drawString("Value keyer:",0,100); 
     tft.drawString("Suggested value:",0,130); 
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
+    }
+  else if (valueType==19) 
+    {
+    btaux.initButtonUL(&tft,215,5,100,40,2,TFT_BLACK,TFT_WHITE,timezonetext[targetValue],3);
+    btaux.drawButton();
     }
   while(!btnDown())
     {
@@ -136,7 +141,7 @@ uint32_t getValByKnob(int valueType, int targetValue, int minValue, int maxValue
       else if (conf.framemode==1) displaySmeter(160,190,70,1);
       else if (conf.framemode==3) displaybarSmeter(40,166,0,90,87); 
       }
-    else if (valueType>=11)        // analog KEYER setting
+    else if ((valueType>=11) && (valueType<=18))        // analog KEYER setting
       {
       tft.setTextSize(2); tft.setTextColor(TFT_YELLOW, TFT_BLACK);
       tft.drawString("     ",160,100); 
@@ -148,7 +153,11 @@ uint32_t getValByKnob(int valueType, int targetValue, int minValue, int maxValue
       else tft.drawNumber(valaux+200,200,130);
       tft.setTextSize(2); tft.setTextColor(TFT_WHITE, TFT_BLACK);
       }
-      
+    else if (valueType==19) 
+      {
+      btaux.initButtonUL(&tft,215,5,100,40,2,TFT_BLACK,TFT_WHITE,timezonetext[targetValue],3);
+      btaux.drawButton();
+      }
     int auxres=checkYN();
     if (auxres==0) 
       return targetValue;
