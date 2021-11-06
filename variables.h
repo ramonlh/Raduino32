@@ -5,9 +5,9 @@
 #define FTPPort 21
 #define DEBUGPort 23
 #define TCPPort 84
-#define UDPPort 85
+#define UDPPortS 85
 #define WSPort 86
-#define SERIALPort 87
+#define UDPPortF 87
 #define WEBPort 88 
 
   typedef struct {    // datos configuración
@@ -154,9 +154,9 @@
       int debugPort;
       int tcpPort;
       int webPort;
-      int udpPort;
+      int udpPortSmeter;
       int wsPort;
-      int serialPort;
+      int udpPortFreq;
       uint8_t LIBRE5[363];                 // Reservados usos futuros
 } conftype;
       conftype conf;
@@ -227,6 +227,7 @@ char filememo[]="/ubitx.mem";
 char filecommon[]="/common.txt";
 char filespanish[]="/spanish.txt";
 char fileenglish[]="/english.txt";
+char filegerman[]="/german.txt";
 char filedash[]="/dash.txt";
 char flecha[4][3]={"<","<<",">>",">"};
 byte tftpage=0;
@@ -264,6 +265,8 @@ unsigned long IF1=0;
 unsigned long IF2=0;
 int lastframemode=0;
 boolean calSmeterReq=false;
+float wFORc;
+float wREFc;
 
 // spectrum values
 int spval[250];
@@ -506,8 +509,8 @@ void initConf()
   conf.debugPort=DEBUGPort;
   conf.tcpPort=TCPPort;
   conf.webPort=WEBPort;  
-  conf.udpPort=UDPPort;
+  conf.udpPortSmeter=UDPPortS;
   conf.wsPort=WSPort;
-  conf.serialPort=SERIALPort;
+  conf.udpPortFreq=UDPPortF;
   memset(conf.LIBRE5,0,sizeof(conf.LIBRE5));                 // Reservados usos futuros
 }

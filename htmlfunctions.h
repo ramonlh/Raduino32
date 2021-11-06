@@ -255,7 +255,7 @@ void ICACHE_FLASH_ATTR selectProbe(int numpar, int valact, boolean printtd)
     if (valact==i) printselected(false);
     printP(mayor); 
     if (i==0)
-      printP("No probe");
+      printP(t(tnoprobe));
     else 
       for (uint8_t j=0;j<8;j++) { if (addr1Wire[i-1][j]<16) printP(cero); printH(addr1Wire[i-1][j]); }   
     printP(c(option_f));   }
@@ -311,20 +311,20 @@ void printTime()
 void HtmlGetStateData(byte ind)    // 
 {
   printP(td);
-  if (ind==0) printP("VFO");
-  else if (ind==1) printP("Mode");
-  else if (ind==2) printP("CW");
-  else if (ind==3) printP("RIT");
-  else if (ind==4) printP("Split");
-  else if (ind==5) printP("VFO A");
-  else if (ind==6) printP("VFO B");
+  if (ind==0) printP(c(tvfo));
+  else if (ind==1) printP(t(tModo));
+  else if (ind==2) printP(c(tcw));
+  else if (ind==3) printP(c(trit));
+  else if (ind==4) printP(c(tsplit));
+  else if (ind==5) printP(c(tvfo),b, letraA); 
+  else if (ind==6) printP(c(tvfo),b, letraB);
   else if (ind==7) printP("Freq. actual");
   printP(td_f,td);
-  if (ind==0) printP(conf.vfoActive==VFO_A?"A":"B");
-  else if (ind==1) printP(conf.isUSB==1?"USB":"LSB");
-  else if (ind==2) printP(conf.cwMode>=1?"ON":"OFF");
-  else if (ind==3) printP(conf.ritOn>=1?"ON":"OFF");
-  else if (ind==4) printP(conf.splitOn>=1?"ON":"OFF");
+  if (ind==0) printP(conf.vfoActive==VFO_A?letraA:letraB);
+  else if (ind==1) printP(conf.isUSB==1?ON:OFF);
+  else if (ind==2) printP(conf.cwMode>=1?ON:OFF);
+  else if (ind==3) printP(conf.ritOn>=1?ON:OFF);
+  else if (ind==4) printP(conf.splitOn>=1?ON:OFF);
   else if (ind==5) printL(conf.frequencyA);
   else if (ind==6) printL(conf.frequencyB);
   else if (ind==7) printL(conf.frequency);
@@ -403,14 +403,14 @@ void ICACHE_FLASH_ATTR printDiaSem(byte i)
 void htmlNotFound()
 {
   msg=vacio;
-  printP("HTTP/1.1", b);
-  printP("404", b);
+  printP(c(HTTP11), b);
+  printP(c(t404), b);
   server.send(404, "text/plain", msg);
   msg=vacio;
 }
 
 
-void panelHTML() {
+void ICACHE_FLASH_ATTR indexHTML() {
   msg=vacio;
   if (server.method()==HTTP_POST) return; 
   writeHeader(false,true);
@@ -421,7 +421,7 @@ void panelHTML() {
   
   /////////////  CONTENIDO   ///////////
   printColspan(3);
-  printP("uBitx", td_f, tr_f);
+  printP(c(uBitx), td_f, tr_f);
 
   printP(menor,letrat,letrar,b);  printP(c(tid),ig,comilla,letral);
   printI(0);  printP(comilla,mayor);
@@ -479,11 +479,6 @@ void panelHTML() {
   serversend200();
 }
 
-void ICACHE_FLASH_ATTR indexHTML() 
-  {
-  panelHTML();
-  }
-
 void ICACHE_FLASH_ATTR filesHTML()
 {
   if (!autOK()) { sendOther(loghtm,-1); return; }
@@ -498,9 +493,6 @@ void ICACHE_FLASH_ATTR filesHTML()
   printP(c(tclass), ig, tnormal, mayor);
   File dir = SPIFFS.open("/");
   File f=dir.openNextFile("r");
-//    File dir=SPIFFS.open(barra);
-//    File file=dir.openNextFile();
-//    if (testfiles) { while (file) { Serial2.print(file.name()); Serial2.print(b); Serial2.println(file.size()); file=dir.openNextFile(); }}
   while (f)   {
     printP(tr, td, href_i, comillas, letrad, letraw);
     printP(interr, letraf, ig);
@@ -563,7 +555,7 @@ void ICACHE_FLASH_ATTR setupioHTML()
     mpi=mp*i;
     printP(tr);
     printP(td);
-    printP(i==0?"TR 1":i==1?"TR 2":"DC 5v");
+    printP(c(i==0?ttransistor1:i==1?ttransistor2:treg5v));
     printP(td_f);
     pc(select_f);
     selectProbe(mpi+0, conf.nprobe[i], true);
@@ -619,7 +611,7 @@ void setupDevHTML()
       else if (param_number==22) { conf.DS18B20enabled = server.arg(i).toInt(); }
       else if (param_number==23) { conf.ATUZM2enabled = server.arg(i).toInt(); }
       else if (param_number==24) { conf.timezone = server.arg(i).toInt(); }
-      else if (param_number==99) { conf.rstper = server.arg(i).toInt(); } // período rset automatico
+      else if (param_number==99) { conf.rstper = server.arg(i).toInt(); } // período reset automatico
       }
     saveconf();
     sendOther(sdhtm,-1);
@@ -630,11 +622,12 @@ void setupDevHTML()
   writeMenu(3, 0);
   writeForm(sdhtm);
 
-  printP(tr,td,"CALLSIGN",td_f);
+  printP(tr,td,t(tcallsign),td_f);
   printcampoC(0, conf.CallSign, 19, true, true, false, true);
   printP(td,td_f,tr_f);
 
-  printP(tr,td,"Calibration / usbCarrier",td_f); 
+  printP(tr,td,t(tcalibration));
+  printP(b,barra,b, t(tusbcarrier),td_f); 
   printcampoL(1, conf.calibration, 9, true, true);
   printcampoL(2,  conf.usbCarrier, 9, true, true); 
 
@@ -648,14 +641,17 @@ void setupDevHTML()
   printcampoF(4, conf.longitud, 6);  printP(td_f, tr_f);
 
   printP(tr, td, t(idioma),b,barra,b);
-  printP("Time Zone",td_f);
-  printcampoCB(5, conf.lang, PSTR("Español"), PSTR("English"),true); 
-  printP(td,"UTC ");
+  printP(t(ttimezone),td_f);
+  printcampoCB(5, conf.lang, PSTR("Español"), PSTR("English"), PSTR("Deustche"),true); 
+  printP(td,c(tutc), b);
   selectTimeZone(24, conf.timezone,false);
   printP(td_f,tr_f);
 
   printP(tr);
-  printP(td, "S-meter / SWR meter", td_f, conf.Smeterenabled==1 ? th : td);
+  printP(td, letraS, guion, t(tmeter));
+  printP(b, barra,b, t(tswr));
+  printP(t(tmeter));
+  printP(td_f, conf.Smeterenabled==1 ? th : td);
   checkBox(20,conf.Smeterenabled,false);
   printP(conf.Smeterenabled?th_f:td_f);
   printP(conf.SWRenabled==1 ? th : td);
@@ -664,7 +660,8 @@ void setupDevHTML()
   printP(tr_f);
 
   printP(tr);
-  printP(td, "DS18B20 probes / ATU ZM-2", td_f, conf.DS18B20enabled==1 ? th : td);
+  printP(td, c(tds18b20), b,barra,b);
+  printP(c(tatuzm2), td_f, conf.DS18B20enabled==1 ? th : td);
   checkBox(22,conf.DS18B20enabled,false);
   printP(conf.DS18B20enabled?th_f:td_f);
   printP(conf.ATUZM2enabled==1 ? th : td);
@@ -673,7 +670,10 @@ void setupDevHTML()
   printP(tr_f);
 
 
-  printP(tr,td,"ATU time(s) / Iterat. ADC"); 
+  printP(tr,td,c(tatu),b);
+  printP(b, c(ttime),paren_i,letras,paren_f);
+  printP(b,barra,b);
+  printP(c(titeraadc)); 
   printcampoI(12, conf.ATUdelay, 5, true, true); printP(td_f);
   printcampoI(17, conf.ATUIter, 5, true, true); 
   printP(td_f,tr_f);
@@ -682,31 +682,47 @@ void setupDevHTML()
   pc(thttp);
   pc(gmaps);
   printP(comillas, b, c(newpage), mayor);
-  printP("ATU  Factor ", barraesp); printP(" Offset", href_f, td_f, td);
+  printP(c(tatu),b);
+  printP(c(tfactor), barraesp); 
+  printP(b, c(toffset), href_f, td_f, td);
   printcampoF(13, conf.ATUFactor, 6);  printP(td_f, td);
   printcampoF(14, conf.ATUOffset, 6);  printP(td_f, tr_f);
 
-  printP(tr,td,"SI5351BX_ADDR"); 
+  printP(tr,td,c(tsi5351),subray);
+  printP(c(taddr)); 
   printcampoI(9, conf.SI5351BX_ADDR, 5, true, true); printP(td_f,td,td_f,tr_f);
 
-  printP(tr, td, "Scan range / TX range",td_f);
+  printP(tr, td, c(tscan),b);
+  printP(t(trange),b,barra,b);
+  printP(c(ttx));
+  printP(b,t(trange),td_f);
   printcampoCB(10, conf.lang, PSTR("Ham bands"), PSTR("All range"),true); 
   printP(td_f);
   printcampoCB(11, conf.lang, PSTR("Ham bands"), PSTR("All range"),true); 
   printP(td_f,tr_f);
 
-  printP(tr, td, "Scan mode / Resume Delay",td_f);
-  printcampoCB(18, conf.scanmode, PSTR("No Stop"), PSTR("Stop-resume"),PSTR("Stop"),true); 
+  printP(tr, td, c(tscan),b);
+  printP(t(tmodo),b,barra,b);
+  printP(t(tResume), b);
+  printP(t(tdelay), td_f);
+  printcampoCB(18, conf.scanmode, PSTR("No Stop"), PSTR("Stop-resume"), PSTR("Stop"),true); 
   printP(td_f);
   printcampoL(19, conf.scandelay, 5, true, true);
   printP(td_f,tr_f);
 
-  printP(tr,td,"Temp. Alarm ºC / OFF TX ºC",td_f); 
+  printP(tr,td, c(ttemp), b);
+  printP(t(talarm),b);
+  printP(c(tdegrees), b,barra,b);
+  printP(c(toff), b);
+  printP(c(ttx),b);
+  printP(c(tdegrees),td_f); 
   printcampoL(15, conf.TempAlarm, 5, true, true);
   printcampoL(16,  conf.TempTxOff, 5, true, true); 
 
-  printP(tr, td, "Reset periodico (h)",td_f,td);
-  printcampoCB(99,conf.rstper,1,24,false); 
+  printP(tr, td, c(ttreset), b);
+  printP(t(tperiodical), b, paren_i,letrah,paren_f,td_f);
+  printP(td);
+  printcampoCB(99,conf.rstper,0,24,false); 
   printP(td_f,td,td_f,tr_f);
 
   writeFooter(guardar, false);
@@ -743,24 +759,30 @@ void setupCWHTML()
   writeHeader(false,false);
   writeMenu(3, 7);
   writeForm(cwhtm);
-  printP(tr,td,"cwKeyType",td_f); 
+  printP(tr,td,t(tcwkeytype),td_f); 
   printcampoCB(0, conf.cwKeyType, "straight", "iambica", "iambicb", true); 
   printP(td,td_f);
-  printP(tr,td,"CW Speed / Delay time"); 
+  printP(tr,td, c(tcw), b);
+  printP(t(tspeed), b,barra,b);
+  printP(t(tdelay));
   printcampoI(1, conf.cwSpeed, 5, true, true); printP(td_f);
   printcampoI(2, conf.cwDelayTime, 5, true, true); printP(td_f,tr_f);
-  printP(tr,td,"DOT from / to"); 
+  printP(tr,td,t(tdot),b);
+  printP(t(tfromto)); 
   printcampoI(3, conf.cwAdcDotFrom, 5, true, true); printP(td_f);
   printcampoI(4, conf.cwAdcDotTo, 5, true, true); printP(td_f,tr_f);
-  printP(tr,td,"DASH from / to"); 
+  printP(tr,td,t(tdash),b);
+  printP(t(tfromto)); 
   printcampoI(5, conf.cwAdcDashFrom, 5, true, true); printP(td_f);
   printcampoI(6, conf.cwAdcDashTo, 5, true, true); printP(td_f,tr_f);
   
-  printP(tr,td,"BOTH from / to"); 
+  printP(tr,td,t(tboth),b);
+  printP(t(tfromto)); 
   printcampoI(7, conf.cwAdcBothFrom, 5, true, true); printP(td_f);
   printcampoI(8, conf.cwAdcBothTo, 5, true, true); printP(td_f,tr_f);
   
-  printP(tr,td,"ST from / to"); 
+  printP(tr,td, t(tst));
+  printP(t(tfromto)); 
   printcampoI(9, conf.cwAdcSTFrom, 5, true, true); printP(td_f);
   printcampoI(10, conf.cwAdcSTTo, 5, true, true); printP(td_f,tr_f);
   
@@ -804,15 +826,26 @@ void setupMemHTML()
   writeForm(smhtm);
   
   printP(tr); printColspan(7); printP(td_f);
-  printColspan(2);  printP("RIT",td_f);
-  printColspan(4);  printP("SPLIT",td_f,tr);
-  printP(tr,td,"Canal",td_f);
-  printP(td,"Act.",td_f,td,"Descr.",td_f);
-  printP(td,"Freq.",td_f,td,"SSB mode",td_f);
-  printP(td,"CW mode",td_f,td,"VFO",td_f);
-  printP(td,"En.",td_f,td,"TX Freq.",td_f);
-  printP(td,"En.",td_f,td,"TX Freq.",td_f);
-  printP(td,"Mmode",td_f,td,"CW",td_f);
+  printColspan(2);  printP(c(trit),td_f);
+  printColspan(4);  printP(c(tsplit),td_f,tr);
+  printP(tr,td,t(canal),td_f);
+  printP(td, c(tact),td_f,td);
+  printP(c(tdescr),td_f);
+  printP(td, t(tfreq),td_f,td);
+  printP(t(tssb),b);
+  printP(t(tModo), td_f);
+  printP(td, c(tcw),b);
+  printP(t(tModo),td_f,td);
+  printP(t(vfot),td_f);
+  printP(td,"En.",td_f,td);
+  printP(c(ttx),b);
+  printP(t(tfreq),td_f);
+  printP(td,"En.",td_f,td);
+  printP(c(ttx),b);
+  printP(t(tfreq),td_f);
+  printP(td,c(ttx),b);
+  printP(t(tModo),td_f,td);
+  printP(c(tcw),td_f);
   printP(tr_f);
 //  for (byte i=0;i<maxMem;i++)
   for (byte i=0;i<10;i++)
@@ -863,9 +896,10 @@ void setupBandHTML()
   writeHeader(false,false);
   writeMenu(3,2);
   writeForm(sbhtm);
-  printP(tr,td,"Banda",td_f,td);
-  printP("desde",td_f,td," hasta   khz",td_f);
-  printP(tr_f);
+  printP(tr,td,t(tband),td_f,td);
+  printP(t(tfrom),td_f,td);
+  printP(t(tto),b);
+  printP(c(tkhz),td_f,tr_f);
   for (byte i=0;i<MAX_BANDS;i++)
     {
     printP(tr);
@@ -927,18 +961,21 @@ void setupSmeterHTML()
   writeMenu(3,6);
   writeForm(smehtm);
 
-  printP(tr,td,"Min / Max",td_f);
+  printP(tr,td, c(tmin),b,barra,b);
+  printP(c(tmax),td_f);
   printPiP(td,minsmeter,td_f);
   printPiP(td,maxsmeter,td_f);
   printP(tr_f);
   
-  printP(tr, td, "Modo");
-  printcampoCB(35, conf.modecalsmeter, PSTR("Lineal"), PSTR("Real"), PSTR("Usuario"), true); 
+  printP(tr, td, t(tModo));
+  printcampoCB(35, conf.modecalsmeter, PSTR("Lineal"), PSTR("Real"), PSTR("User defined"), true); 
   printP(td);
   printP(td_f,tr_f);
 
-  printP(tr,td,"Valor",td_f,td);
-  printP("ADC value",td_f,td,"Tit.",td_f,tr_f);
+  printP(tr,td,t(ttvalue),td_f,td);
+  printP(c(tadc), b);
+  printP(t(ttvalue) ,td_f, td);
+  printP(c(ttit),td_f,tr_f);
   for (byte i=0;i<16;i++)
     {
     mpi=mp*i;
@@ -1006,12 +1043,13 @@ void ICACHE_FLASH_ATTR setupNetHTML()
   writeMenu(3, 3);
   writeForm(snehtm);
 
-  printP(tr, td, "Auto WiFi", td_f, conf.autoWiFi==1 ? th : td);
+  printP(tr, td, c(tauto),b);
+  printP(c(tconn), td_f, conf.autoWiFi==1 ? th : td);
   checkBox(57,conf.autoWiFi,false);
   printP(conf.autoWiFi?th_f:td_f,tr_f);
   
-  printP(tr, td, t(Modo), b, td_f);
-  printcampoCB(41, conf.wifimode, "OFF", sta, ap, apsta,true);
+  printP(tr, td, t(tModo), b, td_f);
+  printcampoCB(41, conf.wifimode, OFF, sta, ap, apsta,true);
   printP(tr_f);
 
   // ssid
@@ -1020,7 +1058,7 @@ void ICACHE_FLASH_ATTR setupNetHTML()
   printP(td);
   printcampoC(42, conf.ssidSTA, 20, true, true, false,false);
   printP(href_i, comillas, scanap, comillas,mayor, b);
-  printP(t(explorar), href_f, td_f, tr_f);
+  printP(c(tscan), href_f, td_f, tr_f);
 
   printparCP(c(routerpass), 43, conf.passSTA, 20, false); 
 
@@ -1070,9 +1108,7 @@ void ICACHE_FLASH_ATTR setupNetHTML()
   for (byte i=0; i<4; i++) printcampoI(i+14, i==2?conf.EEip[i]:conf.EEgw[i],3,i!=2,false);
   printP(td_f, tr_f);
 
-  printP(tr,td);
-  printP("DNS");
-  printP(td_f,td);
+  printP(tr,td,c(tdns),td_f,td);
   for (byte i=0; i<4; i++) printcampoI(i+18, conf.EEdns[i], 3, true,false);
   printP(td_f, tr_f);
   
@@ -1295,7 +1331,7 @@ void ICACHE_FLASH_ATTR setupNetServHTML()
   if (server.method() == HTTP_POST)
     {
     conf.ftpenable=0; conf.debugenable=0; conf.tcpenable=0;
-    conf.udpenable=0;  conf.wsenable=0;  conf.seripenable=0;
+    conf.udpenable=0; conf.wsenable=0; conf.seripenable=0;
     conf.webenable=0;
     conf.mqttenabled=0; conf.iottweetenable=0; conf.iftttenabled=0;
  
@@ -1340,35 +1376,35 @@ void ICACHE_FLASH_ATTR setupNetServHTML()
   tcell(tftpserver);
   checkBox(21, conf.ftpenable,true);
   printColspan(2);
-  printP("Port "); printI(conf.ftpPort);
+  printP(t(tport),b); printI(conf.ftpPort);
   printP(td_f,tr_f);
 
   printP(tr);
   tcell(tdebugserver);
   checkBox(22, conf.debugenable,true);
   printColspan(2);
-  printP("Port "); printI(conf.debugPort);
+  printP(t(tport),b); printI(conf.debugPort);
   printP(td_f,tr_f);
 
   printP(tr);
   tcell(ttcpserver);
   checkBox(23, conf.tcpenable,true);
   printColspan(2);
-  printP("Port "); printI(conf.tcpPort);
+  printP(t(tport),b); printI(conf.tcpPort);
   printP(td_f,tr_f);
 
   printP(tr);
   tcell(tudpserver);
   checkBox(24, conf.udpenable,true);
   printColspan(2);
-  printP("Port "); printI(conf.udpPort);
+  printP(t(tport),b); printI(conf.udpPortSmeter);
   printP(td_f,tr_f);
 
   printP(tr);
   tcell(twsserver);
   checkBox(25, conf.wsenable,true);
   printColspan(2);
-  printP("Port "); printI(conf.wsPort);
+  printP(t(tport),b); printI(conf.wsPort);
   printP(td_f,tr_f);
 
   printP(tr);
@@ -1381,7 +1417,7 @@ void ICACHE_FLASH_ATTR setupNetServHTML()
   tcell(twebserver);
   checkBox(27, conf.webenable,true);
   printColspan(2);
-  printP("Port "); printI(conf.webPort);
+  printP(t(tport),b); printI(conf.webPort);
   printP(td_f,tr_f);
 
   printP(tr, td, href_i, comillas);
@@ -1525,8 +1561,8 @@ void initupdateserver()
       s2("Update: "); s2(upload.filename.c_str());
       clearTFT();
       tft.setTextSize(2);
-      tft.drawString("Actualizando firmware...",0,20);
-      tft.drawString("No apague el equipo",0,40);
+      tft.drawString("Updating firmware...",0,20);
+      tft.drawString("Do not turn off the radio",0,40);
       if (!Update.begin()) { //start with max available size
         Update.printError(Serial2);
       }
@@ -1692,7 +1728,7 @@ void initHTML()
   /**if (!checkfiles()) { server.on("/", filesHTML); return;  }*/
   server.on("/f", filesHTML);
   server.on("/", indexHTML);
-  server.on("/p", panelHTML);
+  server.on("/p", indexHTML);
   server.on("/cw", setupCWHTML);
   server.on("/sd", setupDevHTML);
   server.on("/sm", setupMemHTML);

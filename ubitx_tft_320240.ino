@@ -62,7 +62,7 @@ byte btCalact[5]={1,1,1,0,1};
 byte btSmeact[5]={1,1,0,0,0};
 byte btConact[5]={1,1,0,0,0};
 byte btTempact[5]={1,1,1,0,0};
-byte btPortsact[5]={1,1,1,1,0};
+byte btPortsact[5]={1,1,1,1,1};
 byte btMemManact[5]={0,0,0,0,1};
 byte btATUact[5]={1,1,1,0,0};
 byte btTPAact[5]={1,1,1,1,0};
@@ -73,12 +73,12 @@ byte btNavact[5]={1,1,1,1,0};
 byte btFlotact[5]={1,1,1,1,1};
 byte btYNact[3]={1,1,1};
 byte btMenuNavact[20]={1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0};
-char btMaintext[15][6]={"ATU","V/M","Band-","Band+","LSB","CW","RIT","SPL","IFS","ATT"};
+char btMaintext[10][6]={"ATU","V/M","Band-","Band+","LSB","CW","RIT","SPL","IFS","ATT"};
 char btCaltext[5][11]={"Calibrati.","Adj. BFO","SI5351 Ad.","xxx","Reset Fact"};
 char btSmetext[5][11]={"Min. Value","Max. Value","xxx","xxx","xxx"};
 char btContext[5][11]={"Conn. Mode","Serial2","xxx","xxx","xxx"};
 char btTemptext[5][11]={"Probe TR1","Probe TR2","Probe 5v","xxx","xxx"};
-char btPortstext[5][11]={"TCP","UDP","WS","WEB","xxx"};
+char btPortstext[5][11]={"TCP","UDP-S","WS","WEB","UDP-F"};
 char btATUtext[5][11]={"Enable","C1","C2","",""};
 char btTPAtext[5][11]={"Enable","AGC Comp.","Max Gain","Gain",""};
 char btCWtext[5][11]={"Key type","WPM","Sidetone","Delay Time","Start Time"};
@@ -87,7 +87,7 @@ char btSettext[5][11]={"Language","CallSign","Latitude","Longitude","Time Zone"}
 char btSetRadtext[5][11]={"TX range","SSB auto","Scan range","Scan mode","Resume (s)"};
 char btMemMantext[5][11]={"xxx","xxx","xxx","xxx","Clear All"};
 char btNettext[5][11]={"Auto Conn.","Scan SSID","Password","WiFi Mode","Static IP"};
-char btNavtext[5][8]={"H","<",">"," ","xxx"};
+char btNavtext[5][8]={"H","<",">","M","xxx"};
 char btFlottext[5][6]={"Ent","Scan-","Scan+","Lock",">MEM"};
 char btYNtext[3][6]={"OK","ESC","<--"};
 char btKeytextL[50][2]={"0","1","2","3","4","5","6","7","8","9",
@@ -367,7 +367,7 @@ void displayNav()   // botones navegación
 {
   strcpy(btNavtext[1],tftpage==22?"Ed":"<");
   strcpy(btNavtext[2],tftpage==22?"Ok":">");
-  strcpy(btNavtext[3],remoteclientexits?"R":" ");
+  strcpy(btNavtext[3],"M");
   btNav[0].initButtonUL(&tft,0,210,30,30,2,TFT_WHITE,TFT_BLACK,btNavtext[0],2);
   btNav[0].drawButton();
   for (byte i=1;i<5;i++) if (btNavact[i]==1)
@@ -496,15 +496,17 @@ void displayMenuPORTS()
     else if (i==1) backcolor=conf.udpenable==0?TFT_WHITE:TFT_YELLOW;
     else if (i==2) backcolor=conf.wsenable==0?TFT_WHITE:TFT_YELLOW;
     else if (i==3) backcolor=conf.webenable==0?TFT_WHITE:TFT_YELLOW;
+    else if (i==4) backcolor=conf.webenable==0?TFT_WHITE:TFT_YELLOW;
     btPORTS[i].initButtonUL(&tft,0,35*i+30,160,30,2,backcolor,TFT_BLACK,btPortstext[i],2);
     btPORTS[i].drawButton();
     }
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
   tft.drawString("13 - Ports Settings",0,0);
   tft.drawNumber(conf.tcpPort,180,40);
-  tft.drawNumber(conf.udpPort,180,75);
+  tft.drawNumber(conf.udpPortSmeter,180,75);
   tft.drawNumber(conf.wsPort,180,110);
   tft.drawNumber(conf.webPort,180,145);
+  tft.drawNumber(conf.udpPortFreq,180,180);
 }
 
 void displayCWSet()
@@ -730,8 +732,9 @@ void displaygauge(byte tipo,int value,int xcen,int ycen,int rad,byte fondo,int m
       float auxsin=sin(drad);
       int x=xcen+(rad*(rad>100?9:10)/10)*auxcos;
       int y=ycen-(rad*(rad>100?9:10)/10)*auxsin;
-      tft.drawLine(x-5*auxcos,y+5*auxsin,x,y,TFT_YELLOW);
-      tft.drawLine(x-5*auxcos+1,y+5*auxsin,x+1,y,TFT_YELLOW);
+      int colorline=value==conf.squelchval?TFT_WHITE:TFT_YELLOW;
+      tft.drawLine(x-5*auxcos,y+5*auxsin,x,y,colorline);
+      tft.drawLine(x-5*auxcos+1,y+5*auxsin,x+1,y,colorline);
       tft.setTextColor(textcol, backcol); tft.setTextSize(rad<100?1:2);
       if (tipo==0) { tft.drawNumber(min+(max-min)*i/ndiv, x-5+5*auxcos, y-10); }     // generic
       else if (tipo==1)   // smeter
@@ -746,7 +749,15 @@ void displaygauge(byte tipo,int value,int xcen,int ycen,int rad,byte fondo,int m
   if (tipo==1)    // S-meter
     {
     char auxC[4]="OFF";
-    if (conf.scanmode==1) strcpy(auxC,"SR"); else if (conf.scanmode==2)strcpy(auxC,"St");
+    if (conf.scanmode==1) 
+      {
+      strcpy(auxC,"SR"); 
+      
+      }
+    else if (conf.scanmode==2)
+      {
+      strcpy(auxC,"St");  
+      }
     btSmeter[0].initButtonUL(&tft,xcen-(rad+7),ycen-16,30,20,2,conf.scanmode==0?TFT_LIGHTGREY:conf.scanmode==1?TFT_GREEN:TFT_ORANGE,TFT_BLACK,auxC,1);
     btSmeter[0].drawButton();
     btSmeter[1].initButtonUL(&tft,xcen+rad-23,ycen-16,30,20,2,TFT_ORANGE,TFT_BLACK,"Lev.",1);
@@ -898,7 +909,7 @@ void displayFlot()
   btFlot[1].drawButton();
   btFlot[2].initButtonUL(&tft,255,70,65,30,2,scanF==2?TFT_CYAN:TFT_WHITE,TFT_BLACK,btFlottext[2],2);
   btFlot[2].drawButton();
-  btFlot[3].initButtonUL(&tft,255,210,65,30,2,keylock==1?TFT_RED:TFT_WHITE,TFT_BLACK,btFlottext[3],2);
+  btFlot[3].initButtonUL(&tft,255,210,65,30,2,keylock>0?TFT_RED:TFT_WHITE,TFT_BLACK,btFlottext[3],2);
   btFlot[3].drawButton();
   if (conf.framemode!=3)
     {
@@ -1022,7 +1033,7 @@ void updateDisplay(byte alldata) {
   else if (tftpage==21) {  }   // select AP
   else if (tftpage==22)    // Mem display and select
     {
-    Serial2.println("en tftpage 22");
+    Serial2.println("tftpage=22");
     }
   else if (tftpage==23)    // test ports
     {
@@ -1351,7 +1362,7 @@ void checkSmeterButtons(uint16_t x, uint16_t y)
         }
       else if (i==1)
         {
-        conf.squelchval=getValByKnob(5,conf.squelchval,0,90,2,"Squelch",1);
+        conf.squelchval=getValByKnob(5,conf.squelchval,0,90,6,"Squelch",1);
         updateDisplay(1);
         }
       saveconf();
@@ -1742,7 +1753,7 @@ void setRIT(byte value)
   if (value==conf.ritOn) return;
   conf.ritOn=value; 
   btMainact[6]=value;
-  sendData(tcpclient,tcpritOn);   // reenvía estado a cliente
+  sendData(tcpritOn);   // reenvía estado a cliente
   if (conf.ritOn==1) 
     { 
     setSPLIT(0); 
@@ -1762,7 +1773,7 @@ void setSPLIT(byte value)
   if (value==conf.splitOn) return;
   conf.splitOn=value;
   btMainact[7]=value;
-  sendData(tcpclient,tcpsplitOn); 
+  sendData(tcpsplitOn); 
   if (conf.splitOn==1) 
     { 
     setRIT(0); 
@@ -1775,7 +1786,7 @@ void setSPLIT(byte value)
 void setCW(byte value) 
   { 
   conf.cwMode=value; 
-  sendData(tcpclient,tcpcwMode); 
+  sendData(tcpcwMode); 
   if (conf.vfoActive==VFO_A) conf.cwModeA=conf.cwMode; else conf.cwModeB=conf.cwMode;
   btMainact[5]=(conf.cwMode>0);
   displayMain(); 
@@ -1784,7 +1795,7 @@ void setCW(byte value)
 void setUSB(byte value) 
   {
   if (value==conf.isUSB)  return;
-  conf.isUSB=value; sendData(tcpclient,tcpisUSB); 
+  conf.isUSB=value; sendData(tcpisUSB); 
   if (conf.vfoActive==VFO_A) conf.isUSBA=conf.isUSB; else conf.isUSBB=conf.isUSB;
   btMainact[4]=conf.isUSB==1?1:0; 
   strcpy(btMaintext[4],conf.isUSB==1?"USB":"LSB"); 
@@ -1795,7 +1806,7 @@ void setUSB(byte value)
   
 void setVFO(byte value) 
   { 
-  conf.vfoActive=value; sendData(tcpclient,tcpvfoActive); 
+  conf.vfoActive=value; sendData(tcpvfoActive); 
   if (conf.vfoActive==VFO_A) 
     {
     conf.isUSB=conf.isUSBA; 
@@ -1822,13 +1833,20 @@ void setFrame()
 void setSCAN(byte value)
 {
   if (value==scanF) return;
-  scanF=value; sendData(tcpclient,tcpscanst); 
+  scanF=value; sendData(tcpscanst); 
   displayFlot();
 }
 
 void setLOCK(byte value)
 {
-  keylock=value; sendData(tcpclient,tcpkeylock); 
+  if (value==2) 
+    {
+    strcpy(btFlottext[3],"Rem.");
+    value=1;
+    }
+  else
+    strcpy(btFlottext[3],"Lock");
+  keylock=value; sendData(tcpkeylock); 
   displayFlot();
 }
 
@@ -1839,10 +1857,14 @@ void setATT(int value, byte local)
   SetCarrierFreq();
   if (local==1) {
     updateDisplay(1);
-    sendData(tcpclient, tcpattlevel);
-  }
+    sendData(tcpattlevel);
+    }
   else
+    {
+    btMaincol[9]=conf.attLevel>0?TFT_YELLOW:TFT_WHITE; // ATT
+    displayMain();
     displayATT(0,40,150);
+    }
 }
 
 void setIFS(int value, byte local)
@@ -1850,18 +1872,21 @@ void setIFS(int value, byte local)
   conf.ifShiftValue=value;
   setFrequency(conf.frequency);
   SetCarrierFreq();
-
   if (local==1) {
     updateDisplay(1);
-    sendData(tcpclient, tcpifShiftVal);
+    //sendData(tcpifShiftVal);
   }
   else
+    {
+    btMaincol[8]=conf.ifShiftValue!=0?TFT_YELLOW:TFT_WHITE; // IFS
+    displayMain();
     displayIFS(0,40,185);
+}
 }
 
 void setSTEP(byte value)
 {
-  conf.tuneStepIndex=value; sendData(tcpclient,tcptunestep); 
+  conf.tuneStepIndex=value; sendData(tcptunestep); 
   displayFreq(1,1,1,1);  
 }
 /**

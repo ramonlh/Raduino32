@@ -49,6 +49,7 @@ char* ICACHE_FLASH_ATTR t(int pos)
   char auxlang[20]="";
   if (conf.lang==0) strcpy(auxlang,filespanish);
   if (conf.lang==1) strcpy(auxlang,fileenglish);
+  if (conf.lang==2) strcpy(auxlang,filegerman);
   File auxfile=SPIFFS.open(auxlang,letrar);
   if (auxfile)
     {
@@ -432,7 +433,7 @@ void writeMenu(byte opcprin, byte opcsec)
     printOpc(false, opcsec==6, "S-meter", smehtm);
     printOpc(false, opcsec==3, t(tred), snehtm);
     printOpc(false, opcsec==4, t(servred), snshtm);
-    printOpc(false, opcsec==1, c(senales), siohtm);
+    printOpc(false, opcsec==1, t(tsondastemp), siohtm);
     }
   else if (opcprin==4) // SISTEMA
     {

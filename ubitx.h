@@ -36,7 +36,7 @@
 // To Raduino
 #define ENC_A         34    // INPUT
 #define ENC_B         35    // INPUT
-#define FBUTTON       36    // INPUT
+#define FBUTTON       36    // INPUT     36=VP
 #define PTT           15    // INPUT
 #define ANALOG_KEYER  33    // INPUT ANALOG
 #define TX_RX         23   // Relay
@@ -50,7 +50,7 @@
 
 // to external devices
 #define W0            4     // sondas DS18B20   // EA4GZI
-#define RXD2          39    // UART2            // EA4GZI
+#define RXD2          39    // UART2            // EA4GZI    39=VN
 #define TXD2          22    // UART2            // EA4GZI
 
 //******************************************************
@@ -70,6 +70,7 @@
 
 //*******************************************************
 //  Commands TCP conection    // NO USAR 10 NI 13 
+#define tcpACK 0
 #define tcpsplitOn 3
 #define tcpisUSB 4
 #define tcpcwMode 5

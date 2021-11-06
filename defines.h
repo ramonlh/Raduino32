@@ -98,7 +98,7 @@
 #define longitudt 49
 #define mandorf 50
 #define mes 51
-#define Modo 52
+#define tModo 52
 #define mostrarpines 53
 #define NO 54
 #define bandas 55
@@ -122,7 +122,7 @@
 #define tresetfiles 73
 #define saldig 74
 #define salida 75
-#define explorar 76
+#define tscan 76
 #define seguridad 77
 #define semanal 78
 #define senal 79
@@ -140,7 +140,7 @@
 //#define ultimovalor 91
 #define units 92
 #define usuario 93
-#define tvalor 94
+#define ttvalue 94
 #define versiont 95
 #define versionact 96
 #define versioncheckfail 97
@@ -167,7 +167,36 @@
 #define twsserver 118
 #define tseripserver 119
 #define twebserver 120
-
+#define tcallsign 121
+#define tcalibration 122
+#define tusbcarrier 123
+#define ttimezone 124
+#define tmeter 125
+#define tswr 126
+#define tprobe 127
+#define tprobes 128
+#define trange 129
+#define tResume 130
+#define tdelay 131
+#define tmodo 132
+#define talarm 133
+#define tperiodical 134
+#define tcwkeytype 135
+#define ttime 136
+#define tspeed 137
+#define tdot 138
+#define tdash 139
+#define tboth 140
+#define tfromto 141
+#define tst 142
+#define tfreq 143
+#define tssb 144
+#define vfot 145
+#define tband 146
+#define tfrom 147
+#define tto 148
+#define tsondastemp 149
+#define tnoprobe 150
 //////////////////////////////////////////////////////////////////////
 ////// textos, deben coincidir con los textos del fichero common.txt
 #define dbm 2
@@ -246,7 +275,7 @@
 #define device 73
 #define chipsize 74
 #define chipspeed 75
-#define ndns 76
+#define tdns 76
 #define tmask 77
 #define modet 78
 #define ngateway 79
@@ -303,7 +332,7 @@
 #define panel 130
 #define dig 131
 #define digital 132 
-#define addrt 133
+#define taddr 133
 #define apssid 134
 #define appass 135
 #define defaultt 136
@@ -319,7 +348,7 @@
 //#define dweetname 146
 #define trem 147
 #define salremotas 148
-//#define treset 149
+#define ttreset 149
 //#define tresetwifi 150 
 //#define trestart 151
 #define rfkey 152
@@ -415,7 +444,7 @@
 //#define ap 241
 //#define apsta 242
 //#define sta 243
-#define factor 244
+#define tfactor 244
 #define toffset 245
 //#define checked 246
 //#define href_i 247
@@ -480,3 +509,38 @@
 #define maindevice 306
 #define mqttdashtopic 307
 #define tlink 308
+#define tds18b20 309
+#define tatuzm2 310
+#define tatu 311
+#define tsi5351 312
+#define tscan 313
+#define ttx 314
+#define ttime 315
+#define titeraadc 316
+#define tstop 317
+#define ttemp 318
+#define tcw 319
+#define trit 320
+#define tsplit 321
+#define tdescr 322
+#define tact 323
+#define tvfo 324
+#define tdegrees 325
+#define toff 326
+#define tkhz 327
+#define tmin 328
+#define tmax 329
+#define tadc 330
+#define ttit 331
+#define tauto 332
+#define tconn 333
+#define tlsb 334
+#define tusb 335
+#define ttransistor1 336
+#define ttransistor2 337
+#define treg5v 338
+#define tutc 339
+
+
+
+

@@ -1,10 +1,5 @@
 
 //Firmware Version
-//+ : This symbol identifies the firmware. 
-//    It was originally called 'CEC V1.072' but it is too long to waste the LCD window.
-//    I do not want to make this Firmware users's uBITX messy with my callsign.
-//    Putting one alphabet in front of 'v' has a different meaning. 
-//    So I put + in the sense that it was improved one by one based on Original Firmware.
 //    This firmware hass been gradually changed based on the original firmware 
 //    created by Farhan, Jack, Jerry and others and KD8CEC.
 
@@ -45,15 +40,6 @@
  * The Raduino is a small board that includes the Arduin Nano, a 16x2 LCD display and
  * an Si5351a frequency synthesizer. This board is manufactured by Paradigm Ecomm Pvt Ltd
  * 
- * To learn more about Arduino you may visit www.arduino.cc. 
- * 
- * The Arduino works by starts executing the code in a function called setup() and then it 
- void 
- * repeatedly keeps calling loop() forever. All the initialization code is kept in setup()
- * and code to continuously sense the tuning knob, the function button, transmit/receive,
- * etc is all in the loop() function. If you wish to study the code top down, then scroll
- * to the bottom of this file and read your way up.
- * 
  * Below are the libraries to be included for building the Raduino 
  * The EEPROM library is used to store settings like the frequency memory, caliberation data, 
  * callsign etc .
@@ -84,7 +70,6 @@
 #include <HTTPClient.h>
 #include <EEPROM.h>
 #include <TFT_eSPI.h>     // Graphics and font library for ILI9341 driver chip
-//#include "Free_Fonts.h"   // Include the header file attached to this sketch
 #include "OneWire.h"                  // Local
 #include "DallasTemperature.h"        // Local
 //#include "lcd_backlight.hpp"
@@ -100,15 +85,13 @@
 #include "esp_wifi.h"
 
 WiFiServer tcpserver;
-WiFiUDP udp;
+WiFiUDP udpsmeter, udpfreq, ntpUDP;
 using namespace websockets;
 WebsocketsServer wsserver;
 WebsocketsClient wsclient;    
 
 TFT_eSPI tft=TFT_eSPI();  // Invoke library, pins defined in User_Setup.h
-//TFT_eSprite spr = TFT_eSprite(&tft); // Sprite object
 FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP8266FtpServer.h to see ftp verbose on serial
-WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "europe.pool.ntp.org");
 OneWire owire(W0);
 DallasTemperature sensors0(&owire);
@@ -232,6 +215,29 @@ void setNextHamBandFreq(unsigned long f, int moveDirection)
   saveconf();
 }
 
+float readSWR(int limit)
+{
+  float auxSWR=1;
+  int16_t adc0, adc1;
+  long ldc0=0; long ldc1=0; 
+  for (byte i=0;i<conf.ATUIter;i++)
+    {
+    ldc0=ldc0+adsA.readADC_SingleEnded(VFORp); // VFORp=0
+    ldc1=ldc1+adsA.readADC_SingleEnded(VREFp); // VREFp=1
+    }
+  adc0 = ldc0/conf.ATUIter; if (adc0<0) adc0=0;
+  adc1 = ldc1/conf.ATUIter; if (adc1<0) adc1=0;
+  
+  vFORc=((float(adc0)*0.1875/1000)+0.25)*11*0.707;
+  vREFc=((float(adc1)*0.1875/1000)+0.25)*11*0.707;
+  //wFORc=vFORc*vFORc/50; wREFc=vREFc*vREFc/50;
+  wFORc=vFORc*vFORc*0.707/50; wREFc=vREFc*vREFc*0.707/50;
+  if ((vFORc-vREFc)>0) SWRreal=(vFORc+vREFc)/(vFORc-vREFc); else SWRreal=1.0;
+  auxSWR=(SWRreal*conf.ATUFactor)+conf.ATUOffset;
+  if (auxSWR<limit) auxSWR=1;
+  return(auxSWR);
+}
+
 /*KD8CEC
   When using the basic delay of the Arduino, the program freezes.
   When the delay is used, the program will generate an error because it is not communicating, 
@@ -293,7 +299,6 @@ byte delay_background(unsigned delayTime, byte fromType, byte swr)
  */
 
 void setTXFilters(unsigned long freq){
-//    s2("setTXFilters:");s2(freq); s2(crlf);
     if (freq > 21000000L){  // the default filter is with 35 MHz cut-off
       digitalWrite(TX_LPF_A, 0);
       digitalWrite(TX_LPF_B, 0);
@@ -313,6 +318,16 @@ void setTXFilters(unsigned long freq){
       digitalWrite(TX_LPF_A, 0);
       digitalWrite(TX_LPF_B, 0);
       digitalWrite(TX_LPF_C, 1);    
+    }
+}
+
+void sendFreq()
+{
+  if (WiFi.isConnected()) {
+    //Send a packet
+    udpfreq.beginPacket(udpAddress,conf.udpPortFreq);
+    udpfreq.printf("%lu",conf.frequency);
+    udpfreq.endPacket();
     }
 }
 
@@ -340,18 +355,18 @@ void setFrequency(unsigned long f){
   if (conf.actualBand != 99) 
     conf.freqbyband[conf.actualBand][conf.vfoActive==VFO_A?0:1]=f; 
   if (conf.vfoActive==VFO_A) conf.frequencyA=f; else conf.frequencyB=f;  
-  sendData(tcpclient,tcpfrequency);  
+  sendFreq();
   if (scanF==0)
     {
     if (!readingspectrum)
       {
-      sendData(tcpclient,tcpfrequency);  
+      sendFreq();
       //saveconf();
       }
     }
   else 
     {
-    sendData(tcpclient,tcpfrequency);  
+    sendFreq();
     }
 }
 
@@ -398,7 +413,7 @@ void startTx(byte txMode, byte isDisplayUpdate){
     if ((auxfreq<conf.hamBandRange[auxf][0]*1000) || (auxfreq>conf.hamBandRange[auxf][1]*1000)) 
       {
       tftErrormsg("OUT OF BAND","Modify parameter","TX range");
-      tftpage=2;
+      //tftpage=2;
       return;
       } 
   if ((isTxType & 0x01) != 0x01) { digitalWrite(TX_RX, 1); }
@@ -560,7 +575,6 @@ void setMEMtoVFO(int pos)
 
 void setFreq(int s)
 {
-  //s2("setFreq:"); s2(s); s2(" f:"); s2(conf.frequency); s2(crlf);
   conf.frequency += (conf.arTuneStep[conf.tuneStepIndex] * s);  //applied weight (s is speed) //if want need more increase size, change step size
   if (conf.vfoActive==VFO_A) conf.frequencyA=conf.frequency; else conf.frequencyB=conf.frequency;
   setFrequency(conf.frequency);
@@ -618,7 +632,7 @@ void doMem()
     }
   else if (knob > 1) 
     {
-    if (memlin<6) memlin++;
+    if (memlin<5) memlin++;
     if (mempos<maxMem) { mempos++; cambio=true; }
     }
   Serial2.println(mempos);
@@ -732,8 +746,8 @@ void showSettings()
   for (byte i=0;i<9;i++)
     { s2(i);s2(":");s2(conf.arTuneStep[i]); s2(" "); }
   s2(crlf);
-  s2("latitud:"); s2(conf.latitud); s2(crlf);
-  s2("longitud:"); s2(conf.longitud); s2(crlf);
+  s2("latitude:"); s2(conf.latitud); s2(crlf);
+  s2("longitude:"); s2(conf.longitud); s2(crlf);
   s2("lang:"); s2(conf.lang); s2(crlf);
 
   s2("rstper:"); s2(conf.rstper); s2(crlf);
@@ -770,7 +784,6 @@ void showSettings()
 
   s2("ATUdelay:"); s2(conf.ATUdelay); s2(crlf);
   s2("TXall:"); s2(conf.TXall); s2(crlf);
-  s2("TXall:"); s2(conf.TXall); s2(crlf);
   s2("nprobe:"); s2(conf.usepassDev); s2(crlf);
   for (byte i=0;i<8;i++)
     { 
@@ -788,15 +801,15 @@ void initSettings(){
     {
     ////////////////////////////////////////////////////
     tft.drawString("Reset Factory...",0,40);
-    s2("Reiniciando valores por defecto");s2(crlf);
+    s2("Setting default values");s2(crlf);
     saveconf(); // para iniciar fichero 
     showSettings();
     }
   else
     {
-    if (!checkfiles()) s2("Falta algún fichero");s2(crlf);
+    if (!checkfiles()) s2("Some file is missing");s2(crlf);
     int auxread=readconfEEPROM();
-    s2("Leído readconf:"); s2(auxread); s2(crlf);
+    s2("Read readconf():"); s2(auxread); s2(crlf);
     if(readmemo()!=sizeof(memo)) { savememo(); }
     conf.memMode=0;
     conf.EEip[3]=149;
@@ -884,9 +897,9 @@ void initPorts(){
 
 void connectSTA()
 {
-  s2("  Conectando: ");  s2(conf.ssidSTA);
+  s2("  Connecting: ");  s2(conf.ssidSTA);
   s2("/");  s2(conf.passSTA);
-  displayMsg("Conectando a",conf.ssidSTA,"********",40,140,210,75);
+  displayMsg("Connecting a",conf.ssidSTA,"********",40,140,210,75);
   byte cont = 0;
   while((!WiFi.isConnected()) && (cont++ < 20))  { delay(500); s2("."); }
   clearMsg(40,140,210,75);
@@ -899,17 +912,52 @@ void connectSTA()
   s2("  DNS: ");  s2(WiFi.dnsIP()); s2(crlf);
 }
 
+void readVIpower()
+{
+  int16_t vtotadc=adsB.readADC_SingleEnded(VTOTp);    // es el valor leído del ADC sin convertir
+  int16_t itotadc=adsB.readADC_SingleEnded(ITOTp);    // es el valor leído del ADC sin convertir
+  float factorv=290.0;    // factor teórico
+  float factori=1000.0;   // factor teórico
+  float factorvr=1.0;     // factor corrección
+  float factorir=0.75;   // factor corrección
+  vtotvalue=factorvr*vtotadc*0.1875/factorv;
+  itotvalue=-(factorir)*(itotadc*0.1875-2500)*10/factori;
+}
+
+void sendTemp()
+{
+  sendData(tcptemp1); 
+  sendData(tcptemp2); 
+  sendData(tcptemp3); 
+}
+
+void task1() {
+  tini=millis();
+  readVIpower();
+  countfaulttime++;   // si se hace mayor que TempDesactPrg,desactiva ejecucion programas dependientes de fecha
+  if (inTx==1) {
+    leevaloresOW();
+    sendTemp();
+    }
+  if ((tftpage!=21) && (tftpage!=22) &&(tftpage!=23))
+    displayStatus();
+  if(conf.rstper>0) { if(millis() > 3600000*conf.rstper) { Serial2.println("RESTART"); ESP.restart();  } }
+  mact1=millis();
+  sendFreq();
+  sendData(tcpvtotvalue);
+  sendData(tcpitotvalue);
+}
+
 void initNetServices()
 {
-  //displayIFS(0,40,185);
-  //displayATT(0,40,150);
   task1();
   if ((conf.wifimode>0))  // 
     {
     s2("IP services");s2(crlf);
     if (conf.ftpenable)
       {
-      initFTP(); s2("  FTP server started, port "); s2(conf.ftpPort); s2(" admin/admin");  }
+      initFTP(); s2("  FTP server started, port "); s2(conf.ftpPort); s2(" admin/admin");  
+      }
     else
       s2("  FTP server disabled");
     s2(crlf);
@@ -922,12 +970,16 @@ void initNetServices()
       s2("  WEB server disabled");
     s2(crlf);
     if (conf.tcpenable)
-      {initTCPS(); s2("  TCP server started, port "); s2(conf.tcpPort); }
+      {
+      initTCPS(); s2("  TCP server started, port "); s2(conf.tcpPort); 
+      }
     else
       s2("  TCP server disabled");
     s2(crlf);
     if (conf.udpenable)
-      { initUDPS(); s2("  UDP service started, port "); s2(conf.udpPort); }
+      { initUDPS(); 
+        s2("  UDP-S service started, port "); s2(conf.udpPortSmeter);s2(crlf); 
+        s2("  UDP-F service started, port "); s2(conf.udpPortFreq); }
     else
       s2("  UDP server disabled");
     s2(crlf);
@@ -967,7 +1019,7 @@ void initWiFi() {
     WiFi.channel(conf.canalAP);
     WiFi.softAP(conf.ssidAP, conf.passAP, conf.canalAP, false, 2);
     s2("AP mode:");s2(crlf);
-    s2("  Canal:");s2(WiFi.channel());s2(crlf);
+    s2("  Channel:");s2(WiFi.channel());s2(crlf);
     s2("  AP MAC:"); s2(WiFi.softAPmacAddress());s2(crlf);
     s2("  IP:");s2(WiFi.softAPIP());s2(crlf);
     }
@@ -1014,7 +1066,7 @@ void initSPIFSS(boolean testfiles, boolean format) {
   s2("SPIFFS");s2(b);
   if (SPIFFS.begin(format)) { s2(OK); } else  { s2(ERROR); }
   s2(crlf);
-  if(testfiles) {
+  if (testfiles) {
     File dir=SPIFFS.open("/");
     File file=dir.openNextFile();
     while(file) 
@@ -1030,18 +1082,18 @@ void printhelp()
 {
   //s2("alias,aliasdevice      (set alias)");s2(crlf);
   //s2("debug                  (debug ON/OFF)");s2(crlf);
-  s2("a                      (auto WiFi: yes/no)");s2(crlf);
-  s2("f                      (check files)");s2(crlf);
-  s2("F                      (reset factory)");s2(crlf);
-  s2("h                      (help)");    s2(crlf);
-  s2("p,SSIDpass             (set passSTA)");s2(crlf);
-  s2("P,SSID-APpass          (set pass AP)");s2(crlf);
-  s2("r                      (reset)"); s2(crlf);   
-  s2("s,SSIDname             (set SSID STA)");s2(crlf);
-  s2("S,SSID-AP              (set SSID AP)");s2(crlf);
-  s2("t                      (format SPIFFS)");s2(crlf);
-  s2("u                      (show status)");s2(crlf);
-  s2("w,n                    (wifimode:0,1,2,3=OFF,STA,AP,STA+AP)");s2(crlf);
+  s2("a               (auto WiFi: yes/no)");s2(crlf);
+  s2("f               (check files)");s2(crlf);
+  s2("F               (reset factory)");s2(crlf);
+  s2("h               (help)");    s2(crlf);
+  s2("p,SSIDpass      (set passSTA)");s2(crlf);
+  s2("P,SSID-APpass   (set pass AP)");s2(crlf);
+  s2("r               (reset)"); s2(crlf);   
+  s2("s,SSIDname      (set SSID STA)");s2(crlf);
+  s2("S,SSID-AP       (set SSID AP)");s2(crlf);
+  s2("t               (format SPIFFS)");s2(crlf);
+  s2("u               (show status)");s2(crlf);
+  s2("w,n             (wifimode:0,1,2,3=OFF,STA,AP,STA+AP)");s2(crlf);
   s2("---------------------------------------");s2(crlf);
 }
 
@@ -1113,8 +1165,6 @@ void handleSerial()
         {
         if ((conf.connMode==1) || (conf.connMode==2) || (conf.connMode==3))  // modo IP or Serial2-IP, mod Manager
           handleRecDataIP(cinput, sinput);  
-        else if (conf.connMode==4)    // Serial-IP
-          handleRecDataIP(cinput, sinput);  
         }
       sinput=""; cinput='\0';  
       }
@@ -1134,7 +1184,7 @@ void initDS18B20() {
   if(nTemp>maxTemp) { nTemp=maxTemp; }
   s2("DS18B20 probes"); s2(crlf);
   s2(b); s2(b); s2(t(sondastemp));  s2(dp);
-  s2(nTemp); s2(crlf); s2(b); s2(b); s2(t(Modo));  s2(dp);
+  s2(nTemp); s2(crlf); s2(b); s2(b); s2(t(tModo));  s2(dp);
   s2(b); s2(b); s2((sensors0.isParasitePowerMode())?c(tparasite):c(tpower));  s2(crlf);
   for(byte i=0; i<maxTemp; i++)       {   // busca sondas conectadas
     if (sensors0.getAddress(addr1Wire[i], i))    {
@@ -1195,7 +1245,7 @@ void initremoteDebug()        //  REMOTE DEBUG
 void acopla()
 {
   clearTFT();
-  s2("Acoplando"); s2(crlf);
+  s2("Tunning"); s2(crlf);
   // cap1
   cap1.write(180);              // tell servo to go to position in variable '0'
   cap2.write(180);              // tell servo to go to position in variable '0'
@@ -1298,7 +1348,7 @@ void setup()
   delay(10);
   initTFT();          s2("TFT started");s2(crlf);
   DisplayVersionInfo(FIRMWARE_VERSION_INFO);
-  initSPIFSS(true,false);  
+  initSPIFSS (true,true);  
   initPorts();        s2("Ports OK");  //s2(crlf);
   initSettings();    
   byte auxconnMode=conf.connMode;
@@ -1344,7 +1394,7 @@ void ICACHE_FLASH_ATTR leevaloresOW()
     }
 }
 
-void readSmeter() 
+void readSmeter( ) 
 { 
   int16_t smeteradc=0;
   smeteradc=adsA.readADC_SingleEnded(SMETERp);    // es el valor leído del ADC sin convertir
@@ -1371,39 +1421,13 @@ void readSmeter()
 
   if (WiFi.isConnected()) {
     //Send a packet
-    udp.beginPacket(udpAddress,conf.udpPort);
-    udp.printf("%lu",smetervalue);
-    udp.endPacket();
+    udpsmeter.beginPacket(udpAddress,conf.udpPortSmeter);
+    udpsmeter.printf("%lu",smetervalue);
+    udpsmeter.endPacket();
     }
 }
 
 void readCW() { cwcodevalue=adsB.readADC_SingleEnded(3); }
-
-float wFORc;
-float wREFc;
-
-float readSWR(int limit)
-{
-  float auxSWR=1;
-  int16_t adc0, adc1;
-  long ldc0=0; long ldc1=0; 
-  for (byte i=0;i<conf.ATUIter;i++)
-    {
-    ldc0=ldc0+adsA.readADC_SingleEnded(VFORp); // VFORp=0
-    ldc1=ldc1+adsA.readADC_SingleEnded(VREFp); // VREFp=1
-    }
-  adc0 = ldc0/conf.ATUIter; if (adc0<0) adc0=0;
-  adc1 = ldc1/conf.ATUIter; if (adc1<0) adc1=0;
-  
-  vFORc=((float(adc0)*0.1875/1000)+0.25)*11*0.707;
-  vREFc=((float(adc1)*0.1875/1000)+0.25)*11*0.707;
-  //wFORc=vFORc*vFORc/50; wREFc=vREFc*vREFc/50;
-  wFORc=vFORc*vFORc*0.707/50; wREFc=vREFc*vREFc*0.707/50;
-  if ((vFORc-vREFc)>0) SWRreal=(vFORc+vREFc)/(vFORc-vREFc); else SWRreal=1.0;
-  auxSWR=(SWRreal*conf.ATUFactor)+conf.ATUOffset;
-  if (auxSWR<limit) auxSWR=1;
-  return(auxSWR);
-}
 
 void task01() {
   tini=millis();
@@ -1416,36 +1440,11 @@ void task01() {
   mact01=millis();
 }
 
-void readVIpower()
+void sendData(byte c)
 {
-  int16_t vtotadc=adsB.readADC_SingleEnded(VTOTp);    // es el valor leído del ADC sin convertir
-  int16_t itotadc=adsB.readADC_SingleEnded(ITOTp);    // es el valor leído del ADC sin convertir
-  float factorv=290.0;    // factor teórico
-  float factori=1000.0;   // factor teórico
-  float factorvr=1.0;     // factor corrección
-  float factorir=0.75;   // factor corrección
-  vtotvalue=factorvr*vtotadc*0.1875/factorv;
-  itotvalue=-(factorir)*(itotadc*0.1875-2500)*10/factori;
-}
-
-void task1() {
-  tini=millis();
-  readVIpower();
-  //printhora();
-  //s2(" WiFi:"); s2(WiFi.isConnected());s2(crlf);
-  countfaulttime++;   // si se hace mayor que TempDesactPrg,desactiva ejecucion programas dependientes de fecha
-  if (inTx==1) leevaloresOW();
-  if ((tftpage!=21) && (tftpage!=22) &&(tftpage!=23))
-    displayStatus();
-  if(conf.rstper>0) { if(millis() > 3600000*conf.rstper) { Serial2.println("RESTART"); ESP.restart();  } }
-  mact1=millis();
-}
-
-void sendData(WiFiClient client, byte c)
-{
+  //if (keylock==1) return;
   char data[60];
-  if (c==tcpfrequency) { strcpy(data,itoa(conf.frequency,buff,10)); }
-  else if (c==tcpsplitOn) { strcpy(data,itoa(conf.splitOn,buff,10)); }
+  if (c==tcpsplitOn) { strcpy(data,itoa(conf.splitOn,buff,10)); }
   else if (c==tcpisUSB) { strcpy(data,itoa(conf.isUSB,buff,10)); }
   else if (c==tcpritOn) { strcpy(data,itoa(conf.ritOn,buff,10)); }
   else if (c==tcpcwMode) { strcpy(data,itoa(conf.cwMode,buff,10)); }
@@ -1468,52 +1467,27 @@ void sendData(WiFiClient client, byte c)
   else if (c==tcpmaxsmeter) { strcpy(data,itoa(maxsmeter,buff,10)); }
   else if (c==tcpattlevel) { strcpy(data,itoa(conf.attLevel,buff,10)); }
   else if (c==tcpifShiftVal) { strcpy(data,itoa(conf.ifShiftValue,buff,10)); }
-  else if (c==tcpvtotvalue) 
-    { 
-      //strcpy(data,itoa(int(vtotvalue),buff,1)); 
-      //float pdec=vtotvalue-int(vtotvalue);
-      //strcat(data,punto);
-      //strcat(data,itoa(int(pdec),buff,1));
-    }
-/**  else if (c==tcpitotvalue) 
-    { strcpy(data,itoa(int(itotvalue),buff,1)); 
-      float pdec=itotvalue-int(itotvalue);
-      strcat(data,punto);
-      strcat(data,itoa(int(pdec),buff,1));
-    }**/
-  else if (c==tcpALL) { }
+  else if (c==tcpvtotvalue) { dtostrf(vtotvalue,8,2,data); }
+  else if (c==tcpitotvalue) { dtostrf(itotvalue,8,2,data); }
+
   else { strcpy(data,"999"); }
   if ((conf.connMode==1) || (conf.connMode==2))   // modos IP, enviar por Client
     {
-    client.write(c); 
-    if (c==tcpALL) { client.write(buffconf,sizeof(conf)); }
-    else { client.write(data); client.write('\n'); }
-    }
-  else        // mode serial 
-    {
-    if (conf.serial2Mode==1)    // enviar por Serial2 sólo si modo Manager
-      {
-      s2((byte)c);
-      s2(data);
-      s2(crlf);   
-      }
+    tcpclient.write(c); 
+    if (c==tcpALL) { tcpclient.write(buffconf,sizeof(conf)); }
+    else { tcpclient.write(data); tcpclient.write('\n'); }
     }
 }
 
 void task10() {
   tini=millis();
-  //sendData(tcpclient, tcptemp1); 
-  //sendData(tcpclient, tcptemp2); 
-  //sendData(tcpclient, tcptemp3); 
-  sendData(tcpclient, tcpminsmeter);
-  sendData(tcpclient, tcpmaxsmeter);
+  if (inTx==0) leevaloresOW();
+  sendTemp();
+  sendData(tcpminsmeter);
+  sendData(tcpmaxsmeter);
   displayWiFiSt();
   mact10=millis();
 }
-
-// =======================================================================================
-// Draw an X centered on x,y
-// =======================================================================================
 
 void drawX(int x, int y)
 {
@@ -1541,33 +1515,33 @@ void procesaWSrec(String datarec)
   s2(crlf);
 }
 
-void sendstatus(byte todo, WiFiClient client)
+void sendstatus(byte todo)
 {
-  if (!client.connected()) return;
+  if (!tcpclient.connected()) return;
   if (todo==1) 
     { 
-    sendData(client, tcpfrequency);
-    sendData(client, tcpritOn);
-    sendData(client, tcpsplitOn);
-    sendData(client, tcpisUSB);
-    sendData(client, tcpcwMode);
-    sendData(client, tcpvfoActive);
-    sendData(client, tcpisusbA);
-    sendData(client, tcpisusbB);
-    sendData(client, tcpCallSign); 
-    sendData(client, tcpfrequencyA); 
-    sendData(client, tcpfrequencyB); 
-    sendData(client, tcpscanst); 
-    sendData(client, tcpkeylock); 
-    sendData(client, tcptemp1); 
-    sendData(client, tcptemp2); 
-    sendData(client, tcptemp3); 
-    sendData(client, tcptunestep); 
-    sendData(client, tcpwifi); 
-    sendData(client, tcpattlevel); 
-    sendData(client, tcpifShiftVal); 
-    sendData(client, tcpvtotvalue); 
-    sendData(client, tcpitotvalue); 
+    //sendData(tcpfrequency);
+    sendData(tcpritOn);
+    sendData(tcpsplitOn);
+    sendData(tcpisUSB);
+    sendData(tcpcwMode);
+    sendData(tcpvfoActive);
+    sendData(tcpisusbA);
+    sendData(tcpisusbB);
+    sendData(tcpCallSign); 
+    sendData(tcpfrequencyA); 
+    sendData(tcpfrequencyB); 
+    sendData(tcpscanst); 
+    sendData(tcpkeylock); 
+    sendData(tcptemp1); 
+    sendData(tcptemp2); 
+    sendData(tcptemp3); 
+    sendData(tcptunestep); 
+    sendData(tcpwifi); 
+    sendData(tcpattlevel); 
+    sendData(tcpifShiftVal); 
+    sendData(tcpvtotvalue); 
+    sendData(tcpitotvalue); 
     }
 }
 
@@ -1592,11 +1566,11 @@ void handleRecDataIP(char c, String data)
   else if (c==tcpkeylock) { setLOCK(data.toInt()); }     // 65
   else if (c==tcpattlevel) { setATT(data.toInt(),0); }     // 66
   else if (c==tcpifShiftVal) { setIFS(data.toInt(),0); }   // 67
-  else if (c==tcpALL) 
+  else if (c==tcpALL)   // 127
     { 
     s2("tcpALL received");s2(crlf);
-    sendData(tcpclient,tcpALL); 
-    }               // 127
+    sendData(tcpALL); 
+    }               
 }
 
 void handletcpS()
@@ -1608,8 +1582,15 @@ void handletcpS()
     String auxS=tcpclient.remoteIP().toString();
     auxS.toCharArray (udpAddress, auxS.length()+1);
     printhora(); s2(" New client TCP: "); s2(tcpclient.remoteIP());s2(crlf);
-    sendData(tcpclient,tcpALL);
-    sendstatus(1, tcpclient);
+//    sendstatus(1);
+    if ((conf.connMode==1) || (conf.connMode==2))   // modos IP, enviar por Client
+      {
+      tcpclient.write(tcpALL); 
+      tcpclient.write(buffconf,sizeof(conf)); 
+      
+      }
+    
+    setLOCK(2);
     while (tcpclient.connected()) 
       {
       while (tcpclient.available()>0) 
@@ -1617,13 +1598,16 @@ void handletcpS()
         unsigned long tini=millis();
         char c=tcpclient.read();
         String datarec = tcpclient.readStringUntil('\n'); 
-        s2("Rx:"); s2((byte)c); s2(" len:"); s2(datarec.length()); s2(" data:");
-        for (int i=0;i<datarec.length();i++) { s2((byte)datarec[i]); s2("-"); }
-        s2(" b:"); s2(b); s2(" data:"); s2(datarec);
+        //s2("Rx:"); s2((byte)c); s2(" len:"); s2(datarec.length()); s2(" data:");
+        //for (int i=0;i<datarec.length();i++) { s2((byte)datarec[i]); s2("-"); }
+        //s2(" b:"); s2(b); s2(" data:"); s2(datarec);
         handleRecDataIP(c, datarec);
         }
       loopaux();
       }
+    printhora(); s2(" Client TCP disconnected"); s2(crlf);
+    setLOCK(0);
+    displayNav();
     }
   else
     {
@@ -1641,7 +1625,7 @@ void handleWS()
   if (wsserver.poll())
     {
     printhora();
-    s2(" Nuevo cliente WS: "); s2(tcpclient.remoteIP());s2(crlf);
+    s2(" New client WS: "); s2(tcpclient.remoteIP());s2(crlf);
     wsclient=wsserver.accept();    // accept() bloquea
     }
 }
