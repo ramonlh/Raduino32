@@ -1470,7 +1470,7 @@ void checkSetButtons(uint16_t x, uint16_t y)
        }                         // Latitude
      else if (i==4) 
        {  
-       conf.timezone=getValByKnob(19, conf.timezone, 0, 37, 1, "Time Zone", 1);
+       conf.timezone=getValByKnob(19, conf.timezone, 0, 38, 1, "Time Zone", 1);
        }                         // 
      saveconf(); 
      updateDisplay(1);

@@ -569,7 +569,7 @@ void ICACHE_FLASH_ATTR selectTimeZone(int numpar, int valact, boolean printtd)
 {
   if (printtd) printP(td);
   printinicampoCB(numpar);
-  for (byte i=0;i<38;i++)   
+  for (byte i=0;i<39;i++)   
     {
     printP(c(optionvalue));
     printPiP(comillas, i, comillas);
@@ -982,13 +982,13 @@ void setupSmeterHTML()
     printP(tr,td);
     printI(i);
     printP(td_f); 
-    if ((conf.modecalsmeter==0) || (i==0) || (i==15))
+    if ((conf.modecalsmeter==2) || (i==0) || (i==15))
       {
       printcampoI(mpi, conf.sMeterLevels[i], 6, true, true);
       }
     else
       {
-      printI(conf.sMeterLevels[i]);
+      printP(td); printI(conf.sMeterLevels[i]); printP(td_f);
       }
     printP(td);
     printcampoC(mpi+1, conf.smeterTit[i], 4, true, true, false,false);
