@@ -1344,7 +1344,6 @@ void ICACHE_FLASH_ATTR setupNetServHTML()
       else if (param_number==23) { conf.tcpenable=server.arg(i).toInt();  } // ftp server enabled      }
       else if (param_number==24) { conf.udpenable=server.arg(i).toInt();  } // ftp server enabled      }
       else if (param_number==25) { conf.wsenable=server.arg(i).toInt();  } // ftp server enabled      }
-      else if (param_number==26) { conf.seripenable=server.arg(i).toInt();  } // ftp server enabled      }
       else if (param_number==27) { conf.webenable=server.arg(i).toInt();  } // ftp server enabled      }
       else if (param_number==2) { conf.iftttenabled=server.arg(i).toInt(); } // enable IFTTT
       else if (param_number==3) { server.arg(i).toCharArray(conf.iftttkey, 30); }
@@ -1406,12 +1405,6 @@ void ICACHE_FLASH_ATTR setupNetServHTML()
   printColspan(2);
   printP(t(tport),b); printI(conf.wsPort);
   printP(td_f,tr_f);
-
-  printP(tr);
-  tcell(tseripserver);
-  checkBox(26, conf.seripenable,true);
-  printColspan(2);
-  printP(tr_f);
 
   printP(tr);
   tcell(twebserver);

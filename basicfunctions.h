@@ -383,7 +383,7 @@ void ICACHE_FLASH_ATTR resetWiFi(void)
   conf.EEgw={192,168,1,1};
   conf.EEdns={8,8,8,8};
   conf.EEdns={8,8,4,4};
-  conf.webPort=88;
+  conf.webPort=8088;
   strcpy(conf.hostmyip,c(icanhazip));
   saveconf();
 }

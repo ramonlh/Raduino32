@@ -90,16 +90,16 @@ char btNettext[5][11]={"Auto Conn.","Scan SSID","Password","WiFi Mode","Static I
 char btNavtext[5][8]={"H","<",">","M","xxx"};
 char btFlottext[5][6]={"Ent","Scan-","Scan+","Lock",">MEM"};
 char btYNtext[3][6]={"OK","ESC","<--"};
-char btKeytextL[50][2]={"0","1","2","3","4","5","6","7","8","9",
-                       "a","b","v","d","e","f","g","h","i","j",
-                       "k","l","m","n","ñ","o","p","q","r","s",
-                       "t","u","v","w","x","y","z","","","",
-                       "-","=","_",".",",",";","/","(",")","U"};
-char btKeytextU[50][2]={"0","1","2","3","4","5","6","7","8","9",
-                       "A","B","C","D","E","F","G","H","I","J",
-                       "K","L","M","N","Ñ","O","P","Q","R","S",
-                       "T","U","V","W","X","Y","Z","","","",
-                       "-","=","_",".",",",";","/","(",")","L"};
+char btKeytextL[50][3]={"0","1","2","3","4","5","6","7","8","9",
+                        "a","b","v","d","e","f","g","h","i","j",
+                        "k","l","m","n","ñ","o","p","q","r","s",
+                        "t","u","v","w","x","y","z","","","",
+                        "-","=","_",".",",",";","/","(",")","U"};
+char btKeytextU[50][3]={"0","1","2","3","4","5","6","7","8","9",
+                        "A","B","C","D","E","F","G","H","I","J",
+                        "K","L","M","N","Ñ","O","P","Q","R","S",
+                        "T","U","V","W","X","Y","Z","", "", "",
+                        "-","=","_",".",",",";","/","(",")","L"};
 char keytypetext[3][11]={"Straigth","Iambic A","Iambic B"};
 char btMenuNavtext[20][6]={"HOME","USER","RADIO","CW","Wifi",
                            "CALIB","KEYER","MEM","ATU","TPA",
@@ -1750,7 +1750,6 @@ void checkKEYERButtons(uint16_t x, uint16_t y)
 
 void setRIT(byte value) 
   { 
-  if (value==conf.ritOn) return;
   conf.ritOn=value; 
   btMainact[6]=value;
   sendData(tcpritOn);   // reenvía estado a cliente
@@ -1758,19 +1757,14 @@ void setRIT(byte value)
     { 
     setSPLIT(0); 
     conf.ritTxFrequency = conf.frequency;
-    setFrequency(conf.ritTxFrequency);
     }
-  else
-    {
-    setFrequency(conf.ritTxFrequency);
-    }
+  setFrequency(conf.ritTxFrequency);
   displayMain();
   displayFreq(1,1,1,1);
   }
   
 void setSPLIT(byte value) 
   { 
-  if (value==conf.splitOn) return;
   conf.splitOn=value;
   btMainact[7]=value;
   sendData(tcpsplitOn); 

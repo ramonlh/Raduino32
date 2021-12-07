@@ -1,10 +1,10 @@
-
+ 
 //Firmware Version
 //    This firmware hass been gradually changed based on the original firmware 
 //    created by Farhan, Jack, Jerry and others and KD8CEC.
 
 // Standar version - No tasks
-#define FIRMWARE_VERSION_INFO F("v 1.102")
+#define FIRMWARE_VERSION_INFO F("v 1.103")
 #define EEPROM_SIZE 2048
 
 /********************************************
@@ -1469,7 +1469,6 @@ void sendData(byte c)
   else if (c==tcpifShiftVal) { strcpy(data,itoa(conf.ifShiftValue,buff,10)); }
   else if (c==tcpvtotvalue) { dtostrf(vtotvalue,8,2,data); }
   else if (c==tcpitotvalue) { dtostrf(itotvalue,8,2,data); }
-
   else { strcpy(data,"999"); }
   if ((conf.connMode==1) || (conf.connMode==2))   // modos IP, enviar por Client
     {
@@ -1520,7 +1519,6 @@ void sendstatus(byte todo)
   if (!tcpclient.connected()) return;
   if (todo==1) 
     { 
-    //sendData(tcpfrequency);
     sendData(tcpritOn);
     sendData(tcpsplitOn);
     sendData(tcpisUSB);
@@ -1552,12 +1550,12 @@ void handleRecDataIP(char c, String data)
   else if (c==tcpisUSB) { setUSB(data.toInt()); }        // 4
   else if (c==tcpcwMode) { setCW(data.toInt()); }        // 5
   else if (c==tcpritOn) { setRIT(data.toInt()); }        // 8
-  else if (c==tcpvfoActive) { setVFO(data.toInt()); }    // 19
+  else if (c==tcpvfoActive) { setVFO(data.toInt()); sendData(tcpfrequencyA); sendData(tcpfrequencyB); }    // 19
   else if (c==tcpbanddn) { setNextHamBandFreq(conf.frequency,-1); } // 40
   else if (c==tcpbandup) { setNextHamBandFreq(conf.frequency,1); }  // 41
   else if (c==tcpfreqdn) { setFreq(-1); }                // 42
   else if (c==tcpfrequp) { setFreq(1); }                 // 43
-  else if (c==tcpfrequency) { conf.frequency=data.toInt();   setFreq(0); }              // 45
+  else if (c==tcpfrequency) { conf.frequency=data.toInt(); setFreq(0); } // 45
   else if (c==tcptunestep) { setSTEP(data.toInt()); }    // 51
   else if (c==tcpwifi) { setWiFi(); }                    // 52
   else if (c==tcpreset) { ESP.restart(); }               // 53
@@ -1566,11 +1564,7 @@ void handleRecDataIP(char c, String data)
   else if (c==tcpkeylock) { setLOCK(data.toInt()); }     // 65
   else if (c==tcpattlevel) { setATT(data.toInt(),0); }     // 66
   else if (c==tcpifShiftVal) { setIFS(data.toInt(),0); }   // 67
-  else if (c==tcpALL)   // 127
-    { 
-    s2("tcpALL received");s2(crlf);
-    sendData(tcpALL); 
-    }               
+  else if (c==tcpALL) { s2("tcpALL received");s2(crlf); sendData(tcpALL); }  // 127
 }
 
 void handletcpS()
@@ -1582,12 +1576,12 @@ void handletcpS()
     String auxS=tcpclient.remoteIP().toString();
     auxS.toCharArray (udpAddress, auxS.length()+1);
     printhora(); s2(" New client TCP: "); s2(tcpclient.remoteIP());s2(crlf);
-//    sendstatus(1);
     if ((conf.connMode==1) || (conf.connMode==2))   // modos IP, enviar por Client
       {
+      conf.webenable=0;
       tcpclient.write(tcpALL); 
       tcpclient.write(buffconf,sizeof(conf)); 
-      
+      sendstatus(1);
       }
     
     setLOCK(2);
@@ -1598,13 +1592,12 @@ void handletcpS()
         unsigned long tini=millis();
         char c=tcpclient.read();
         String datarec = tcpclient.readStringUntil('\n'); 
-        //s2("Rx:"); s2((byte)c); s2(" len:"); s2(datarec.length()); s2(" data:");
-        //for (int i=0;i<datarec.length();i++) { s2((byte)datarec[i]); s2("-"); }
-        //s2(" b:"); s2(b); s2(" data:"); s2(datarec);
         handleRecDataIP(c, datarec);
         }
+      sendFreq();
       loopaux();
       }
+    conf.webenable=1;
     printhora(); s2(" Client TCP disconnected"); s2(crlf);
     setLOCK(0);
     displayNav();

@@ -2,13 +2,13 @@
 /* Raduino needs to keep track of current state of the transceiver. These are a few variables that do it */
 
 //****************** PORTS **************************
-#define FTPPort 21
-#define DEBUGPort 23
-#define TCPPort 84
-#define UDPPortS 85
-#define WSPort 86
-#define UDPPortF 87
-#define WEBPort 88 
+#define FTPPort    21
+#define DEBUGPort  23
+#define TCPPort  8084
+#define UDPPortS 8085
+#define WSPort   8086
+#define UDPPortF 8087
+#define WEBPort  8088 
 
   typedef struct {    // datos configuración
       uint8_t LIBRE0;

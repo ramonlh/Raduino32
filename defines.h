@@ -12,7 +12,7 @@
 #define maxMem 100
 
   #define modelo 32
-  #define webportdefault 88
+  #define webportdefault 8088
   #define maxerrorrem 5
   #define SLAVE 0
   #define MASTER 1
