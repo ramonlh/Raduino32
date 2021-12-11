@@ -1,0 +1,20 @@
+object Frame2: TFrame2
+  Size.Width = 60.000000000000000000
+  Size.Height = 37.000000000000000000
+  Size.PlatformDefault = False
+  object Rectangle1: TRectangle
+    Align = Client
+    Fill.Color = claLightgray
+    Size.Width = 60.000000000000000000
+    Size.Height = 37.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Text1: TText
+    Align = Client
+    Size.Width = 60.000000000000000000
+    Size.Height = 37.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'RIT'
+    TextSettings.Font.Size = 18.000000000000000000
+  end
+end

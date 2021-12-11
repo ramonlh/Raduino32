@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2021/02/05 19:05:53.000.883,=C:\PROYECTOS\Embarcadero\C++\Unit1.cpp</Transaction>
+    <Transaction>2021/02/05 19:05:54.000.270,=C:\PROYECTOS\Embarcadero\C++\Project1PCH1.h</Transaction>
+    <Transaction>2021/02/05 19:09:42.000.018,C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx01.h=C:\PROYECTOS\Embarcadero\C++\Unit1.h</Transaction>
+    <Transaction>2021/02/05 19:09:42.000.018,C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx01.cpp=C:\PROYECTOS\Embarcadero\C++\Unit1.cpp</Transaction>
+    <Transaction>2021/02/05 19:09:42.000.018,C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx01.fmx=C:\PROYECTOS\Embarcadero\C++\Unit1.fmx</Transaction>
+    <Transaction>2021/02/05 19:09:51.000.803,C:\PROYECTOS\Embarcadero\C++\uBitx\uBitx.h=C:\PROYECTOS\Embarcadero\C++\Project1PCH1.h</Transaction>
+    <Transaction>2021/02/05 19:10:00.000.795,C:\PROYECTOS\Embarcadero\C++\uBitx\uBitxProject.cbproj=C:\PROYECTOS\Embarcadero\C++\Project1.cbproj</Transaction>
+    <Transaction>2021/02/05 19:36:48.000.249,=C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.cpp</Transaction>
+    <Transaction>2021/02/05 19:39:03.000.430,=C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.cpp</Transaction>
+    <Transaction>2021/02/05 19:43:23.000.064,C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.fmx=C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx02.fmx</Transaction>
+    <Transaction>2021/02/05 19:43:23.000.064,C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.h=C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx02.h</Transaction>
+    <Transaction>2021/02/05 19:43:23.000.064,C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.cpp=C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx02.cpp</Transaction>
+    <Transaction>2021/02/05 19:48:18.000.620,=C:\PROYECTOS\Embarcadero\C++\Android\Debug\Form3.cpp</Transaction>
+    <Transaction>2021/02/05 20:01:01.000.589,C:\PROYECTOS\Embarcadero\C++\Android\Debug\Form3.cpp=</Transaction>
+    <Transaction>2021/02/05 20:36:10.000.287,C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx02.cpp=</Transaction>
+    <Transaction>2021/02/06 17:37:17.000.105,=C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx02.cpp</Transaction>
+    <Transaction>2021/12/08 01:00:12.000.882,=C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.cpp</Transaction>
+    <Transaction>2021/12/08 01:00:53.000.270,C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx03.h=C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.h</Transaction>
+    <Transaction>2021/12/08 01:00:53.000.270,C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx03.cpp=C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.cpp</Transaction>
+    <Transaction>2021/12/08 01:00:53.000.270,C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx03.fmx=C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.fmx</Transaction>
+    <Transaction>2021/12/08 01:06:57.000.028,C:\PROYECTOS\Embarcadero\C++\uBitx\UuBitx03.cpp=</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile Android=""/>
+	</ActiveMobileDevice>
+	<BT_BuildType>Debug</BT_BuildType>
+</BorlandProject>

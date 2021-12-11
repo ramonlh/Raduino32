@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2021/11/23 11:51:54.000.752,=C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.cpp</Transaction>
+    <Transaction>2021/11/23 11:52:02.000.167,=C:\PROYECTOS\Embarcadero\C++\uBitx\Project1PCH1.h</Transaction>
+    <Transaction>2021/12/10 20:56:39.690,=C:\PROYECTOS\Embarcadero\C++\uBitx\Unit1.cpp</Transaction>
+    <Transaction>2021/12/10 20:56:39.928,=C:\PROYECTOS\Embarcadero\C++\uBitx\Project1PCH1.h</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile Android="FQBBB19B08201317"/>
+	</ActiveMobileDevice>
+</BorlandProject>

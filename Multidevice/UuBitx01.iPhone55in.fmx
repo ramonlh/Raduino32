@@ -1,0 +1,227 @@
+inherited F1_iPhone55in: TF1_iPhone55in
+  ClientHeight = 716
+  ClientWidth = 414
+  DesignerMasterStyle = 0
+  inherited ToolBar1: TToolBar
+    Size.Width = 414.000000000000000000
+    Size.Height = 44.000000000000000000
+    inherited Switch1: TSwitch
+      Size.Width = 55.000000000000000000
+      Size.Height = 35.000000000000000000
+    end
+    inherited Label11: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 72.000000000000000000
+      TextSettings.Font.Size = 10.000000000000000000
+    end
+  end
+  inherited TabControl1: TTabControl
+    Size.Width = 414.000000000000000000
+    Size.Height = 672.000000000000000000
+    Sizes = (
+      414s
+      623s
+      414s
+      623s
+      414s
+      623s
+      414s
+      623s)
+    inherited TabItem1: TTabItem
+      ExplicitSize.cx = 103.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      inherited NumberBox8: TNumberBox
+        Size.Height = 30.000000000000000000
+      end
+      inherited NumberBox2: TNumberBox
+        Anchors = [akLeft]
+        Position.X = 367.852996826171900000
+        Position.Y = 3330834.750000000000000000
+        Size.Height = 30.000000000000000000
+      end
+      inherited Frame218: TFrame2
+        inherited Text1: TText
+          TextSettings.Font.Size = 10.000000000000000000
+        end
+      end
+      inherited Frame219: TFrame2
+        inherited Text1: TText
+          TextSettings.Font.Size = 10.000000000000000000
+        end
+      end
+      inherited Frame220: TFrame2
+        inherited Text1: TText
+          TextSettings.Font.Size = 10.000000000000000000
+        end
+      end
+      inherited NumberBox6: TNumberBox
+        Size.Height = 30.000000000000000000
+      end
+      inherited NumberBox7: TNumberBox
+        Size.Height = 30.000000000000000000
+      end
+      inherited Memo1: TMemo
+        Viewport.Width = 81.000000000000000000
+        Viewport.Height = 65.000000000000000000
+      end
+      inherited NumberBox1: TNumberBox
+        Anchors = [akLeft]
+        Position.X = 353.337127685546900000
+        Position.Y = 4680040.000000000000000000
+        Size.Height = 30.000000000000000000
+      end
+      inherited Button17: TButton
+        OnClick = nil
+      end
+    end
+    inherited TabItem2: TTabItem
+      ExplicitSize.cx = 96.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      inherited TabControl3: TTabControl
+        Size.Width = 414.000000000000000000
+        Size.Height = 579.000000000000000000
+        Sizes = (
+          414s
+          530s
+          414s
+          530s
+          414s
+          530s
+          414s
+          530s
+          414s
+          530s
+          414s
+          530s
+          414s
+          530s
+          414s
+          530s
+          414s
+          530s)
+        inherited TabItem21: TTabItem
+          ExplicitSize.cx = 44.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+        end
+        inherited TabItem22: TTabItem
+          ExplicitSize.cx = 51.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited SpinBox1: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+        end
+        inherited TabItem23: TTabItem
+          ExplicitSize.cx = 39.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited SpinBox2: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited SpinBox3: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited SpinBox4: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited SpinBox5: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+        end
+        inherited TabItem24: TTabItem
+          ExplicitSize.cx = 43.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+        end
+        inherited TabItem25: TTabItem
+          ExplicitSize.cx = 50.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited SpinBox6: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited SpinBox7: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited SpinBox8: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+        end
+        inherited TabItem26: TTabItem
+          ExplicitSize.cx = 50.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited SpinBox9: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited Label35: TLabel
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+          end
+          inherited SpinBox10: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited Label38: TLabel
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+          end
+          inherited SpinBox11: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited SpinBox12: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited Label41: TLabel
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+          end
+          inherited SpinBox13: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited SpinBox14: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited Label44: TLabel
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+          end
+          inherited SpinBox15: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited SpinBox16: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+        end
+        inherited TabItem27: TTabItem
+          ExplicitSize.cx = 48.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+        end
+        inherited TabItem28: TTabItem
+          ExplicitSize.cx = 42.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+        end
+        inherited TabItem12: TTabItem
+          ExplicitSize.cx = 40.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited SpinBox17: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+          inherited SpinBox18: TSpinBox
+            Size.Height = 30.000000000000000000
+          end
+        end
+      end
+      inherited ToolBar2: TToolBar
+        Size.Width = 414.000000000000000000
+        Size.Height = 44.000000000000000000
+      end
+    end
+    inherited TabItem3: TTabItem
+      ExplicitSize.cx = 96.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      inherited Edit1: TEdit
+        Size.Height = 30.000000000000000000
+      end
+    end
+    inherited TabItem4: TTabItem
+      ExplicitSize.cx = 96.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      inherited Memo3: TMemo
+        Size.Width = 414.000000000000000000
+        Viewport.Width = 414.000000000000000000
+        Viewport.Height = 337.000000000000000000
+      end
+    end
+  end
+end

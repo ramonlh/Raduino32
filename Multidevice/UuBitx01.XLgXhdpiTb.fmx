@@ -1,0 +1,681 @@
+inherited F1_XLgXhdpiTb: TF1_XLgXhdpiTb
+  ClientHeight = 1255
+  ClientWidth = 800
+  DesignerMasterStyle = 0
+  inherited ToolBar1: TToolBar
+    Size.Width = 800.000000000000000000
+    inherited Label11: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Size.Width = 41.000000000000000000
+      TextSettings.Font.Size = 10.000000000000000000
+    end
+  end
+  inherited TabControl1: TTabControl
+    Size.Width = 800.000000000000000000
+    Size.Height = 1207.000000000000000000
+    Sizes = (
+      800s
+      1158s
+      800s
+      1158s
+      800s
+      1158s
+      800s
+      1158s)
+    inherited TabItem1: TTabItem
+      Size.Width = 200.000000000000000000
+      ExplicitSize.cx = 200.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      inherited NumberBox8: TNumberBox
+        Size.Height = 32.000000000000000000
+      end
+      inherited NumberBox2: TNumberBox
+        Anchors = [akLeft]
+        Position.X = 125262192.000000000000000000
+        Position.Y = 1407568022863872.000000000000000000
+      end
+      inherited Memo1: TMemo
+        Viewport.Width = 81.000000000000000000
+        Viewport.Height = 65.000000000000000000
+      end
+      inherited NumberBox1: TNumberBox
+        Anchors = [akLeft]
+        Position.X = 122270832.000000000000000000
+        Position.Y = 2085286213320704.000000000000000000
+      end
+      inherited Button17: TButton
+        OnClick = nil
+      end
+    end
+    inherited TabItem2: TTabItem
+      Size.Width = 200.000000000000000000
+      ExplicitSize.cx = 96.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      inherited TabControl3: TTabControl
+        Size.Width = 800.000000000000000000
+        Size.Height = 1110.000000000000000000
+        TabIndex = 0
+        Sizes = (
+          800s
+          1061s
+          800s
+          1061s
+          800s
+          1061s
+          800s
+          1061s
+          800s
+          1061s
+          800s
+          1061s
+          800s
+          1061s
+          800s
+          1061s
+          800s
+          1061s)
+        inherited TabItem21: TTabItem
+          IsSelected = True
+          Size.Width = 38.000000000000000000
+          ExplicitSize.cx = 44.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited ComboBox1: TComboBox
+            Position.X = 232.000000000000000000
+          end
+          inherited Edit5: TEdit
+            Position.X = 232.000000000000000000
+            Position.Y = 75.000000000000000000
+          end
+          inherited Label12: TLabel
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Label13: TLabel
+            Position.Y = 80.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Label14: TLabel
+            Position.Y = 147.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Edit6: TEdit
+            Position.X = 232.000000000000000000
+            Position.Y = 136.000000000000000000
+          end
+          inherited Label15: TLabel
+            Position.Y = 214.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Edit7: TEdit
+            Position.X = 232.000000000000000000
+            Position.Y = 198.000000000000000000
+          end
+        end
+        inherited TabItem22: TTabItem
+          Size.Width = 43.000000000000000000
+          ExplicitSize.cx = 51.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited Label16: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 30.000000000000000000
+          end
+          inherited ComboBox2: TComboBox
+            Position.X = 272.000000000000000000
+          end
+          inherited ComboBox4: TComboBox
+            Position.X = 272.000000000000000000
+            Position.Y = 76.000000000000000000
+          end
+          inherited Label18: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 84.000000000000000000
+          end
+          inherited Label17: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 138.000000000000000000
+          end
+          inherited ComboBox3: TComboBox
+            Position.X = 272.000000000000000000
+            Position.Y = 130.000000000000000000
+          end
+          inherited ComboBox5: TComboBox
+            Position.X = 272.000000000000000000
+            Position.Y = 184.000000000000000000
+          end
+          inherited SpinBox1: TSpinBox
+            Position.X = 272.000000000000000000
+            Position.Y = 238.000000000000000000
+          end
+          inherited Label20: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 246.000000000000000000
+          end
+          inherited Label19: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 192.000000000000000000
+          end
+        end
+        inherited TabItem23: TTabItem
+          Size.Width = 27.000000000000000000
+          ExplicitSize.cx = 39.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited ComboBox6: TComboBox
+            Position.X = 200.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited Label21: TLabel
+            Position.Y = 28.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox2: TSpinBox
+            Position.X = 200.000000000000000000
+            Position.Y = 76.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label22: TLabel
+            Position.Y = 82.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox3: TSpinBox
+            Position.X = 200.000000000000000000
+            Position.Y = 130.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label23: TLabel
+            Position.Y = 137.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox4: TSpinBox
+            Position.X = 200.000000000000000000
+            Position.Y = 184.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label24: TLabel
+            Position.Y = 191.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Label25: TLabel
+            Position.Y = 246.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox5: TSpinBox
+            Position.X = 200.000000000000000000
+            Position.Y = 239.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+        end
+        inherited TabItem24: TTabItem
+          Size.Width = 33.000000000000000000
+          ExplicitSize.cx = 43.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited ComboBox7: TComboBox
+            Position.X = 232.000000000000000000
+            Position.Y = 11.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited Label26: TLabel
+            Position.X = 24.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Edit8: TEdit
+            Position.X = 232.000000000000000000
+            Position.Y = 86.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited Label27: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 70.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Label28: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 126.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited ComboBox8: TComboBox
+            Position.X = 240.000000000000000000
+            Position.Y = 162.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited Label29: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 182.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Button2: TButton
+            Position.X = 376.000000000000000000
+            Position.Y = 86.000000000000000000
+          end
+          inherited ComboBox9: TComboBox
+            Position.X = 232.000000000000000000
+            Position.Y = 238.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited Label30: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 238.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Label31: TLabel
+            Position.X = 344.000000000000000000
+            Position.Y = 246.000000000000000000
+          end
+        end
+        inherited TabItem25: TTabItem
+          Size.Width = 31.000000000000000000
+          ExplicitSize.cx = 50.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited SpinBox6: TSpinBox
+            Position.X = 240.000000000000000000
+            Position.Y = 38.000000000000000000
+            Size.Width = 150.000000000000000000
+          end
+          inherited Label32: TLabel
+            Position.Y = 46.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox7: TSpinBox
+            Position.X = 240.000000000000000000
+            Position.Y = 86.000000000000000000
+            Size.Width = 150.000000000000000000
+          end
+          inherited Label33: TLabel
+            Position.Y = 94.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Label34: TLabel
+            Position.Y = 142.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox8: TSpinBox
+            Position.X = 240.000000000000000000
+            Position.Y = 134.000000000000000000
+            Size.Width = 150.000000000000000000
+          end
+          inherited ComboBox14: TComboBox
+            Position.X = 240.000000000000000000
+            Position.Y = 182.000000000000000000
+            Size.Width = 150.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited Label55: TLabel
+            Position.Y = 190.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+        end
+        inherited TabItem26: TTabItem
+          Size.Width = 30.000000000000000000
+          ExplicitSize.cx = 50.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited SpinBox9: TSpinBox
+            Position.X = 264.000000000000000000
+            Position.Y = 158.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label35: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 166.000000000000000000
+            Size.Width = 80.000000000000000000
+            Size.Height = 35.000000000000000000
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+          end
+          inherited Label36: TLabel
+            Position.X = 160.000000000000000000
+            Position.Y = 182.000000000000000000
+            Size.Width = 60.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox10: TSpinBox
+            Position.X = 264.000000000000000000
+            Position.Y = 182.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label37: TLabel
+            Position.X = 152.000000000000000000
+            Position.Y = 158.000000000000000000
+            Size.Width = 60.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Label38: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 102.000000000000000000
+            Size.Width = 80.000000000000000000
+            Size.Height = 35.000000000000000000
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+          end
+          inherited Label39: TLabel
+            Position.X = 152.000000000000000000
+            Position.Y = 94.000000000000000000
+            Size.Width = 60.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox11: TSpinBox
+            Position.X = 264.000000000000000000
+            Position.Y = 94.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label40: TLabel
+            Position.X = 160.000000000000000000
+            Position.Y = 118.000000000000000000
+            Size.Width = 60.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox12: TSpinBox
+            Position.X = 264.000000000000000000
+            Position.Y = 118.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label41: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 230.000000000000000000
+            Size.Width = 80.000000000000000000
+            Size.Height = 35.000000000000000000
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+          end
+          inherited Label42: TLabel
+            Position.X = 152.000000000000000000
+            Position.Y = 222.000000000000000000
+            Size.Width = 60.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox13: TSpinBox
+            Position.X = 264.000000000000000000
+            Position.Y = 222.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label43: TLabel
+            Position.X = 160.000000000000000000
+            Position.Y = 246.000000000000000000
+            Size.Width = 60.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox14: TSpinBox
+            Position.X = 264.000000000000000000
+            Position.Y = 246.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label44: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 38.000000000000000000
+            Size.Width = 80.000000000000000000
+            Size.Height = 35.000000000000000000
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+          end
+          inherited Label45: TLabel
+            Position.X = 152.000000000000000000
+            Position.Y = 30.000000000000000000
+            Size.Width = 60.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox15: TSpinBox
+            Position.X = 264.000000000000000000
+            Position.Y = 30.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+          inherited Label46: TLabel
+            Position.X = 160.000000000000000000
+            Position.Y = 54.000000000000000000
+            Size.Width = 60.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox16: TSpinBox
+            Position.X = 264.000000000000000000
+            Position.Y = 54.000000000000000000
+            Size.Width = 120.000000000000000000
+          end
+        end
+        inherited TabItem27: TTabItem
+          Size.Width = 36.000000000000000000
+          ExplicitSize.cx = 48.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+        end
+        inherited TabItem28: TTabItem
+          IsSelected = False
+          Size.Width = 31.000000000000000000
+          ExplicitSize.cx = 42.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited ComboBox10: TComboBox
+            Position.X = 216.000000000000000000
+            Position.Y = 30.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited Label47: TLabel
+            Position.X = 32.000000000000000000
+            Position.Y = 38.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Button4: TButton
+            Position.X = 216.000000000000000000
+            Position.Y = 106.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited Button5: TButton
+            Position.X = 216.000000000000000000
+            Position.Y = 182.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+            Size.PlatformDefault = False
+          end
+        end
+        inherited TabItem12: TTabItem
+          Size.Width = 30.000000000000000000
+          ExplicitSize.cx = 40.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          inherited Label48: TLabel
+            Position.Y = 46.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited ComboBox11: TComboBox
+            Position.X = 208.000000000000000000
+            Position.Y = 38.000000000000000000
+            Size.Width = 97.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited ComboBox12: TComboBox
+            Position.X = 208.000000000000000000
+            Position.Y = 99.000000000000000000
+            Size.Width = 97.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          inherited Label49: TLabel
+            Position.Y = 107.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox17: TSpinBox
+            Position.X = 208.000000000000000000
+            Position.Y = 160.000000000000000000
+          end
+          inherited Label50: TLabel
+            Position.Y = 168.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited Label51: TLabel
+            Position.Y = 230.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 35.000000000000000000
+          end
+          inherited SpinBox18: TSpinBox
+            Position.X = 208.000000000000000000
+            Position.Y = 222.000000000000000000
+          end
+        end
+      end
+      inherited ToolBar2: TToolBar
+        Size.Width = 800.000000000000000000
+        inherited Button8: TButton
+          StyledSettings = [Family, Style, FontColor]
+          Size.Width = 120.000000000000000000
+          Size.Height = 35.000000000000000000
+          TextSettings.Font.Size = 14.000000000000000000
+        end
+        inherited Button9: TButton
+          StyledSettings = [Family, Style, FontColor]
+          Size.Width = 120.000000000000000000
+          Size.Height = 35.000000000000000000
+          TextSettings.Font.Size = 14.000000000000000000
+        end
+        inherited Button10: TButton
+          StyledSettings = [Family, Style, FontColor]
+          Position.X = 140.000000000000000000
+          Size.Width = 120.000000000000000000
+          Size.Height = 35.000000000000000000
+          TextSettings.Font.Size = 14.000000000000000000
+        end
+      end
+    end
+    inherited TabItem3: TTabItem
+      Size.Width = 200.000000000000000000
+      ExplicitSize.cx = 96.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      inherited Edit1: TEdit
+        Position.X = 200.000000000000000000
+        Position.Y = 111.000000000000000000
+      end
+      inherited Label2: TLabel
+        Position.X = 200.000000000000000000
+        Position.Y = 191.000000000000000000
+      end
+      inherited Label3: TLabel
+        Position.X = 200.000000000000000000
+        Position.Y = 231.000000000000000000
+      end
+      inherited Label4: TLabel
+        Position.X = 200.000000000000000000
+        Position.Y = 271.000000000000000000
+      end
+      inherited Label6: TLabel
+        Position.Y = 151.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+      end
+      inherited Label7: TLabel
+        Position.Y = 191.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+      end
+      inherited Label8: TLabel
+        Position.Y = 231.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+      end
+      inherited Label9: TLabel
+        Position.Y = 271.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+      end
+      inherited Label1: TLabel
+        Position.X = 200.000000000000000000
+        Position.Y = 151.000000000000000000
+      end
+      inherited Label5: TLabel
+        Position.Y = 31.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+      end
+      inherited ComboBox13: TComboBox
+        Position.X = 200.000000000000000000
+        Position.Y = 31.000000000000000000
+      end
+      inherited Label52: TLabel
+        Position.Y = 111.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+      end
+      inherited Label53: TLabel
+        Position.Y = 311.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+      end
+      inherited Label54: TLabel
+        Position.X = 200.000000000000000000
+        Position.Y = 311.000000000000000000
+      end
+      inherited ComboBox15: TComboBox
+        Position.X = 200.000000000000000000
+        Position.Y = 71.000000000000000000
+      end
+      inherited Label56: TLabel
+        Position.Y = 71.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+      end
+    end
+    inherited TabItem4: TTabItem
+      Size.Width = 200.000000000000000000
+      ExplicitSize.cx = 96.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      inherited Memo3: TMemo
+        Size.Width = 800.000000000000000000
+        Viewport.Width = 800.000000000000000000
+        Viewport.Height = 337.000000000000000000
+      end
+      inherited Button6: TButton
+        Position.X = 600.000000000000000000
+        Position.Y = 47.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+      end
+      inherited Panel1: TPanel
+        inherited Button7: TButton
+          Position.X = 496.000000000000000000
+        end
+        inherited Edit2: TEdit
+          Size.Width = 489.000000000000000000
+        end
+      end
+      inherited Button1: TButton
+        Position.X = 584.000000000000000000
+        Position.Y = 101.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 35.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+  end
+  inherited Timer1: TTimer
+    Left = 400
+    Top = 336
+  end
+  inherited IdUDPServer1: TIdUDPServer
+    Left = 400
+    Top = 273
+  end
+end

@@ -1,0 +1,1966 @@
+object F1: TF1
+  Left = 1350
+  Top = 360
+  Caption = 'uBitx Raduino32'
+  ClientHeight = 625
+  ClientWidth = 395
+  Position = Designed
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  Left = 1350
+  Top = 360
+  DesignerMasterStyle = 0
+  object ToolBar1: TToolBar
+    Size.Width = 395.000000000000000000
+    Size.Height = 48.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Label10: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 224.000000000000000000
+      Position.Y = 14.000000000000000000
+      Size.Width = 113.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 16.000000000000000000
+      Text = 'uBitx Remote'
+      TabOrder = 18
+    end
+    object Switch1: TSwitch
+      IsChecked = False
+      Position.X = 8.000000000000000000
+      Position.Y = 7.000000000000000000
+      Size.Width = 44.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnSwitch = Switch1Switch
+    end
+    object Label11: TLabel
+      Position.X = 56.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 33.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Disc.'
+      TabOrder = 20
+    end
+    object Label57: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 320.000000000000000000
+      Position.Y = 18.000000000000000000
+      Size.Width = 49.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 8.000000000000000000
+      Text = 'by EA4GZI'
+      TabOrder = 17
+    end
+    object Label58: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 216.000000000000000000
+      Position.Y = 102.000000000000000000
+      Size.Width = 81.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 16.000000000000000000
+      Text = 'CallSign'
+      TabOrder = 19
+    end
+    object Label63: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 344.000000000000000000
+      Position.Y = 2.000000000000000000
+      Size.Width = 49.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 8.000000000000000000
+      TextSettings.HorzAlign = Trailing
+      Text = 'V.'
+      TabOrder = 16
+    end
+  end
+  object TabControl1: TTabControl
+    Align = Client
+    Size.Width = 395.000000000000000000
+    Size.Height = 577.000000000000000000
+    Size.PlatformDefault = False
+    TabHeight = 49.000000000000000000
+    TabIndex = 0
+    TabOrder = 3
+    TabPosition = PlatformDefault
+    Sizes = (
+      395s
+      528s
+      395s
+      528s
+      395s
+      528s
+      395s
+      528s)
+    object TabItem1: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 49.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Panel'
+      ExplicitSize.cx = 49.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      object NumberBox8: TNumberBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 64
+        TabStop = False
+        Cursor = crIBeam
+        DecimalDigits = 0
+        Min = -1000000.000000000000000000
+        Max = 1000000.000000000000000000
+        CanFocus = False
+        TextSettings.FontColor = claAquamarine
+        Position.X = 88.000000000000000000
+        Position.Y = 74.000000000000000000
+        EnableDragHighlight = False
+        Size.Width = 201.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        StyledSettings = [Family, Size, Style]
+      end
+      object Button11: TButton
+        StyledSettings = [Family, Style]
+        Position.X = 48.000000000000000000
+        Position.Y = 15.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 28
+        Text = 'B'
+        TextSettings.Font.Size = 20.000000000000000000
+        TextSettings.FontColor = claDarkgreen
+        OnClick = Button11Click
+      end
+      object Button12: TButton
+        StyledSettings = [Family, Style]
+        Position.X = 48.000000000000000000
+        Position.Y = 74.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 29
+        Text = 'A'
+        TextSettings.Font.Size = 32.000000000000000000
+        OnClick = Button12Click
+      end
+      object NumberBox2: TNumberBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 16
+        Cursor = crIBeam
+        DecimalDigits = 0
+        Max = 1000000000.000000000000000000
+        TextSettings.Font.Size = 20.000000000000000000
+        TextSettings.FontColor = claDarkgreen
+        TextSettings.HorzAlign = Trailing
+        Position.X = 88.000000000000000000
+        Position.Y = 15.000000000000000000
+        EnableDragHighlight = False
+        Enabled = False
+        Size.Width = 161.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        StyledSettings = [Family, Style]
+        object FloatKeyAnimation2: TFloatKeyAnimation
+          Duration = 0.200000002980232200
+          Keys = <>
+          PropertyName = 'Height'
+          StartFromCurrent = False
+        end
+      end
+      object ProgressBar1: TProgressBar
+        Max = 90.000000000000000000
+        Orientation = Horizontal
+        Position.X = 190.000000000000000000
+        Position.Y = 320.000000000000000000
+      end
+      inline Frame21: TFrame2
+        Position.X = 152.000000000000000000
+        Position.Y = 143.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          OnClick = Frame21Text1Click
+        end
+      end
+      inline Frame22: TFrame2
+        Position.X = 224.000000000000000000
+        Position.Y = 143.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'SPL'
+          OnClick = Frame22Text1Click
+        end
+      end
+      inline Frame23: TFrame2
+        Position.X = 296.000000000000000000
+        Position.Y = 143.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'Scan+'
+          OnClick = Frame23Text1Click
+        end
+      end
+      inline Frame210: TFrame2
+        Position.X = 296.000000000000000000
+        Position.Y = 223.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'ENT'
+        end
+      end
+      inline Frame211: TFrame2
+        Position.X = 296.000000000000000000
+        Position.Y = 64.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'Band+'
+          OnClick = Frame211Text1Click
+        end
+      end
+      inline Frame212: TFrame2
+        Position.X = 8.000000000000000000
+        Position.Y = 143.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'ATU'
+        end
+      end
+      inline Frame213: TFrame2
+        Position.X = 296.000000000000000000
+        Position.Y = 264.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Rectangle1: TRectangle
+          Enabled = False
+        end
+        inherited Text1: TText
+          Text = '>MEM'
+        end
+      end
+      inline Frame214: TFrame2
+        Position.X = 296.000000000000000000
+        Position.Y = 304.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'Lock'
+          OnClick = Frame214Text1Click
+        end
+      end
+      inline Frame215: TFrame2
+        Position.X = 80.000000000000000000
+        Position.Y = 143.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'V/M'
+        end
+      end
+      inline Frame218: TFrame2
+        Position.X = 8.000000000000000000
+        Position.Y = 238.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        inherited Rectangle1: TRectangle
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+        end
+        inherited Text1: TText
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+          Text = 'WiFi'
+          TextSettings.Font.Size = 14.000000000000000000
+        end
+      end
+      inline Frame219: TFrame2
+        Position.X = 8.000000000000000000
+        Position.Y = 274.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        inherited Rectangle1: TRectangle
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+        end
+        inherited Text1: TText
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+          Text = 'Rst'
+          TextSettings.Font.Size = 14.000000000000000000
+          OnClick = Frame219Text1Click
+        end
+      end
+      inline Frame220: TFrame2
+        Position.X = 8.000000000000000000
+        Position.Y = 309.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        inherited Rectangle1: TRectangle
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+        end
+        inherited Text1: TText
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+          Text = 'H'
+          TextSettings.Font.Size = 14.000000000000000000
+        end
+      end
+      inline Frame221: TFrame2
+        Position.X = 96.000000000000000000
+        Position.Y = 315.000000000000000000
+        Size.Width = 25.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        inherited Rectangle1: TRectangle
+          Fill.Color = claLimegreen
+          Size.Width = 25.000000000000000000
+          Size.Height = 25.000000000000000000
+        end
+        inherited Text1: TText
+          Size.Width = 25.000000000000000000
+          Size.Height = 25.000000000000000000
+          Text = '0'
+        end
+      end
+      inline Frame222: TFrame2
+        Position.X = 128.000000000000000000
+        Position.Y = 315.000000000000000000
+        Size.Width = 25.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        inherited Rectangle1: TRectangle
+          Fill.Color = claLimegreen
+          Size.Width = 25.000000000000000000
+          Size.Height = 25.000000000000000000
+        end
+        inherited Text1: TText
+          Size.Width = 25.000000000000000000
+          Size.Height = 25.000000000000000000
+          Text = '0'
+        end
+      end
+      inline Frame223: TFrame2
+        Position.X = 160.000000000000000000
+        Position.Y = 315.000000000000000000
+        Size.Width = 25.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        inherited Rectangle1: TRectangle
+          Fill.Color = claLimegreen
+          Size.Width = 25.000000000000000000
+          Size.Height = 25.000000000000000000
+        end
+        inherited Text1: TText
+          Size.Width = 25.000000000000000000
+          Size.Height = 25.000000000000000000
+          Text = '0'
+        end
+      end
+      inline Frame24: TFrame2
+        Position.X = 296.000000000000000000
+        Position.Y = 183.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'Scan-'
+          OnClick = Frame24Text1Click
+        end
+      end
+      inline Frame25: TFrame2
+        Position.X = 224.000000000000000000
+        Position.Y = 183.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'ATT'
+        end
+      end
+      inline Frame26: TFrame2
+        Position.X = 152.000000000000000000
+        Position.Y = 183.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'IFS'
+        end
+      end
+      inline Frame27: TFrame2
+        Position.X = 80.000000000000000000
+        Position.Y = 183.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'LSB'
+          OnClick = Frame27Text1Click
+        end
+      end
+      inline Frame28: TFrame2
+        Position.X = 8.000000000000000000
+        Position.Y = 183.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'CW'
+          OnClick = Frame28Text1Click
+        end
+      end
+      inline Frame29: TFrame2
+        Position.X = 296.000000000000000000
+        Position.Y = 103.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'Band-'
+          OnClick = Frame29Text1Click
+        end
+      end
+      inline Frame225: TFrame2
+        Position.X = 296.000000000000000000
+        Position.Y = 25.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 37.000000000000000000
+        Size.PlatformDefault = False
+        inherited Text1: TText
+          Text = 'TX'
+          OnClick = Frame225Text1Click
+        end
+      end
+      object Label59: TLabel
+        Position.X = 48.000000000000000000
+        Position.Y = 271.000000000000000000
+        Size.Width = 25.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'IFS'
+        TabOrder = 58
+      end
+      object Label60: TLabel
+        Position.X = 48.000000000000000000
+        Position.Y = 231.000000000000000000
+        Size.Width = 25.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'ATT'
+        TabOrder = 57
+      end
+      object ScrollBar1: TScrollBar
+        Max = 250.000000000000000000
+        SmallChange = 10.000000000000000000
+        Orientation = Horizontal
+        Position.X = 48.000000000000000000
+        Position.Y = 247.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 18.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 59
+        OnChange = ScrollBar1Change
+      end
+      object ScrollBar2: TScrollBar
+        Max = 2000.000000000000000000
+        Min = -2000.000000000000000000
+        SmallChange = 100.000000000000000000
+        Orientation = Horizontal
+        Position.X = 48.000000000000000000
+        Position.Y = 287.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 18.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 60
+        OnChange = ScrollBar2Change
+      end
+      object Label61: TLabel
+        Position.X = 40.000000000000000000
+        Position.Y = 310.000000000000000000
+        Size.Width = 41.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = '0.0'
+        TabOrder = 56
+      end
+      object Label62: TLabel
+        Position.X = 40.000000000000000000
+        Position.Y = 325.000000000000000000
+        Size.Width = 41.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = '0.000'
+        TabOrder = 53
+      end
+      object NumberBox6: TNumberBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 62
+        Cursor = crIBeam
+        DecimalDigits = 0
+        Max = 250.000000000000000000
+        TextSettings.HorzAlign = Trailing
+        Position.X = 161.000000000000000000
+        Position.Y = 230.000000000000000000
+        HorzIncrement = 10.000000000000000000
+        Size.Width = 41.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        OnChange = NumberBox6Change
+      end
+      object NumberBox7: TNumberBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 61
+        Cursor = crIBeam
+        DecimalDigits = 0
+        Min = -2000.000000000000000000
+        Max = 2000.000000000000000000
+        TextSettings.HorzAlign = Trailing
+        Position.X = 160.000000000000000000
+        Position.Y = 271.000000000000000000
+        HorzIncrement = 100.000000000000000000
+        Size.Width = 41.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        OnChange = NumberBox7Change
+      end
+      object Memo1: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        Position.X = 8.000000000000000000
+        Position.Y = 368.000000000000000000
+        Size.Width = 81.000000000000000000
+        Size.Height = 65.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 63
+        Viewport.Width = 77.000000000000000000
+        Viewport.Height = 61.000000000000000000
+      end
+      object NumberBox1: TNumberBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 0
+        Cursor = crIBeam
+        DecimalDigits = 0
+        Max = 1000000000.000000000000000000
+        TextSettings.Font.Size = 32.000000000000000000
+        TextSettings.HorzAlign = Trailing
+        Position.X = 88.000000000000000000
+        Position.Y = 74.000000000000000000
+        HorzIncrement = 100.000000000000000000
+        Enabled = False
+        Size.Width = 201.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        StyledSettings = [Family, Style, FontColor]
+        object FloatKeyAnimation1: TFloatKeyAnimation
+          Duration = 0.200000002980232200
+          Keys = <>
+          PropertyName = 'Height'
+          StartFromCurrent = False
+        end
+      end
+      object Label64: TLabel
+        Position.X = 48.000000000000000000
+        Position.Y = 318.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = '0.0'
+        TabOrder = 55
+      end
+      object Label65: TLabel
+        Position.X = 72.000000000000000000
+        Position.Y = 310.000000000000000000
+        Size.Width = 17.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'V'
+        TabOrder = 54
+      end
+      object ArcDial1: TArcDial
+        Position.X = 96.000000000000000000
+        Position.Y = 344.000000000000000000
+        Size.Width = 121.000000000000000000
+        Size.Height = 105.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 88
+        OnChange = ArcDial1Change
+      end
+      object Button13: TButton
+        Position.X = 208.000000000000000000
+        Position.Y = 351.000000000000000000
+        RepeatClick = True
+        Size.Width = 105.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 94
+        Text = '+100'
+        OnClick = Button13Click
+      end
+      object Button14: TButton
+        Position.X = 208.000000000000000000
+        Position.Y = 471.000000000000000000
+        RepeatClick = True
+        Size.Width = 105.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 89
+        Text = '-100'
+        OnClick = Button14Click
+      end
+      object Button15: TButton
+        Position.X = 232.000000000000000000
+        Position.Y = 375.000000000000000000
+        RepeatClick = True
+        Size.Width = 81.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 93
+        Text = '+10'
+        OnClick = Button13Click
+      end
+      object Button16: TButton
+        Position.X = 232.000000000000000000
+        Position.Y = 447.000000000000000000
+        RepeatClick = True
+        Size.Width = 81.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 90
+        Text = '-10'
+        OnClick = Button13Click
+      end
+      object Button17: TButton
+        Position.X = 264.000000000000000000
+        Position.Y = 399.000000000000000000
+        RepeatClick = True
+        Size.Width = 50.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 92
+        Text = '+1'
+        OnClick = Button17Click
+      end
+      object Button18: TButton
+        Position.X = 264.000000000000000000
+        Position.Y = 423.000000000000000000
+        RepeatClick = True
+        Size.Width = 50.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 91
+        Text = '-1'
+        OnClick = Button18Click
+      end
+    end
+    object TabItem2: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 51.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'tabitemcontacts'
+      TabOrder = 0
+      Text = 'Setup'
+      ExplicitSize.cx = 96.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      object TabControl3: TTabControl
+        Align = Client
+        Size.Width = 395.000000000000000000
+        Size.Height = 480.000000000000000000
+        Size.PlatformDefault = False
+        TabHeight = 49.000000000000000000
+        TabIndex = 7
+        TabOrder = 0
+        TabPosition = PlatformDefault
+        Sizes = (
+          395s
+          431s
+          395s
+          431s
+          395s
+          431s
+          395s
+          431s
+          395s
+          431s
+          395s
+          431s
+          395s
+          431s
+          395s
+          431s
+          395s
+          431s)
+        object TabItem21: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 44.000000000000000000
+          Size.Height = 49.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'User'
+          ExplicitSize.cx = 44.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          object ComboBox1: TComboBox
+            Items.Strings = (
+              'Espa'#241'ol'
+              'English')
+            ItemIndex = 0
+            Position.X = 72.000000000000000000
+            Position.Y = 14.000000000000000000
+            TabOrder = 0
+          end
+          object Edit5: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 4
+            Position.X = 72.000000000000000000
+            Position.Y = 46.000000000000000000
+          end
+          object Label12: TLabel
+            Position.X = 8.000000000000000000
+            Position.Y = 14.000000000000000000
+            Size.Width = 49.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Languaje'
+            TabOrder = 7
+          end
+          object Label13: TLabel
+            Position.X = 8.000000000000000000
+            Position.Y = 46.000000000000000000
+            Size.Width = 49.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'CallSign'
+            TabOrder = 6
+          end
+          object Label14: TLabel
+            Position.X = 8.000000000000000000
+            Position.Y = 78.000000000000000000
+            Size.Width = 49.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Latitude'
+            TabOrder = 5
+          end
+          object Edit6: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 2
+            Position.X = 72.000000000000000000
+            Position.Y = 78.000000000000000000
+          end
+          object Label15: TLabel
+            Position.X = 8.000000000000000000
+            Position.Y = 110.000000000000000000
+            Size.Width = 57.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Longitude'
+            TabOrder = 3
+          end
+          object Edit7: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 1
+            Position.X = 72.000000000000000000
+            Position.Y = 110.000000000000000000
+          end
+        end
+        object TabItem22: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 51.000000000000000000
+          Size.Height = 49.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Radio'
+          ExplicitSize.cx = 51.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          object Label16: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 22.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'TX range'
+            TabOrder = 15
+          end
+          object ComboBox2: TComboBox
+            Items.Strings = (
+              'Ham Bands'
+              'All Range')
+            ItemIndex = 0
+            Position.X = 104.000000000000000000
+            Position.Y = 22.000000000000000000
+            TabOrder = 9
+          end
+          object ComboBox4: TComboBox
+            Items.Strings = (
+              'No'
+              'Yes')
+            ItemIndex = 1
+            Position.X = 104.000000000000000000
+            Position.Y = 54.000000000000000000
+            TabOrder = 0
+          end
+          object Label18: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 54.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'SSB auto'
+            TabOrder = 6
+          end
+          object Label17: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 86.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Scan range'
+            TabOrder = 11
+          end
+          object ComboBox3: TComboBox
+            Items.Strings = (
+              'Ham Bands'
+              'All Range')
+            ItemIndex = 0
+            Position.X = 104.000000000000000000
+            Position.Y = 86.000000000000000000
+            TabOrder = 3
+          end
+          object ComboBox5: TComboBox
+            Items.Strings = (
+              'No Stop'
+              'Stop-Resume'
+              'Stop')
+            ItemIndex = 0
+            Position.X = 104.000000000000000000
+            Position.Y = 118.000000000000000000
+            TabOrder = 1
+          end
+          object SpinBox1: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 10
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 30.000000000000000000
+            Value = 3.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 150.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label20: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 150.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Resume delay'
+            TabOrder = 5
+          end
+          object Label19: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 118.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Scan mode'
+            TabOrder = 8
+          end
+        end
+        object TabItem23: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 39.000000000000000000
+          Size.Height = 49.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'CW'
+          ExplicitSize.cx = 39.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          object ComboBox6: TComboBox
+            Items.Strings = (
+              'Straigth'
+              'Iambic A'
+              'Iambic B')
+            ItemIndex = 0
+            Position.X = 104.000000000000000000
+            Position.Y = 22.000000000000000000
+            TabOrder = 4
+          end
+          object Label21: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 22.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Key type'
+            TabOrder = 12
+          end
+          object SpinBox2: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 15
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Min = 3.000000000000000000
+            Max = 50.000000000000000000
+            Value = 12.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 54.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label22: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 54.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'WPM'
+            TabOrder = 8
+          end
+          object SpinBox3: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 14
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Min = 50.000000000000000000
+            Max = 2000.000000000000000000
+            Value = 800.000000000000000000
+            Increment = 10.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 94.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label23: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 94.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'SideTone'
+            TabOrder = 7
+          end
+          object SpinBox4: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 13
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 120.000000000000000000
+            Value = 60.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 134.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label24: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 134.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Delay time'
+            TabOrder = 6
+          end
+          object Label25: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 174.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Start time'
+            TabOrder = 5
+          end
+          object SpinBox5: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 11
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 250.000000000000000000
+            Value = 50.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 174.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+        end
+        object TabItem24: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 43.000000000000000000
+          Size.Height = 49.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'WiFi'
+          ExplicitSize.cx = 43.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          object ComboBox7: TComboBox
+            Items.Strings = (
+              'No'
+              'Yes')
+            ItemIndex = 0
+            Position.X = 104.000000000000000000
+            Position.Y = 14.000000000000000000
+            TabOrder = 1
+          end
+          object Label26: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 14.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Auto Connect'
+            TabOrder = 5
+          end
+          object Edit8: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 10
+            Position.X = 104.000000000000000000
+            Position.Y = 46.000000000000000000
+          end
+          object Label27: TLabel
+            Position.X = 56.000000000000000000
+            Position.Y = 46.000000000000000000
+            Size.Width = 41.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'SSID'
+            TabOrder = 12
+          end
+          object Edit9: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 9
+            Position.X = 104.000000000000000000
+            Position.Y = 78.000000000000000000
+          end
+          object Label28: TLabel
+            Position.X = 32.000000000000000000
+            Position.Y = 78.000000000000000000
+            Size.Width = 65.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Password'
+            TabOrder = 11
+          end
+          object ComboBox8: TComboBox
+            Items.Strings = (
+              'OFF'
+              'STA'
+              'AP'
+              'AP+STA')
+            ItemIndex = 0
+            Position.X = 104.000000000000000000
+            Position.Y = 110.000000000000000000
+            TabOrder = 6
+          end
+          object Label29: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 110.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'WiFi Mode'
+            TabOrder = 14
+          end
+          object Button2: TButton
+            Position.X = 216.000000000000000000
+            Position.Y = 46.000000000000000000
+            Size.Width = 57.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 15
+            Text = 'Scan'
+          end
+          object ComboBox9: TComboBox
+            Enabled = False
+            Items.Strings = (
+              'No'
+              'Yes')
+            ItemIndex = 1
+            Position.X = 104.000000000000000000
+            Position.Y = 142.000000000000000000
+            TabOrder = 0
+          end
+          object Label30: TLabel
+            Position.X = 32.000000000000000000
+            Position.Y = 142.000000000000000000
+            Size.Width = 65.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Static IP'
+            TabOrder = 4
+          end
+          object Label31: TLabel
+            Position.X = 216.000000000000000000
+            Position.Y = 142.000000000000000000
+            Size.Width = 97.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = '192.168.1.149'
+            TabOrder = 3
+          end
+        end
+        object TabItem25: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 38.000000000000000000
+          Size.Height = 49.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Adj'
+          ExplicitSize.cx = 50.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          object SpinBox6: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 17
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Min = -500000.000000000000000000
+            Max = 500000.000000000000000000
+            Increment = 875.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 22.000000000000000000
+            Size.Width = 145.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label32: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 22.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Calibration'
+            TabOrder = 9
+          end
+          object SpinBox7: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 16
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Min = 11000000.000000000000000000
+            Max = 12000000.000000000000000000
+            Value = 11056000.000000000000000000
+            Increment = 50.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 70.000000000000000000
+            Size.Width = 145.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label33: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 78.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'BFO'
+            TabOrder = 8
+          end
+          object Label34: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 126.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'SI5351 Addr'
+            TabOrder = 7
+          end
+          object SpinBox8: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 15
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Min = 1.000000000000000000
+            Max = 255.000000000000000000
+            Value = 96.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 118.000000000000000000
+            Size.Width = 89.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object ComboBox14: TComboBox
+            Items.Strings = (
+              'Debug'
+              'Manager')
+            ItemIndex = 0
+            Position.X = 104.000000000000000000
+            Position.Y = 166.000000000000000000
+            TabOrder = 6
+          end
+          object Label55: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 166.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Serial2 Mode'
+            TabOrder = 14
+          end
+        end
+        object TabItem26: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 39.000000000000000000
+          Size.Height = 49.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Key'
+          ExplicitSize.cx = 50.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          object SpinBox9: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 28
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 3000.000000000000000000
+            Value = 901.000000000000000000
+            Increment = 10.000000000000000000
+            Position.X = 88.000000000000000000
+            Position.Y = 150.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label35: TLabel
+            StyledSettings = [Family, Size, FontColor]
+            Position.X = 8.000000000000000000
+            Position.Y = 150.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            Text = 'DOT'
+            TabOrder = 21
+          end
+          object Label36: TLabel
+            Position.X = 64.000000000000000000
+            Position.Y = 174.000000000000000000
+            Size.Width = 25.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'to'
+            TabOrder = 13
+          end
+          object SpinBox10: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 27
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 3000.000000000000000000
+            Value = 1300.000000000000000000
+            Increment = 10.000000000000000000
+            Position.X = 88.000000000000000000
+            Position.Y = 174.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label37: TLabel
+            Position.X = 56.000000000000000000
+            Position.Y = 150.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'from'
+            TabOrder = 17
+          end
+          object Label38: TLabel
+            StyledSettings = [Family, Size, FontColor]
+            Position.X = 8.000000000000000000
+            Position.Y = 86.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            Text = 'BOTH'
+            TabOrder = 19
+          end
+          object Label39: TLabel
+            Position.X = 56.000000000000000000
+            Position.Y = 86.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'from'
+            TabOrder = 16
+          end
+          object SpinBox11: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 26
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 3000.000000000000000000
+            Value = 901.000000000000000000
+            Increment = 10.000000000000000000
+            Position.X = 88.000000000000000000
+            Position.Y = 86.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label40: TLabel
+            Position.X = 64.000000000000000000
+            Position.Y = 110.000000000000000000
+            Size.Width = 25.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'to'
+            TabOrder = 10
+          end
+          object SpinBox12: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 24
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 3000.000000000000000000
+            Value = 900.000000000000000000
+            Increment = 10.000000000000000000
+            Position.X = 88.000000000000000000
+            Position.Y = 110.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label41: TLabel
+            StyledSettings = [Family, Size, FontColor]
+            Position.X = 8.000000000000000000
+            Position.Y = 214.000000000000000000
+            Size.Width = 41.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            Text = 'DASH'
+            TabOrder = 14
+          end
+          object Label42: TLabel
+            Position.X = 56.000000000000000000
+            Position.Y = 214.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'from'
+            TabOrder = 12
+          end
+          object SpinBox13: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 23
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 3000.000000000000000000
+            Value = 1800.000000000000000000
+            Increment = 10.000000000000000000
+            Position.X = 88.000000000000000000
+            Position.Y = 214.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label43: TLabel
+            Position.X = 64.000000000000000000
+            Position.Y = 238.000000000000000000
+            Size.Width = 25.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'to'
+            TabOrder = 8
+          end
+          object SpinBox14: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 20
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 3000.000000000000000000
+            Value = 2300.000000000000000000
+            Increment = 10.000000000000000000
+            Position.X = 88.000000000000000000
+            Position.Y = 238.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label44: TLabel
+            StyledSettings = [Family, Size, FontColor]
+            Position.X = 8.000000000000000000
+            Position.Y = 22.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.StyleExt = {00070000000000000004000000}
+            Text = 'ST'
+            TabOrder = 11
+          end
+          object Label45: TLabel
+            Position.X = 56.000000000000000000
+            Position.Y = 22.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'from'
+            TabOrder = 9
+          end
+          object SpinBox15: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 18
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 3000.000000000000000000
+            Increment = 10.000000000000000000
+            Position.X = 88.000000000000000000
+            Position.Y = 22.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label46: TLabel
+            Position.X = 64.000000000000000000
+            Position.Y = 46.000000000000000000
+            Size.Width = 25.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'to'
+            TabOrder = 7
+          end
+          object SpinBox16: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 15
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 3000.000000000000000000
+            Value = 50.000000000000000000
+            Increment = 10.000000000000000000
+            Position.X = 88.000000000000000000
+            Position.Y = 46.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+        end
+        object TabItem27: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 48.000000000000000000
+          Size.Height = 49.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'Mem'
+          ExplicitSize.cx = 48.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          object Button3: TButton
+            Position.X = 96.000000000000000000
+            Position.Y = 182.000000000000000000
+            TabOrder = 0
+            Text = 'Clear All'
+          end
+        end
+        object TabItem28: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = True
+          Size.Width = 42.000000000000000000
+          Size.Height = 49.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'ATU'
+          ExplicitSize.cx = 42.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          object ComboBox10: TComboBox
+            Items.Strings = (
+              'No'
+              'Yes')
+            ItemIndex = 0
+            Position.X = 96.000000000000000000
+            Position.Y = 22.000000000000000000
+            TabOrder = 1
+          end
+          object Label47: TLabel
+            Position.X = 24.000000000000000000
+            Position.Y = 22.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Enabled'
+            TabOrder = 5
+          end
+          object Button4: TButton
+            Position.X = 96.000000000000000000
+            Position.Y = 62.000000000000000000
+            TabOrder = 7
+            Text = 'Adjust C1'
+          end
+          object Button5: TButton
+            Position.X = 96.000000000000000000
+            Position.Y = 102.000000000000000000
+            TabOrder = 6
+            Text = 'Adjust C2'
+          end
+        end
+        object TabItem12: TTabItem
+          CustomIcon = <
+            item
+            end>
+          IsSelected = False
+          Size.Width = 40.000000000000000000
+          Size.Height = 49.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = ''
+          TabOrder = 0
+          Text = 'TPA'
+          ExplicitSize.cx = 40.000000000000000000
+          ExplicitSize.cy = 26.000000000000000000
+          object Label48: TLabel
+            Position.X = 32.000000000000000000
+            Position.Y = 30.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Enabled'
+            TabOrder = 6
+          end
+          object ComboBox11: TComboBox
+            Items.Strings = (
+              'No'
+              'Yes')
+            ItemIndex = 0
+            Position.X = 104.000000000000000000
+            Position.Y = 30.000000000000000000
+            TabOrder = 2
+          end
+          object ComboBox12: TComboBox
+            Items.Strings = (
+              'OFF'
+              '1:2'
+              '1:4'
+              '1:8')
+            ItemIndex = 0
+            Position.X = 104.000000000000000000
+            Position.Y = 62.000000000000000000
+            TabOrder = 1
+          end
+          object Label49: TLabel
+            Position.X = 32.000000000000000000
+            Position.Y = 62.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'AGC compr.'
+            TabOrder = 5
+          end
+          object SpinBox17: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 16
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 12.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 94.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object Label50: TLabel
+            Position.X = 32.000000000000000000
+            Position.Y = 94.000000000000000000
+            Size.Width = 73.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Max gain'
+            TabOrder = 9
+          end
+          object Label51: TLabel
+            Position.X = 32.000000000000000000
+            Position.Y = 126.000000000000000000
+            Size.Width = 57.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Gain'
+            TabOrder = 8
+          end
+          object SpinBox18: TSpinBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 15
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Max = 30.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 126.000000000000000000
+            Size.Width = 100.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+        end
+      end
+      object ToolBar2: TToolBar
+        Size.Width = 395.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object Button8: TButton
+          Position.X = 272.000000000000000000
+          Position.Y = 8.000000000000000000
+          Size.Width = 100.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'Save to uBitx'
+        end
+        object Button9: TButton
+          Position.X = 8.000000000000000000
+          Position.Y = 8.000000000000000000
+          Size.Width = 100.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          Text = 'Read from uBitx'
+          OnClick = Button9Click
+        end
+        object Button10: TButton
+          Position.X = 144.000000000000000000
+          Position.Y = 8.000000000000000000
+          Size.Width = 100.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = 'Reset values'
+          OnClick = Button10Click
+        end
+      end
+    end
+    object TabItem3: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 81.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'tabitemsearch'
+      TabOrder = 0
+      Text = 'Connection'
+      ExplicitSize.cx = 96.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      object Edit1: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 13
+        Text = '192.168.1.149'
+        Position.X = 88.000000000000000000
+        Position.Y = 79.000000000000000000
+        Enabled = False
+        Size.Width = 121.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object Label2: TLabel
+        Enabled = False
+        Position.X = 96.000000000000000000
+        Position.Y = 151.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = '8088'
+        TabOrder = 1
+      end
+      object Label3: TLabel
+        Enabled = False
+        Position.X = 96.000000000000000000
+        Position.Y = 183.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = '8086'
+        TabOrder = 4
+      end
+      object Label4: TLabel
+        Enabled = False
+        Position.X = 96.000000000000000000
+        Position.Y = 215.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = '8085'
+        TabOrder = 3
+      end
+      object Label6: TLabel
+        Position.X = 24.000000000000000000
+        Position.Y = 119.000000000000000000
+        Size.Width = 40.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'TCP'
+        TabOrder = 12
+      end
+      object Label7: TLabel
+        Position.X = 24.000000000000000000
+        Position.Y = 151.000000000000000000
+        Size.Width = 40.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Web'
+        TabOrder = 6
+      end
+      object Label8: TLabel
+        Position.X = 24.000000000000000000
+        Position.Y = 183.000000000000000000
+        Size.Width = 40.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'WS'
+        TabOrder = 5
+      end
+      object Label9: TLabel
+        Position.X = 24.000000000000000000
+        Position.Y = 215.000000000000000000
+        Size.Width = 73.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'UDP Smeter'
+        TabOrder = 10
+      end
+      object Label1: TLabel
+        Enabled = False
+        Position.X = 96.000000000000000000
+        Position.Y = 119.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = '8084'
+        TabOrder = 0
+      end
+      object Label5: TLabel
+        Position.X = 24.000000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 105.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Connection Mode'
+        TabOrder = 8
+      end
+      object ComboBox13: TComboBox
+        Items.Strings = (
+          'OFF'
+          'IP as STA'
+          'IP as AP'
+          'Serial-IP'
+          'Serial')
+        ItemIndex = 1
+        Position.X = 128.000000000000000000
+        Position.Y = 7.000000000000000000
+        TabOrder = 14
+        OnChange = ComboBox13Change
+      end
+      object Label52: TLabel
+        Position.X = 24.000000000000000000
+        Position.Y = 87.000000000000000000
+        Size.Width = 40.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'IP'
+        TabOrder = 11
+      end
+      object Label53: TLabel
+        Position.X = 24.000000000000000000
+        Position.Y = 247.000000000000000000
+        Size.Width = 57.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'UDO Freq'
+        TabOrder = 9
+      end
+      object Label54: TLabel
+        Enabled = False
+        Position.X = 96.000000000000000000
+        Position.Y = 247.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = '8087'
+        TabOrder = 2
+      end
+      object ComboBox15: TComboBox
+        Items.Strings = (
+          'Debug'
+          'Manager')
+        ItemIndex = 1
+        Position.X = 126.000000000000000000
+        Position.Y = 39.000000000000000000
+        TabOrder = 15
+      end
+      object Label56: TLabel
+        Position.X = 24.000000000000000000
+        Position.Y = 39.000000000000000000
+        Size.Width = 105.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Serial 2'
+        TabOrder = 7
+      end
+    end
+    object TabItem4: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 56.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Debug'
+      ExplicitSize.cx = 96.000000000000000000
+      ExplicitSize.cy = 49.000000000000000000
+      object Memo3: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        Align = Top
+        Size.Width = 395.000000000000000000
+        Size.Height = 337.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Viewport.Width = 391.000000000000000000
+        Viewport.Height = 333.000000000000000000
+      end
+      object Button6: TButton
+        Position.X = 296.000000000000000000
+        Position.Y = 15.000000000000000000
+        Size.Width = 65.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Clear'
+        OnClick = Button6Click
+      end
+      object Panel1: TPanel
+        Position.X = 8.000000000000000000
+        Position.Y = 344.000000000000000000
+        Size.Width = 369.000000000000000000
+        Size.Height = 41.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        object Button7: TButton
+          Position.X = 320.000000000000000000
+          Size.Width = 49.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = 'Send'
+          OnClick = Button7Click
+        end
+        object Edit2: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          Align = Left
+          TabOrder = 1
+          Size.Width = 313.000000000000000000
+          Size.Height = 41.000000000000000000
+          Size.PlatformDefault = False
+        end
+      end
+      object Button1: TButton
+        Position.X = 280.000000000000000000
+        Position.Y = 53.000000000000000000
+        TabOrder = 2
+        Text = 'Leer datos'
+        OnClick = Button1Click
+      end
+    end
+  end
+  object Timer1: TTimer
+    Interval = 10
+    OnTimer = Timer1Timer
+    Left = 136
+    Top = 568
+  end
+  object IdUDPServer1: TIdUDPServer
+    Bindings = <>
+    DefaultPort = 8085
+    OnUDPRead = IdUDPServer1UDPRead
+    Left = 16
+    Top = 569
+  end
+  object IdTCPClient1: TIdTCPClient
+    ConnectTimeout = 0
+    Port = 8084
+    ReadTimeout = -1
+    Left = 96
+    Top = 568
+  end
+  object IdUDPServer2: TIdUDPServer
+    Bindings = <>
+    DefaultPort = 8087
+    OnUDPRead = IdUDPServer2UDPRead
+    Left = 56
+    Top = 568
+  end
+end
