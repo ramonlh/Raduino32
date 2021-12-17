@@ -176,8 +176,8 @@
       unsigned long ftxspl[maxMem];  // frequency TX Split
       char descr[maxMem][20];        // descripción
 } memotype;
-  memotype memo;
-  uint8_t *buffmemo=(uint8_t *) &memo; // acceder a mem como bytes
+      memotype memo;
+      uint8_t *buffmemo=(uint8_t *) &memo; // acceder a mem como bytes
 
   // space for save freq actual
   uint8_t vfoActiveAct;      // VFO 

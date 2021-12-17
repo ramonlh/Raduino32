@@ -83,6 +83,7 @@
 #include <ArduinoWebsockets.h>
 #include "AsyncUDP.h"
 #include "esp_wifi.h"
+#include "driver/i2s.h"
 
 WiFiServer tcpserver;
 WiFiUDP udpsmeter, udpfreq, ntpUDP;
@@ -1351,6 +1352,8 @@ void setup()
   initSPIFSS (true,true);  
   initPorts();        s2("Ports OK");  //s2(crlf);
   initSettings();    
+  conf.attLevel=0;      //
+  conf.ifShiftValue=0;   //
   byte auxconnMode=conf.connMode;
   conf.connMode=0;
  // showSettings();
@@ -1473,7 +1476,8 @@ void sendData(byte c)
   if ((conf.connMode==1) || (conf.connMode==2))   // modos IP, enviar por Client
     {
     tcpclient.write(c); 
-    if (c==tcpALL) { tcpclient.write(buffconf,sizeof(conf)); }
+    if (c==tcpMEM) { tcpclient.write(buffmemo,sizeof(memo)); }
+    else if (c==tcpALL) { tcpclient.write(buffconf,sizeof(conf)); }
     else { tcpclient.write(data); tcpclient.write('\n'); }
     }
 }
@@ -1564,6 +1568,7 @@ void handleRecDataIP(char c, String data)
   else if (c==tcpkeylock) { setLOCK(data.toInt()); }     // 65
   else if (c==tcpattlevel) { setATT(data.toInt(),0); }     // 66
   else if (c==tcpifShiftVal) { setIFS(data.toInt(),0); }   // 67
+  else if (c==tcpMEM) { s2("tcpMEM received");s2(crlf); sendData(tcpMEM); }  // 126
   else if (c==tcpALL) { s2("tcpALL received");s2(crlf); sendData(tcpALL); }  // 127
 }
 
@@ -1579,8 +1584,8 @@ void handletcpS()
     if ((conf.connMode==1) || (conf.connMode==2))   // modos IP, enviar por Client
       {
       conf.webenable=0;
-      tcpclient.write(tcpALL); 
-      tcpclient.write(buffconf,sizeof(conf)); 
+      tcpclient.write(tcpMEM);   tcpclient.write(buffmemo,sizeof(memo)); 
+      tcpclient.write(tcpALL);   tcpclient.write(buffconf,sizeof(conf)); 
       sendstatus(1);
       }
     

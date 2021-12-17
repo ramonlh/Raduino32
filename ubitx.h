@@ -104,6 +104,7 @@
 #define tcpvtotvalue 68
 #define tcpitotvalue 69
 
+#define tcpMEM 126
 #define tcpALL 127
 
 //==============================================================================

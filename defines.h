@@ -502,7 +502,7 @@
 #define evendatalast 299
 #define dashiconoff 300
 #define dashiconon 301
-#define gpio 302
+#define gpiot 302
 //#define small 303
 #define localip 304
 #define publicip 305
