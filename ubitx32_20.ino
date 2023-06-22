@@ -75,8 +75,8 @@
 //#include "lcd_backlight.hpp"
 #include "ubitx.h"
 #include "ubitx_eemap.h"
-#include "Adafruit_ADS1015.h"
-#include <ESP32Servo.h>
+#include <Adafruit_ADS1X15.h>
+#include <ESP32_Servo.h>
 #include "RemoteDebug.h"        //https://github.com/JoaoLopesF/RemoteDebug
 #include <PubSubClient.h>
 #include "Adafruit_TPA2016.h"
@@ -85,26 +85,78 @@
 #include "esp_wifi.h"
 #include "driver/i2s.h"
 
-WiFiServer tcpserver;
-WiFiUDP udpsmeter, udpfreq, ntpUDP;
-using namespace websockets;
-WebsocketsServer wsserver;
-WebsocketsClient wsclient;    
+// extensions
+#define SERIAL1
+#define SERIAL2
+#define WIFIBLE
+#define TCPSERVER
+#define UDPSERVER
+#define NTPCLIENT
+#define WEBSOCKETS
+#define FTPSERVER
+#define NTPCLIENT
+#define DS18B20   // checked
+#define ADS1X15   // checked
+#define SERVO
+#define WEBSERVER
+#define REMOTEDEBUG
+#define ESPCLIENT
+#define TCPCLIENT
+#define PUBSUB
+#define TPA2016
+#define TFT
+
+#ifdef TCPSERVER
+  WiFiServer tcpserver;
+#endif
+
+#ifdef UDPSERVER
+  WiFiUDP udpsmeter, udpfreq;
+#endif
+
+#ifdef NTPCLIENT
+  WiFiUDP ntpUDP;
+#endif
+
+#ifdef WEBSOCKETS
+  using namespace websockets;
+  WebsocketsServer wsserver;
+  WebsocketsClient wsclient;    
+#endif
 
 TFT_eSPI tft=TFT_eSPI();  // Invoke library, pins defined in User_Setup.h
-FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP8266FtpServer.h to see ftp verbose on serial
-NTPClient timeClient(ntpUDP, "europe.pool.ntp.org");
-OneWire owire(W0);
-DallasTemperature sensors0(&owire);
-Adafruit_ADS1115 adsA(0x48);  /* Use this for the 16-bit version */
-Adafruit_ADS1115 adsB(0x49);  /* Use this for the 16-bit version */
-Servo cap1, cap2;
-WebServer server(webportdefault);
-RemoteDebug Debug;
-WiFiClient espClient;
-WiFiClient tcpclient;
-PubSubClient PSclient(espClient);
-Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
+
+#ifdef FTPSERVER
+  FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP8266FtpServer.h to see ftp verbose on serial
+#endif
+
+#ifdef NTPCLIENT
+  NTPClient timeClient(ntpUDP, "europe.pool.ntp.org");
+#endif
+
+#ifdef WEBSERVER
+  WebServer server(webportdefault);
+#endif
+
+#ifdef REMOTEDEBUG
+  RemoteDebug Debug;
+#endif
+
+#ifdef ESPCLIENT
+  WiFiClient espClient;
+#endif
+
+#ifdef TCPCLIENT
+  WiFiClient tcpclient;
+#endif
+
+#ifdef PUBSUB
+  PubSubClient PSclient(espClient);
+#endif
+
+#ifdef TPA2016
+  Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
+#endif
 
 extern int enc_read(void);
 
@@ -155,15 +207,18 @@ byte autoCWSendReserv[AUTO_CW_RESERVE_MAX]; //Reserve CW Auto Send
 byte autoCWSendReservCount = 0;             //Reserve CW Text Cound
 byte sendingCWTextIndex = 0;                //cw auto seding Text Index
 
-#include "basicfunctions.h"            // include
-#include "htmlFunctions.h"             // include
-#include "cwdecode.h"
-
 boolean txCAT = false;        //turned on if the transmitting due to a CAT command
 boolean txTFT = false;        //turned on if the transmitting due to a TFT command
 byte inTx = 0;                //it is set to 1 if in transmit mode (whatever the reason : cw, ptt or cat)
 char keyDown = 0;             //in cw mode, denotes the carrier is being transmitted
 byte isIFShift=0;             //1 = ifShift, 2 extend
+
+#include "ubitx_tft_320240.h"
+#include "basicfunctions.h"            // include
+#include "htmlfunctions.h"             // include
+#include "cwdecode.h"
+
+
 
 unsigned long maxRitdev=5000;  // max. deviation on RIT
 unsigned countloop=0;
@@ -185,7 +240,9 @@ void setNextHamBandFreq(unsigned long f, int moveDirection)
 {
   unsigned long resultFreq = 0;
   if (conf.actualBand == 99) 
-    { conf.actualBand=3; }   //out of hamband
+    {
+    conf.actualBand=3; 
+    }   //out of hamband
   else if (moveDirection==1)
     {
     if (conf.actualBand < conf.useHamBandCount-1)
@@ -201,7 +258,9 @@ void setNextHamBandFreq(unsigned long f, int moveDirection)
       conf.actualBand=conf.useHamBandCount-1;
     }
   else
+  {
     conf.actualBand = 99;
+  }
   resultFreq = resultFreq & 0x1FFFFFFF;
   if ((resultFreq/1000) < conf.hamBandRange[conf.actualBand][0] || (resultFreq / 1000) > conf.hamBandRange[conf.actualBand][1])
     resultFreq = (unsigned long)(conf.hamBandRange[conf.actualBand][0]) * 1000;
@@ -210,33 +269,13 @@ void setNextHamBandFreq(unsigned long f, int moveDirection)
     setFrequency(conf.freqbyband[conf.actualBand][conf.vfoActive==VFO_A?0:1]);
     }
   else
+  {
     setFrequency(resultFreq);
+  }
+    
   if (conf.autoMode==1) { setUSB(resultFreq>=10000000?1:0); }
   displayFreq(0,1,1,1);
   saveconf();
-}
-
-float readSWR(int limit)
-{
-  float auxSWR=1;
-  int16_t adc0, adc1;
-  long ldc0=0; long ldc1=0; 
-  for (byte i=0;i<conf.ATUIter;i++)
-    {
-    ldc0=ldc0+adsA.readADC_SingleEnded(VFORp); // VFORp=0
-    ldc1=ldc1+adsA.readADC_SingleEnded(VREFp); // VREFp=1
-    }
-  adc0 = ldc0/conf.ATUIter; if (adc0<0) adc0=0;
-  adc1 = ldc1/conf.ATUIter; if (adc1<0) adc1=0;
-  
-  vFORc=((float(adc0)*0.1875/1000)+0.25)*11*0.707;
-  vREFc=((float(adc1)*0.1875/1000)+0.25)*11*0.707;
-  //wFORc=vFORc*vFORc/50; wREFc=vREFc*vREFc/50;
-  wFORc=vFORc*vFORc*0.707/50; wREFc=vREFc*vREFc*0.707/50;
-  if ((vFORc-vREFc)>0) SWRreal=(vFORc+vREFc)/(vFORc-vREFc); else SWRreal=1.0;
-  auxSWR=(SWRreal*conf.ATUFactor)+conf.ATUOffset;
-  if (auxSWR<limit) auxSWR=1;
-  return(auxSWR);
 }
 
 /*KD8CEC
@@ -913,18 +952,6 @@ void connectSTA()
   s2("  DNS: ");  s2(WiFi.dnsIP()); s2(crlf);
 }
 
-void readVIpower()
-{
-  int16_t vtotadc=adsB.readADC_SingleEnded(VTOTp);    // es el valor leído del ADC sin convertir
-  int16_t itotadc=adsB.readADC_SingleEnded(ITOTp);    // es el valor leído del ADC sin convertir
-  float factorv=290.0;    // factor teórico
-  float factori=1000.0;   // factor teórico
-  float factorvr=1.0;     // factor corrección
-  float factorir=0.75;   // factor corrección
-  vtotvalue=factorvr*vtotadc*0.1875/factorv;
-  itotvalue=-(factorir)*(itotadc*0.1875-2500)*10/factori;
-}
-
 void sendTemp()
 {
   sendData(tcptemp1); 
@@ -1006,6 +1033,7 @@ void initNetServices()
 }
 
 void initWiFi() {
+  
   if(conf.wifimode==0) { WiFi.mode(WIFI_OFF); }
   else if (conf.wifimode==1) { WiFi.mode(WIFI_STA); }
   else if (conf.wifimode==2) { WiFi.mode(WIFI_AP); }
@@ -1178,52 +1206,11 @@ void initTone()
   ledcAttachPin(CW_TONE,0);
 }
 
-void initDS18B20() {
-  sensors0.begin();
-  sensors0.setResolution(9);
-  nTemp=sensors0.getDeviceCount();
-  if(nTemp>maxTemp) { nTemp=maxTemp; }
-  s2("DS18B20 probes"); s2(crlf);
-  s2(b); s2(b); s2(t(sondastemp));  s2(dp);
-  s2(nTemp); s2(crlf); s2(b); s2(b); s2(t(tModo));  s2(dp);
-  s2(b); s2(b); s2((sensors0.isParasitePowerMode())?c(tparasite):c(tpower));  s2(crlf);
-  for(byte i=0; i<maxTemp; i++)       {   // busca sondas conectadas
-    if (sensors0.getAddress(addr1Wire[i], i))    {
-      s2(b);s2(b);
-      for(uint8_t j=0; j<8; j++) { if(addr1Wire[i][j]<16) { s2(cero); } s2(addr1Wire[i][j]); }
-      s2(crlf);
-      }
-    }
-  s2("  Started");s2(crlf);
-  leevaloresOW();     s2("  Values read");s2(crlf);}
-
-void initADS()
-{
-  adsA.begin();
-  //adsA.setGain(GAIN_TWOTHIRDS);  // +/- 6.144V  1 bit = 0.1875mV (default)
-  adsB.begin();
-  //adsB.setGain(GAIN_TWOTHIRDS);  // +/- 6.144V  1 bit = 0.1875mV (default)
-}
-
 void initI2C()
 {
   Wire.begin(SDA,SCL);
 }
 
-void initATU()
-{
-  // Allow allocation of all timers
-  ESP32PWM::allocateTimer(0);
-  ESP32PWM::allocateTimer(1);
-  ESP32PWM::allocateTimer(2);
-  ESP32PWM::allocateTimer(3);
-  cap1.setPeriodHertz(50);    // standard 50 hz servo
-  cap2.setPeriodHertz(50);    // standard 50 hz servo
-  // using default min/max of 1000us and 2000us
-  // different servos may require different min/max settings for an accurate 0 to 180 sweep
-  //cap1.write(conf.posATUC1);
-  cap2.write(conf.posATUC2);
-}
 
 void initremoteDebug()        //  REMOTE DEBUG
 {
@@ -1241,50 +1228,6 @@ void initremoteDebug()        //  REMOTE DEBUG
   Debug.setResetCmdEnabled(true); // Enable the reset command
   Debug.showProfiler(true);       // Profiler (Good to measure times, to optimize codes)
   Debug.showColors(true);         // Colors
-}
-
-void acopla()
-{
-  clearTFT();
-  s2("Tunning"); s2(crlf);
-  // cap1
-  cap1.write(180);              // tell servo to go to position in variable '0'
-  cap2.write(180);              // tell servo to go to position in variable '0'
-  delay(500);
-  swrmin=999; posmin1=180; 
-  for (int i=180; i>0; i--) {   // goes from 0 degrees to 180 degrees
-    SWR=readSWR(0);
-    displaySWR2();
-  //  displaySWR(1);
-    cap1.write(i);              // tell servo to go to position in variable 'pos'
-    if (SWRreal<swrmin) 
-      { 
-      posmin1=i-1; swrmin=SWRreal; 
-      }
-    }
-  delay(100);
-  conf.posATUC1=posmin1;
-  cap1.write(conf.posATUC1);            // tell servo to go to position in variable 'pos'
-  saveconf();
-
-  // cap 2
-  swrmin=999; posmin2=180;
-  for (int i=180; i>0; i--) {   // goes from 0 degrees to 180 degrees
-    SWR=readSWR(0);
-    displaySWR2();  
-//    displaySWR(1);
-    cap2.write(i);              // tell servo to go to position in variable 'pos'
-    if (SWRreal<swrmin) 
-      { 
-      posmin2=i-1; 
-      swrmin=SWRreal; 
-      }
-    }
-  delay(100);
-  conf.posATUC2=posmin2;
-  saveconf();
-  cap2.write(conf.posATUC2);            // tell servo to go to position in variable 'pos'
-  delay(500);
 }
 
 void deleteMemo()
@@ -1340,6 +1283,7 @@ void setup()
 {
   initSerial2(115200);  
   EEPROM.begin(EEPROM_SIZE);
+
   initConf();
   conf.connMode=0;
   s2("========== Init =========");s2(crlf);
@@ -1356,12 +1300,14 @@ void setup()
   conf.ifShiftValue=0;   //
   byte auxconnMode=conf.connMode;
   conf.connMode=0;
- // showSettings();
+  //showSettings();
+
   initI2C();          s2("I2C started");s2(crlf);
   initOscillators();  s2("Oscillators started");s2(crlf);
   initTone();         s2("Pin Tone OK");s2(crlf);
   setFrequency(conf.frequency);  
-  initDS18B20();   
+  initDS18B20(); 
+  leevaloresOW();  
   initADS();          s2("ADS1115 started");s2(crlf);
   initATU();          s2("ATU started");s2(crlf);
   updateDisplay(1);
@@ -1376,68 +1322,25 @@ void setup()
   s2("END SETUP");s2(crlf);  
   s2("============================");s2(crlf);
   s2("Type 'h' to help"); s2(crlf); 
+
   s2("----------------------------");s2(crlf);
   conf.connMode=auxconnMode;
 }
-
-void ICACHE_FLASH_ATTR leevaloresOW()
-{
-  sensors0.requestTemperatures();
-  for (byte i=0; i<maxTemp; i++)  
-    {
-    if (conf.nprobe[i]>0)
-      {
-      int auxI=sensors0.getTempC(conf.probecode[i])*100;
-      if (auxI>0)
-        {
-        MbR[i]=auxI;
-        MbRant[i]=MbR[i];
-        }
-      }
-    }
-}
-
-void readSmeter( ) 
-{ 
-  int16_t smeteradc=0;
-  smeteradc=adsA.readADC_SingleEnded(SMETERp);    // es el valor leído del ADC sin convertir
-  calSmeterReq=calSmeterReq || (smeteradc<conf.sMeterLevels[0]) || (smeteradc>conf.sMeterLevels[15]);
-  smeteradc=smeteradc>smeterlast?((smeterlast*7+smeteradc*3))/10:   // valor ajustado para evitar variaciones rápidas
-                                 ((smeterlast*9+smeteradc*1))/10;   // de VK2ETA
-  smeterlast=smeteradc;     // guardar último valor leído
-  if (smeteradc<=minsmeter) { minsmeter=smeteradc; }    // buscar mínimo      
-  if (smeteradc>=maxsmeter) { maxsmeter=smeteradc; }    // buscar máximo    
-
-  // convertir valor a escala 0-90
-  byte i=0; boolean encontrado=false;
-  while ((i<16) && (!encontrado))           // busca intervalo de 0 a 16
-    {
-    if (smeteradc<conf.sMeterLevels[i]) 
-      encontrado=true;
-    else
-      i++;
-    }
-  if (i<15)
-    smetervalue=((i-1)*6) + (smeteradc-conf.sMeterLevels[i])*6 / (conf.sMeterLevels[i]-conf.sMeterLevels[i-1]);
-  else
-    smetervalue=90; 
-
-  if (WiFi.isConnected()) {
-    //Send a packet
-    udpsmeter.beginPacket(udpAddress,conf.udpPortSmeter);
-    udpsmeter.printf("%lu",smetervalue);
-    udpsmeter.endPacket();
-    }
-}
-
-void readCW() { cwcodevalue=adsB.readADC_SingleEnded(3); }
 
 void task01() {
   tini=millis();
   if ((inTx==0) && (tftpage==0) && (conf.framemode<=1))
     {
-    if (conf.framemode==0) displaySmeter(190,210,50,1);
-    else if (conf.framemode==1) displaybarSmeter(40,186,0,90,69);
+    if (conf.framemode==0) 
+      {
+      readSmeter();
+      displaySmeter(190,210,50,1);
+      }
+    else if (conf.framemode==1) 
+      {   
+      readSmeter();   // valores de 0 a 90
+      displaybarSmeter(40,186,0,90,69);
+      }
     }
   if (tftpage==23) { updateDisplay(0); }
   mact01=millis();
@@ -1547,6 +1450,24 @@ void sendstatus(byte todo)
     }
 }
 
+void setWiFi()
+{
+   if (WiFi.isConnected())
+     { 
+     WiFi.disconnect();  
+     displayWiFiSt();
+     }
+   else
+     {
+     initWiFi();
+     if ((conf.wifimode==1) || (conf.wifimode==3))  
+       connectSTA();
+     if (conf.wifimode>0) 
+       initNetServices();
+     }
+}
+
+
 void handleRecDataIP(char c, String data)
 {
   byte b=(byte)c;
@@ -1563,7 +1484,7 @@ void handleRecDataIP(char c, String data)
   else if (c==tcptunestep) { setSTEP(data.toInt()); }    // 51
   else if (c==tcpwifi) { setWiFi(); }                    // 52
   else if (c==tcpreset) { ESP.restart(); }               // 53
-  else if (c==tcpframe) { setFrame(); }                  // 54
+  else if (c==tcpframe) { setFrame(); saveconf(); }                  // 54
   else if (c==tcpscanst) { setSCAN(data.toInt()); }      // 64
   else if (c==tcpkeylock) { setLOCK(data.toInt()); }     // 65
   else if (c==tcpattlevel) { setATT(data.toInt(),0); }     // 66
@@ -1628,6 +1549,226 @@ void handleWS()
     }
 }
 
+
+#ifdef SERVO
+  Servo cap1, cap2;
+#endif
+
+
+
+void initATU()
+{
+  // Allow allocation of all timers
+  //ESP32PWM::allocateTimer(0);
+  //ESP32PWM::allocateTimer(1);
+  //ESP32PWM::allocateTimer(2);
+  //ESP32PWM::allocateTimer(3);
+  //cap1.setPeriodHertz(50);    // standard 50 hz servo
+  //cap2.setPeriodHertz(50);    // standard 50 hz servo
+  // using default min/max of 1000us and 2000us
+  // different servos may require different min/max settings for an accurate 0 to 180 sweep
+  //cap1.write(conf.posATUC1);
+  //cap2.write(conf.posATUC2);
+}
+
+void acopla()
+{
+  clearTFT();
+  s2("Tunning"); s2(crlf);
+  // cap1
+  cap1.write(180);              // tell servo to go to position in variable '0'
+  cap2.write(180);              // tell servo to go to position in variable '0'
+  delay(500);
+  swrmin=999; posmin1=180; 
+  for (int i=180; i>0; i--) {   // goes from 0 degrees to 180 degrees
+    SWR=readSWR(0);
+    displaySWR2();
+  //  displaySWR(1);
+    cap1.write(i);              // tell servo to go to position in variable 'pos'
+    if (SWRreal<swrmin) 
+      { 
+      posmin1=i-1; swrmin=SWRreal; 
+      }
+    }
+  delay(100);
+  conf.posATUC1=posmin1;
+  cap1.write(conf.posATUC1);            // tell servo to go to position in variable 'pos'
+  saveconf();
+
+  // cap 2
+  swrmin=999; posmin2=180;
+  for (int i=180; i>0; i--) {   // goes from 0 degrees to 180 degrees
+    SWR=readSWR(0);
+    displaySWR2();  
+//    displaySWR(1);
+    cap2.write(i);              // tell servo to go to position in variable 'pos'
+    if (SWRreal<swrmin) 
+      { 
+      posmin2=i-1; 
+      swrmin=SWRreal; 
+      }
+    }
+  delay(100);
+  conf.posATUC2=posmin2;
+  saveconf();
+  cap2.write(conf.posATUC2);            // tell servo to go to position in variable 'pos'
+  delay(500);
+}
+
+
+
+// ADC ports ADS1115
+#define VFORp 0
+#define VREFp 1
+#define SMETERp 2
+
+#define VTOTp 0
+#define ITOTp 1
+
+#ifdef ADS1X15
+  Adafruit_ADS1115 adsA;  /* Use this for the 16-bit version */
+  Adafruit_ADS1115 adsB;  /* Use this for the 16-bit version */
+#endif
+
+void readSmeter( ) 
+{ 
+#ifdef ADS1X15
+  int16_t smeteradc=0;
+  smeteradc=adsA.readADC_SingleEnded(SMETERp);    // es el valor leído del ADC sin convertir
+  calSmeterReq=calSmeterReq || (smeteradc<conf.sMeterLevels[0]) || (smeteradc>conf.sMeterLevels[15]);
+  smeteradc=smeteradc>smeterlast?((smeterlast*7+smeteradc*3))/10:   // valor ajustado para evitar variaciones rápidas
+                                 ((smeterlast*9+smeteradc*1))/10;   // de VK2ETA
+  smeterlast=smeteradc;     // guardar último valor leído
+  if (smeteradc<=minsmeter) { minsmeter=smeteradc; }    // buscar mínimo      
+  if (smeteradc>=maxsmeter) { maxsmeter=smeteradc; }    // buscar máximo    
+
+  // convertir valor a escala 0-90
+  byte i=0; boolean encontrado=false;
+  while ((i<16) && (!encontrado))           // busca intervalo de 0 a 16
+    {
+    if (smeteradc<conf.sMeterLevels[i]) 
+      encontrado=true;
+    else
+      i++;
+    }
+  if (i<15)
+    smetervalue=((i-1)*6) + (smeteradc-conf.sMeterLevels[i])*6 / (conf.sMeterLevels[i]-conf.sMeterLevels[i-1]);
+  else
+    smetervalue=90; 
+
+  if (WiFi.isConnected()) {
+    //Send a packet
+    udpsmeter.beginPacket(udpAddress,conf.udpPortSmeter);
+    udpsmeter.printf("%lu",smetervalue);
+    udpsmeter.endPacket();
+    }
+#endif
+}
+
+float readSWR(int limit)
+{
+#ifdef ADS1X15
+  float auxSWR=1;
+  int16_t adc0, adc1;
+  long ldc0=0; long ldc1=0; 
+  for (byte i=0;i<conf.ATUIter;i++)
+    {
+    ldc0=ldc0+adsA.readADC_SingleEnded(VFORp); // VFORp=0
+    ldc1=ldc1+adsA.readADC_SingleEnded(VREFp); // VREFp=1
+    }
+  adc0 = ldc0/conf.ATUIter; if (adc0<0) adc0=0;
+  adc1 = ldc1/conf.ATUIter; if (adc1<0) adc1=0;
+  
+  vFORc=((float(adc0)*0.1875/1000)+0.25)*11*0.707;
+  vREFc=((float(adc1)*0.1875/1000)+0.25)*11*0.707;
+  //wFORc=vFORc*vFORc/50; wREFc=vREFc*vREFc/50;
+  wFORc=vFORc*vFORc*0.707/50; wREFc=vREFc*vREFc*0.707/50;
+  if ((vFORc-vREFc)>0) SWRreal=(vFORc+vREFc)/(vFORc-vREFc); else SWRreal=1.0;
+  auxSWR=(SWRreal*conf.ATUFactor)+conf.ATUOffset;
+  if (auxSWR<limit) auxSWR=1;
+  return(auxSWR);
+#endif
+}
+
+void readVIpower()
+{
+#ifdef ADS1X15
+  int16_t vtotadc=adsB.readADC_SingleEnded(VTOTp);    // es el valor leído del ADC sin convertir
+  int16_t itotadc=adsB.readADC_SingleEnded(ITOTp);    // es el valor leído del ADC sin convertir
+  float factorv=290.0;    // factor teórico
+  float factori=1000.0;   // factor teórico
+  float factorvr=1.0;     // factor corrección
+  float factorir=0.75;   // factor corrección
+  vtotvalue=factorvr*vtotadc*0.1875/factorv;
+  itotvalue=-(factorir)*(itotadc*0.1875-2500)*10/factori;
+#endif
+}
+
+void initADS()
+{
+#ifdef ADS1X15
+  adsA.begin();
+  //adsA.setGain(GAIN_TWOTHIRDS);  // +/- 6.144V  1 bit = 0.1875mV (default)
+  adsB.begin();
+  //adsB.setGain(GAIN_TWOTHIRDS);  // +/- 6.144V  1 bit = 0.1875mV (default)
+#endif
+}
+
+void readCW() 
+{ 
+#ifdef ADS1X15
+  cwcodevalue=adsB.readADC_SingleEnded(3); 
+#endif
+}
+
+
+OneWire owire(W0);
+DallasTemperature sensors0(&owire);
+
+void ICACHE_FLASH_ATTR leevaloresOW()
+{
+#ifdef DS18B20
+  sensors0.requestTemperatures();
+  for (byte i=0; i<maxTemp; i++)  
+    {
+    if (conf.nprobe[i]>0)
+      {
+      int auxI=sensors0.getTempC(conf.probecode[i])*100;
+      if (auxI>0)
+        {
+        MbR[i]=auxI;
+        MbRant[i]=MbR[i];
+        }
+      }
+    }
+#endif
+}
+
+void initDS18B20() 
+{
+#ifdef DS18B20
+  sensors0.begin();
+  sensors0.setResolution(9);
+  nTemp=sensors0.getDeviceCount();
+  if(nTemp>maxTemp) { nTemp=maxTemp; }
+  Serial2.println("DS18B20 probes");
+  Serial2.print(b); Serial2.print(b); Serial2.print(t(sondastemp));  Serial2.print(dp);
+  Serial2.print(nTemp); Serial2.print(crlf); Serial2.print(b); Serial2.print(b); Serial2.print(t(tModo));  Serial2.print(dp);
+  Serial2.print(b); Serial2.print(b); 
+  Serial2.println((sensors0.isParasitePowerMode())?c(tparasite):c(tpower));
+  for(byte i=0; i<maxTemp; i++)       {   // busca sondas conectadas
+    if (sensors0.getAddress(addr1Wire[i], i))    {
+      Serial2.print(b);Serial2.print(b);
+      for(uint8_t j=0; j<8; j++) { if(addr1Wire[i][j]<16) { Serial2.print(cero); } Serial2.print(addr1Wire[i][j]); }
+      Serial2.println();
+      }
+    }
+  Serial2.println("  Started");
+#endif
+}
+
+
+
 void loopaux()
 {
   countloop++;  
@@ -1648,9 +1789,10 @@ void loopaux()
     //decodeCW();
     cwKeyer(); 
     }
+
   if (tftpage==0)
     {
-    //readSmeter();     // este proceso dura unos 9 ms
+    readSmeter();     // este proceso dura unos 9 ms
     if (inTx==1)  // TX
       { 
       SWR=readSWR(1); 
@@ -1665,6 +1807,7 @@ void loopaux()
           if (scanF>0) 
             { 
             doScanF();  
+            readSmeter();   // valores de 0 a 90
             displayFrame();
             if (conf.scanmode>0)
               {

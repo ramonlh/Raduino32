@@ -272,7 +272,7 @@
 #define tport 70
 #define tfile 71
 #define updatet 72 
-#define device 73
+#define ndevice 73
 #define chipsize 74
 #define chipspeed 75
 #define tdns 76

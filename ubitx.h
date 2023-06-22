@@ -60,13 +60,6 @@
 #define I2CMETER_ADDR     0x58
 
 //*******************************************************
-// ADC ports ADS1115
-#define VFORp 0
-#define VREFp 1
-#define SMETERp 2
-
-#define VTOTp 0
-#define ITOTp 1
 
 //*******************************************************
 //  Commands TCP conection    // NO USAR 10 NI 13 

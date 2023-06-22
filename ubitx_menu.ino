@@ -31,7 +31,11 @@ uint32_t getValByKnob(int valueType, int targetValue, int minValue, int maxValue
   if (valueType==2)      // IFS
     { 
     displayIFS(1,0,0); 
-    if (conf.framemode==0) displaySmeter(160,190,70,1);
+    if (conf.framemode==0) 
+      {
+      readSmeter();
+      displaySmeter(190,210,50,1);
+      }
     else if (conf.framemode==1) displaybarSmeter(40,166,0,90,87); 
     else if (conf.framemode==2) displaySpectrum();
     else if (conf.framemode==3) displayFreqs();
@@ -49,8 +53,16 @@ uint32_t getValByKnob(int valueType, int targetValue, int minValue, int maxValue
   else if (valueType==6)      // ATT
     { 
     displayATT(1,0,0); 
-    if (conf.framemode==0) displaySmeter(160,190,70,1);
-    else if (conf.framemode==1) displaybarSmeter(40,166,0,90,87); 
+    if (conf.framemode==0) 
+      {
+      readSmeter();
+      displaySmeter(190,210,50,1);
+      }
+    else if (conf.framemode==1) 
+      {   
+      readSmeter();   // valores de 0 a 90
+      displaybarSmeter(40,186,0,90,69);
+      }
     else if (conf.framemode==2) displaySpectrum();
     else if (conf.framemode==3) displayFreqs();
     }
@@ -131,15 +143,39 @@ uint32_t getValByKnob(int valueType, int targetValue, int minValue, int maxValue
       }  
     if (valueType==2)   // IFS
       {
-      if (conf.framemode==0) displaySmeter(160,190,70,1);
-      else if (conf.framemode==1) displaySmeter(160,190,70,1);
-      else if (conf.framemode==3) displaybarSmeter(40,166,0,90,87); 
+      if (conf.framemode==0) 
+        {
+        readSmeter();
+        displaySmeter(190,210,50,1);
+        }
+      else if (conf.framemode==1) 
+        {
+        readSmeter();
+        displaySmeter(190,210,50,1);
+        }
+      else if (conf.framemode==3) 
+        {   
+        readSmeter();   // valores de 0 a 90
+        displaybarSmeter(40,186,0,90,69);
+        }
       }
     else if (valueType==6)   // ATT
       {
-      if (conf.framemode==0) displaySmeter(160,190,70,1);
-      else if (conf.framemode==1) displaySmeter(160,190,70,1);
-      else if (conf.framemode==3) displaybarSmeter(40,166,0,90,87); 
+      if (conf.framemode==0) 
+        {
+        readSmeter();
+        displaySmeter(190,210,50,1);
+        }
+      else if (conf.framemode==1) 
+        {
+        readSmeter();
+        displaySmeter(190,210,50,1);
+        }
+      else if (conf.framemode==3) 
+        {
+        readSmeter();
+        displaybarSmeter(40,166,0,90,87); 
+        }
       }
     else if ((valueType>=11) && (valueType<=18))        // analog KEYER setting
       {

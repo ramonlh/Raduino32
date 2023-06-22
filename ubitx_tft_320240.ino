@@ -273,6 +273,83 @@ void displayStatus()
   displayVI();
 }
 
+const float degtoradf=0.017453;        // 3.1416/180;  coef. para convertir a radianes 
+int xant=190; int yant=210;
+int xantR=190; int yantR=210;
+int backcol=TFT_BLACK; int textcol=TFT_WHITE; 
+int dialcol=TFT_YELLOW; int needlecol=TFT_GREEN;
+
+void displayneedle(int value,int xcen,int ycen,int rad,int min,int max,int angle)
+{
+  float factorg=float((max-min))/float(angle); // unidades por grado
+  int grados=(90+angle/2)-((value-min)/factorg);
+  float radi=grados*degtoradf;
+  int x=xcen+(rad*8/10)*cos(radi);
+  int y=ycen-(rad*8/10)*sin(radi);
+  tft.drawLine(xcen,ycen,xant,yant,backcol); 
+    tft.drawLine(xcen+1,ycen,xant+1,yant,backcol); 
+  tft.drawLine(xcen,ycen,x,y,needlecol); 
+    tft.drawLine(xcen+1,ycen,x+1,y,needlecol); 
+  xant=x; yant=y;
+}
+
+
+void displaygauge(byte tipo,int value,int xcen,int ycen,int rad,byte fondo,int min,int max,int angle,int ndiv)
+{
+  displayneedle(value,xcen,ycen,rad,min,max,angle);
+  if (angle>180) angle=180; if (value<min) value=min; if (value>max) value=max;
+  int x0=rad>=100?0:xcen-rad*7/6; 
+  int y0=rad>100?0:ycen-rad*7/5;
+  int wx=rad>100?320:rad*7/3;
+  int wy=rad>100?240:rad*3/2;
+  tft.drawRect(x0,y0,wx,wy,textcol);
+  tft.fillCircle(xcen,ycen,2,needlecol);
+  int dgrdiv=angle/ndiv;      // grados por división
+  for (byte i=0; i<ndiv+1;i++) 
+    if (i%2==0)
+      {
+      int dgr=(90+angle/2)-dgrdiv*i;
+      float drad=dgr*degtoradf;
+      float auxcos=cos(drad);
+      float auxsin=sin(drad);
+      int x=xcen+(rad*(rad>100?9:10)/10)*auxcos;
+      int y=ycen-(rad*(rad>100?9:10)/10)*auxsin;
+      int colorline=value==conf.squelchval?TFT_WHITE:TFT_YELLOW;
+      tft.drawLine(x-5*auxcos,y+5*auxsin,x,y,colorline);
+      tft.drawLine(x-5*auxcos+1,y+5*auxsin,x+1,y,colorline);
+      tft.setTextColor(textcol, backcol); tft.setTextSize(rad<100?1:2);
+      if (tipo==0) { tft.drawNumber(min+(max-min)*i/ndiv, x-5+5*auxcos, y-10); }     // generic
+      else if (tipo==1)   // smeter
+        { 
+        if (calSmeterReq) tft.setTextColor(TFT_RED, backcol);  
+        tft.drawString(conf.smeterTit[i], x+(rad/8)*auxcos, y-rad*auxsin/5); 
+        }
+      else if (tipo==2) { tft.drawNumber(min+i,x+(rad/10)*auxcos, y-rad*auxsin/8); } // SWR
+      else if (tipo==3) { tft.drawNumber(i*15,x+(rad/10)*auxcos, y-rad*auxsin/8); }  // CAP1 & CAP2
+      else if (tipo==5) { tft.drawString(conf.smeterTit[i],x+(rad/10)*auxcos, y-rad*auxsin/8); }  // adjust squelch level 
+      }   
+  if (tipo==1)    // S-meter
+    {
+    char auxC[4]="OFF";
+    if (conf.scanmode==1) 
+      {
+      strcpy(auxC,"SR"); 
+      
+      }
+    else if (conf.scanmode==2)
+      {
+      strcpy(auxC,"St");  
+      }
+    btSmeter[0].initButtonUL(&tft,xcen-(rad+7),ycen-16,30,20,2,conf.scanmode==0?TFT_LIGHTGREY:conf.scanmode==1?TFT_GREEN:TFT_ORANGE,TFT_BLACK,auxC,1);
+    btSmeter[0].drawButton();
+    btSmeter[1].initButtonUL(&tft,xcen+rad-23,ycen-16,30,20,2,TFT_ORANGE,TFT_BLACK,"Lev.",1);
+    btSmeter[1].drawButton();
+    }
+  else if (tipo==2)  // SWR
+    { tft.drawString("SWR",x0+3,y0+10); }   
+}
+
+
 void displaySWR(byte tam)
 {
   if (tam==0)
@@ -677,7 +754,6 @@ void displayMsg(char* msg1,char* msg2,char* msg3,int x,int y,int w, int h)
 
 void displaybarSmeter(int x,int y,int min,int max, int divi)   // display bar
 {
-  readSmeter();   // valores de 0 a 90
   if (smetervalue<min) smetervalue=min; if (smetervalue>max) smetervalue=max;
   int bkcolor=TFT_GREEN;
   for (int i=0;i<16;i++)    // titles
@@ -692,80 +768,6 @@ void displaybarSmeter(int x,int y,int min,int max, int divi)   // display bar
     }
 }
 
-const float degtoradf=0.017453;        // 3.1416/180;  coef. para convertir a radianes 
-int xant=190; int yant=210;
-int xantR=190; int yantR=210;
-int backcol=TFT_BLACK; int textcol=TFT_WHITE; 
-int dialcol=TFT_YELLOW; int needlecol=TFT_GREEN;
-
-void displayneedle(int value,int xcen,int ycen,int rad,int min,int max,int angle)
-{
-  float factorg=float((max-min))/float(angle); // unidades por grado
-  int grados=(90+angle/2)-((value-min)/factorg);
-  float radi=grados*degtoradf;
-  int x=xcen+(rad*8/10)*cos(radi);
-  int y=ycen-(rad*8/10)*sin(radi);
-  tft.drawLine(xcen,ycen,xant,yant,backcol); 
-    tft.drawLine(xcen+1,ycen,xant+1,yant,backcol); 
-  tft.drawLine(xcen,ycen,x,y,needlecol); 
-    tft.drawLine(xcen+1,ycen,x+1,y,needlecol); 
-  xant=x; yant=y;
-}
-
-void displaygauge(byte tipo,int value,int xcen,int ycen,int rad,byte fondo,int min,int max,int angle,int ndiv)
-{
-  displayneedle(value,xcen,ycen,rad,min,max,angle);
-  if (angle>180) angle=180; if (value<min) value=min; if (value>max) value=max;
-  int x0=rad>=100?0:xcen-rad*7/6; 
-  int y0=rad>100?0:ycen-rad*7/5;
-  int wx=rad>100?320:rad*7/3;
-  int wy=rad>100?240:rad*3/2;
-  tft.drawRect(x0,y0,wx,wy,textcol);
-  tft.fillCircle(xcen,ycen,2,needlecol);
-  int dgrdiv=angle/ndiv;      // grados por división
-  for (byte i=0; i<ndiv+1;i++) 
-    if (i%2==0)
-      {
-      int dgr=(90+angle/2)-dgrdiv*i;
-      float drad=dgr*degtoradf;
-      float auxcos=cos(drad);
-      float auxsin=sin(drad);
-      int x=xcen+(rad*(rad>100?9:10)/10)*auxcos;
-      int y=ycen-(rad*(rad>100?9:10)/10)*auxsin;
-      int colorline=value==conf.squelchval?TFT_WHITE:TFT_YELLOW;
-      tft.drawLine(x-5*auxcos,y+5*auxsin,x,y,colorline);
-      tft.drawLine(x-5*auxcos+1,y+5*auxsin,x+1,y,colorline);
-      tft.setTextColor(textcol, backcol); tft.setTextSize(rad<100?1:2);
-      if (tipo==0) { tft.drawNumber(min+(max-min)*i/ndiv, x-5+5*auxcos, y-10); }     // generic
-      else if (tipo==1)   // smeter
-        { 
-        if (calSmeterReq) tft.setTextColor(TFT_RED, backcol);  
-        tft.drawString(conf.smeterTit[i], x+(rad/8)*auxcos, y-rad*auxsin/5); 
-        }
-      else if (tipo==2) { tft.drawNumber(min+i,x+(rad/10)*auxcos, y-rad*auxsin/8); } // SWR
-      else if (tipo==3) { tft.drawNumber(i*15,x+(rad/10)*auxcos, y-rad*auxsin/8); }  // CAP1 & CAP2
-      else if (tipo==5) { tft.drawString(conf.smeterTit[i],x+(rad/10)*auxcos, y-rad*auxsin/8); }  // adjust squelch level 
-      }   
-  if (tipo==1)    // S-meter
-    {
-    char auxC[4]="OFF";
-    if (conf.scanmode==1) 
-      {
-      strcpy(auxC,"SR"); 
-      
-      }
-    else if (conf.scanmode==2)
-      {
-      strcpy(auxC,"St");  
-      }
-    btSmeter[0].initButtonUL(&tft,xcen-(rad+7),ycen-16,30,20,2,conf.scanmode==0?TFT_LIGHTGREY:conf.scanmode==1?TFT_GREEN:TFT_ORANGE,TFT_BLACK,auxC,1);
-    btSmeter[0].drawButton();
-    btSmeter[1].initButtonUL(&tft,xcen+rad-23,ycen-16,30,20,2,TFT_ORANGE,TFT_BLACK,"Lev.",1);
-    btSmeter[1].drawButton();
-    }
-  else if (tipo==2)  // SWR
-    { tft.drawString("SWR",x0+3,y0+10); }   
-}
 
 void displaySWR2()
 {
@@ -833,7 +835,7 @@ void displaySWR2()
 
 void displaySmeter(int x, int y, int r, byte fondo)
 {
-  readSmeter();
+  //readSmeter();
   displaygauge(1,smetervalue,x,y,r,fondo,0,90,90,15);
 }
 
@@ -920,6 +922,23 @@ void displayFlot()
     }
 }
 
+void  initButtons()
+{
+  btMainact[0]=inTx==1?1:0;         // RX / TX
+  btMainact[1]=0;                   // V/M
+  btMainact[2]=0;                   // Band Down
+  btMainact[3]=0;                   // Band Up
+  btMainact[4]=conf.isUSB==1?1:0;   // LSB / USB
+  strcpy(btMaintext[0],inTx==1?"TX":"ATU");          // TX / ATU (only at RX
+  strcpy(btMaintext[4],conf.isUSB==1?"USB":"LSB");   // LSB / USB
+  btMainact[5]=conf.cwMode>0?1:0;   // CW
+  btMainact[6]=conf.ritOn==1?1:0;   // RIT
+  btMainact[7]=conf.splitOn==1?1:0; // Split
+  btMainact[8]=conf.ifShiftValue!=0?1:0; // IFS
+  btMainact[9]=conf.attLevel>0?1:0; // ATT
+}
+
+
 void displayMain()
 {
   if (tftpage==0) {
@@ -968,7 +987,11 @@ void displaySpectrum()
 void displayFrame()
 {
   if (conf.framemode==0) displaySmeter(190,210,50,1);
-  else if (conf.framemode==1) displaybarSmeter(40,186,0,90,69);
+  else if (conf.framemode==1) 
+      {   
+      //readSmeter();   // valores de 0 a 90
+      displaybarSmeter(40,186,0,90,69);
+      }
   else if (conf.framemode==2) displaySpectrum();
   else if (conf.framemode==3) displayFreqs();
 }
@@ -1042,12 +1065,8 @@ void updateDisplay(byte alldata) {
     tft.drawString("23 - Test Ports",0,0);
     
     tft.drawString("ADSA",0,40);
-    for (byte i=0; i<2; i++) tft.drawNumber(adsA.readADC_SingleEnded(i),60+i*80,40);
-    for (byte i=2; i<4; i++) tft.drawNumber(adsA.readADC_SingleEnded(i),60+(i-2)*80,60);
     
     tft.drawString("ADSB",0,80);
-    for (byte i=0; i<2; i++) tft.drawNumber(adsB.readADC_SingleEnded(i),60+i*80,80);
-    for (byte i=2; i<4; i++) tft.drawNumber(adsB.readADC_SingleEnded(i),60+(i-2)*80,100);
     }
   else if (tftpage==24) {  displayMenuNav();  }
 }
@@ -1056,22 +1075,6 @@ void DisplayVersionInfo(const __FlashStringHelper * fwVersionInfo)
 {
   tft.drawString("Version:",0,20);
   tft.drawString(fwVersionInfo,140,20);
-}
-
-void  initButtons()
-{
-  btMainact[0]=inTx==1?1:0;         // RX / TX
-  btMainact[1]=0;                   // V/M
-  btMainact[2]=0;                   // Band Down
-  btMainact[3]=0;                   // Band Up
-  btMainact[4]=conf.isUSB==1?1:0;   // LSB / USB
-  strcpy(btMaintext[0],inTx==1?"TX":"ATU");          // TX / ATU (only at RX
-  strcpy(btMaintext[4],conf.isUSB==1?"USB":"LSB");   // LSB / USB
-  btMainact[5]=conf.cwMode>0?1:0;   // CW
-  btMainact[6]=conf.ritOn==1?1:0;   // RIT
-  btMainact[7]=conf.splitOn==1?1:0; // Split
-  btMainact[8]=conf.ifShiftValue!=0?1:0; // IFS
-  btMainact[9]=conf.attLevel>0?1:0; // ATT
 }
 
 int checkYN()
@@ -1184,6 +1187,13 @@ void editMEM()
   
 }
 
+void setFrame()
+{
+  conf.framemode=conf.framemode<3?conf.framemode+1:0;
+  updateDisplay(1);
+}
+
+
 void checkNavButtons(uint16_t x, uint16_t y)
 {
   for (byte i=0; i<5;i++)     // navigation buttons
@@ -1222,23 +1232,6 @@ void checkMenuButtons(uint16_t x, uint16_t y)
       updateDisplay(1);
       }
    }
-}
-
-void setWiFi()
-{
-   if (WiFi.isConnected())
-     { 
-     WiFi.disconnect();  
-     displayWiFiSt();
-     }
-   else
-     {
-     initWiFi();
-     if ((conf.wifimode==1) || (conf.wifimode==3))  
-       connectSTA();
-     if (conf.wifimode>0) 
-       initNetServices();
-     }
 }
 
 void checkStaButtons(uint16_t x, uint16_t y)
@@ -1393,7 +1386,8 @@ void checkMainButtons(uint16_t x, uint16_t y)
            }  // TX
         strcpy(btMaintext[0],inTx==0?"ATU":"TX");
         updateDisplay(1);
-        }   
+        }  
+         
       else if (i==1)    // V/M
         { 
         //conf.memMode=1 
@@ -1402,6 +1396,7 @@ void checkMainButtons(uint16_t x, uint16_t y)
         saveFREQ();
         clearTFT();
         }
+        
       else if (i==2)    //Prior Band
         { 
         strcpy(btMaintext[4],conf.isUSB==1?"USB":"LSB"); 
@@ -1409,6 +1404,7 @@ void checkMainButtons(uint16_t x, uint16_t y)
         setNextHamBandFreq(conf.frequency,-1);
         displayFreq(1,1,1,1);
         } 
+        
       else if (i==3)    //Next Band
         { 
         strcpy(btMaintext[4],conf.isUSB==1?"USB":"LSB"); 
@@ -1416,17 +1412,22 @@ void checkMainButtons(uint16_t x, uint16_t y)
         setNextHamBandFreq(conf.frequency, 1); 
         displayFreq(1,1,1,1);
         }  
+        
       else if (i==4)   // LSB-USB 
         { 
         setUSB(conf.isUSB==0?1:0);
         }
+        
       else if (i==5)   // CW 
         {
         setCW(conf.cwMode>0?0:1);
         setFrequency(conf.frequency);
         }
+        
       else if (i==6) { setRIT(conf.ritOn==0?1:0); }   // RIT
+      
       else if (i==7) { setSPLIT(conf.splitOn==0?1:0); }   // SPL
+      
       else if (i==8)    // IFS
         {
         conf.ifShiftValue = getValByKnob(2, conf.ifShiftValue, -2000, 2000, 100, "IF Shift Hz", 2);
@@ -1434,15 +1435,17 @@ void checkMainButtons(uint16_t x, uint16_t y)
         btMainact[i]=conf.ifShiftValue!=0?1:0;
         setIFS(conf.ifShiftValue,1);
         }
+        
       else if (i==9)    // ATT
         {
         conf.attLevel = getValByKnob(6, conf.attLevel, 0, 250, 10, "ATT Level", 1);
         btMainact[i]=conf.attLevel==0?0:1;
         setATT(conf.attLevel,1);
         }
+        
       if (i>0) saveconf();
       }
-    }
+    } // for
 }
 
 void checkSetButtons(uint16_t x, uint16_t y)
@@ -1758,7 +1761,7 @@ void setRIT(byte value)
     setSPLIT(0); 
     conf.ritTxFrequency = conf.frequency;
     }
-  setFrequency(conf.ritTxFrequency);
+  //setFrequency(conf.ritTxFrequency);
   displayMain();
   displayFreq(1,1,1,1);
   }
@@ -1816,13 +1819,6 @@ void setVFO(byte value)
   setFrequency(conf.frequency);
   displayFreq(1,1,1,1); 
   }
-
-void setFrame()
-{
-  conf.framemode=conf.framemode<3?conf.framemode+1:0;
-  updateDisplay(1);
-  saveconf();
-}
 
 void setSCAN(byte value)
 {
